@@ -6,15 +6,104 @@ import {
     TextInput,
     TouchableHighlight,
     Text,
-    BackHandler
+    BackHandler,
+    Keyboard,
+    Alert,
+    AsyncStorage
 } from "react-native";
 
+import {
+    userProfile,
+    showProfileLoading,
 
+    
+  } from "../../actions/ProfileActions";
+  import Loader from '../common/Loader';
+  import { connect } from "react-redux";
 import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
 class DriverProfileScreen extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+          loading: false,
+          userProfile:'',
+          profileResponseData: '',
+          username:'',
+          email:'',
+          phone:''
+          
+        }
+      }
+
+      componentWillMount(){
+          console.log("componentWillMount.........................")
+      }
+      componentDidMount(){
+        console.log("componentDidMount.........................")
+
+          this.getProfileData();
+      }
+
+      componentWillUpdate(){
+        console.log("componentWillUpdate.........................")
+
+      }
+    
+
+
+      componentWillReceiveProps(nextProps)
+      {
+        if(nextProps.profileResponseData != undefined && nextProps.profileResponseData != '')
+        {
+            if(nextProps.profileResponseData.status == 200){
+
+                this.props.showProfileLoading(false);
+      
+                 // Clear any previous data if exist.
+                 if(nextProps.profileResponseData.message == "success")
+            {
+            AsyncStorage.setItem("userData", JSON.stringify(nextProps.profileResponseData.data));
+            }
+                this.setState({username: nextProps.profileResponseData.data.firstname +" " +nextProps.profileResponseData.data.lastname })
+                this.setState({email: nextProps.profileResponseData.data.email});
+                this.setState({phone: nextProps.profileResponseData.data.phone});
+            }
+          
+          else{
+            this.props.showProfileLoading(false);
+            alert(nextProps.loginResponseData.message);
+            //this.props.clearLoginRecord();
+          }
+        }
+      }
+
+      getProfileData(){
+        this.props.showProfileLoading(true);
+          console.log("getprofile data.....................")
+        AsyncStorage.getItem("userData").then((value) => {
+            if(value) {
+                userId = JSON.parse(value)._id;
+                console.log("userId..........................", userId)
+              
+
+              var profile={
+                userId: userId
+                
+              }
+            
+              this.props.userProfile(profile);
+               
+            
+          }
+        
+        }).done();
+       
+      }
+
     onEditButtonPress() {
+        Actions.pop();
         Actions.EditProfileScreen();
     }
     render() {
@@ -22,6 +111,8 @@ class DriverProfileScreen extends Component {
 
             <View
                 style={{ flex: 1, backgroundColor: '#fff', }}>
+                <Loader
+          loading={this.props.isLoading} />
                 <View
                     style={styles.imageContainer}>
 
@@ -40,7 +131,7 @@ class DriverProfileScreen extends Component {
                     style={{ backgroundColor: '#f1f1fd', paddingBottom: 20 }}>
                     <Text
                         style={styles.inputTextStyle} >
-                        xyzxyz
+                       {this.state.username}
                                    </Text>
                     <View
                         style={{
@@ -64,7 +155,7 @@ class DriverProfileScreen extends Component {
                             paddingBottom: 5,
                             paddingTop: 10
                         }}>
-                        a@gmail.com
+                        {this.state.email}
                                    </Text>
 
 
@@ -80,7 +171,7 @@ class DriverProfileScreen extends Component {
 
                     <Text
                         style={styles.inputTextStyle} >
-                        +91 9812321234
+                        {this.state.phone}
                                    </Text>
 
 
@@ -95,19 +186,6 @@ class DriverProfileScreen extends Component {
 
 
 
-                    <Text
-                        style={styles.inputTextStyle}>
-                        ***************
-            </Text>
-
-                    <View
-                        style={{
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 1,
-                            marginStart: 10,
-                            marginEnd: 10
-                        }}
-                    />
                 </View>
                 <View
                     style={{
@@ -185,4 +263,13 @@ const styles = StyleSheet.create({
 
 });
 
-export default DriverProfileScreen;
+const mapStateToProps = ({ profile }) => {
+    const { profileResponseData, isLoading } = profile;
+    
+  
+    return {
+        profileResponseData: profileResponseData,
+        isLoading: isLoading
+    }
+  }
+export default connect(mapStateToProps,{userProfile,showProfileLoading})(DriverProfileScreen);

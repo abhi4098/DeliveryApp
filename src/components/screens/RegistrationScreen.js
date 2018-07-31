@@ -117,7 +117,7 @@ else{
             
             //AsyncStorage.setItem("role", nextProps.registerResponseData.role);
            // AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
-           alert("Verification link send to registered Email address\n Please verify to Login");
+           alert("Verification link send \n Please verify to Login");
             this.props.nameChanged('');
             this.props.passChanged('');
             this.props.phoneChanged('');

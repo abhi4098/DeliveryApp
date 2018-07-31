@@ -6,7 +6,10 @@ import {
 	StyleSheet,
 	Image,
 	TouchableHighlight,  
-	Button
+	Button,
+	Keyboard,
+    Alert,
+    AsyncStorage
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
 import SideMenu from "react-native-side-menu";
@@ -46,11 +49,11 @@ class Dashboard extends Component {
 
 	onBackPress() {
 		if (Actions.state.index === 1) {
-			console.log("onBackPress", Actions.state.index)
+			console.log("onBackPress.............", Actions.state.index)
 			BackHandler.exitApp();
 			return false;
 		}
-  		console.log("onBackPress", Actions.state.index)
+  		console.log("onBackPress..............", Actions.state.index)
 		Actions.pop();
 		return true;
 	}
@@ -93,6 +96,11 @@ class Dashboard extends Component {
 
 		if (item == 'Logout') {
 			//Actions.MapScreen();
+			AsyncStorage.setItem("userData", '');
+			Actions.pop();
+			BackHandler.exitApp();
+			
+
 		}
 
 	}

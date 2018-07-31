@@ -21,24 +21,28 @@ export default class Splash extends Component{
 
 	componentWillMount() {
 		setTimeout(()=>{
-			if(global.isLogin === undefined)
-			{
-				console.log("islogin ....................false-------------------------------------")
-				
-				Actions.LoginScreen();
-				console.log(global.isLogin)
+			console.log("user data................................")
 
-
-			}
-			else
-			{
-				console.log("islogin ....................true-------------------------------------")
-				Actions.Dashboard();
-			}
+			AsyncStorage.getItem("userData").then((token) => {
+			    if(token) {
+					console.log("user data........................",token)
+			    	if(token.length > 0){
+			    		Actions.Dashboard();
+			    	}else{
+			    		Actions.LoginScreen();
+					}
+				}else{
+						Actions.LoginScreen();
+					}
+				}
+		
 			
-            
+			)
+
 			
 		},2000);
+		
+		
 	}
 
 	render(){

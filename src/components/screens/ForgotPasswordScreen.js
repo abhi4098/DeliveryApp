@@ -36,15 +36,15 @@ class ForgotPasswordScreen extends Component {
     console.log("forgot password response..................." ,this.props.isForgotLoading)
 
       if(nextProps.forgotResponseData != undefined && nextProps.forgotResponseData != ''){
-        if(nextProps.forgotResponseData != 'invalidEmail'){ 
-          alert("Password reset Link send to registerd Email");
+        if(nextProps.forgotResponseData.status= 200){ 
+          alert("Password send to registerd Email");
          this.props.showForgotPasswordLoading(false);          
           Actions.pop();
           Actions.LoginScreen();
         }        
         else{
           this.props.showForgotPasswordLoading(false);
-          alert(nextProps.forgotResponseData);
+          alert(nextProps.forgotResponseData.message);
               this.props.clearForgotResponseRecord();
         }
       }

@@ -18,6 +18,7 @@ import AcceptedDeliveryRequestScreen from './components/screens/AcceptedDelivery
 import OrderDeliveredScreen from './components/screens/OrderDeliveredScreen';
 import EditProfileScreen from './components/screens/EditProfileScreen';
 import DriverStatusScreen from './components/screens/DriverStatusScreen';
+import UpdatePasswordScreen from './components/screens/UpdatePasswordScreen';
 
 
 
@@ -29,14 +30,14 @@ const RouterComponent = () => {
 		<Scene key="Splash"             
 				   component={Splash}              
 				   hideNavBar={true} 
-				   
+				   initial
 				    />
 			
 			<Scene 
 				   key="LoginScreen"            
 				   component={LoginScreen}   
 				   hideNavBar={true}
-				   initial
+				   
 				 />
 			<Scene
 					key="ForgotPasswordScreen"           
@@ -121,6 +122,14 @@ const RouterComponent = () => {
 	                key="EditProfileScreen"      
 	                component={EditProfileScreen}  
 					title = "Edit Profile"
+				
+					
+	                />
+
+					 <Scene
+	                key="UpdatePasswordScreen"      
+	                component={UpdatePasswordScreen}  
+					title = "Update Password"
 				
 					
 	                />

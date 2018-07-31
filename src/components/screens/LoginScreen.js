@@ -46,6 +46,25 @@ class LoginScreen extends Component {
     }
   }
 
+
+  componentWillMount() {
+
+    this.props.showLoading(true);
+    setTimeout(()=>{    
+    AsyncStorage.getItem("userData").then((token) => {
+          if(token) {
+            if(token.length > 0){
+              Actions.Dashboard();
+              this.props.showLoading(false);
+            }
+          }else{
+            this.props.showLoading(false);
+          }
+      }).done();
+    },500);
+    
+  }
+
   onUserNameChanged(username) {
     this.props.usernameChanged(username);
   }
@@ -102,16 +121,19 @@ class LoginScreen extends Component {
 
 
     if(nextProps.loginResponseData != undefined && nextProps.loginResponseData != ''){
-      console.log("nextProps.loginResponseData---------------------" ,nextProps.loginResponseData.status);
+      console.log("nextProps.loginResponseData'''''''''''''''''''''''---------------------" ,nextProps.loginResponseData);
 
         if(nextProps.loginResponseData.status == 200){
 
             this.props.showLoading(false);
   
-            AsyncStorage.clear(); // Clear any previous data if exist.
+            // Clear any previous data if exist.
             
-           // AsyncStorage.setItem("role", nextProps.loginResponseData.role);
-           // AsyncStorage.setItem("userData", JSON.stringify(nextProps.loginResponseData.data));
+            
+            if(nextProps.loginResponseData.message == "UserExist")
+            {
+            AsyncStorage.setItem("userData", JSON.stringify(nextProps.loginResponseData.data));
+            }
 
             this.props.usernameChanged('');
             this.props.passwordChanged('');
@@ -156,11 +178,11 @@ class LoginScreen extends Component {
 
   onBackPress() {
     if (Actions.state.index === 1) {
-      console.log("onBackPress1", Actions.state.index)
+      console.log("onBackPress1.................", Actions.state.index)
       BackHandler.exitApp();
       return false;
     }
-    console.log("onBackPress2", Actions.state.index)
+    console.log("onBackPress2..............", Actions.state.index)
     Actions.pop();
     return true;
   }

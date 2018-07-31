@@ -6,39 +6,122 @@ import {
     TextInput,
     TouchableHighlight,
     Text,
-    BackHandler
+    BackHandler,
+    Keyboard,
+    Alert,
+    AsyncStorage
 } from "react-native";
 
+import {
+    userProfileUpdate,
+    showUpdateProfileLoading,
 
+    
+  } from "../../actions/ProfileActions";
+  import Loader from '../common/Loader';
 import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions";
 class EditProfileScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
          //...other state
-         defaultValue1: "xyzxyz",
-         defaultValue2: "a@gmail.com",
-         defaultValue3: "+91 9812321234",
-         defaultValue4: "******************"
+         userProfileUpdate: '',
+         loading: false,
+         updateProfileResponseData:'',
+         name: '',
+         email:'',
+         phone:''
         };
     }
+
+    componentDidMount(){
+        this.getProfileData();
+    }
+  
        
+    getProfileData(){
+        
+        AsyncStorage.getItem("userData").then((value) => {
+            if(value) {
+                userId = JSON.parse(value)._id;
+                this.setState({name: JSON.parse(value).firstname +" " +JSON.parse(value).lastname })
+                this.setState({email: JSON.parse(value).email});
+                this.setState({phone: JSON.parse(value).phone});
+               
+            
+          }
+        
+        }).done();
+       
+      }
+    onChangePasswordButtonPress(){
+        Actions.pop();
+        Actions.UpdatePasswordScreen();
+    }
 
     onUpdateButtonPress() {
-       Actions.pop();
+        this.props.showUpdateProfileLoading(true);
+        AsyncStorage.getItem("userData").then((value) => {
+            if(value) {
+                userId = JSON.parse(value)._id;
+                console.log("name with state..........................", this.state.name)
+                
+              
+
+                var updateProfile={
+                    name: this.state.name,
+                    email: this.state.email,
+                    phone: this.state.phone,
+                    userId:userId
+                    
+                  }
+                
+                  this.props.userProfileUpdate(updateProfile);
+            
+          }
+        
+        }).done();
+        
+      // Actions.pop();
     }
+
+
+    componentWillReceiveProps(nextProps)
+    {
+      if(nextProps.updateProfileResponseData != undefined && nextProps.updateProfileResponseData != '')
+      {
+        this.props.showUpdateProfileLoading(false);
+
+          if(nextProps.updateProfileResponseData.status == 200){
+            alert("Profile Updated");
+          //  Actions.pop();
+          }
+        
+        else{
+          this.props.showUpdateProfileLoading(false);
+          alert(nextProps.updateProfileResponseData.message);
+          //this.props.clearLoginRecord();
+        }
+      }
+    }
+
+
     render() {
         return (
            
             <View
                 style={{ flex: 1, backgroundColor: '#fff',justifyContent:'flex-end' }}>
+                <Loader
+          loading={this.props.isLoading} />
                 <View
                     style={styles.imageContainer}>
 
                     <Image
-                        style={{ width: 200, height: 50 }}
+                       // style={{ width: 200, height: 50 }}
                         source={AppLogo
                         }></Image>
 
@@ -55,10 +138,11 @@ class EditProfileScreen extends Component {
                   
                   underlineColorAndroid='transparent'
                   placeholder="Username"
-                  autoFocus = "true"
+                  
                   defaultValue={this.state.defaultValue1} 
                   onChange={this.changeName} 
-                  value={this.state.nameNow}
+                  value={this.state.name}
+                  onChangeText = {(name) => this.setState({name})}
                  
                  
                 />
@@ -83,9 +167,10 @@ class EditProfileScreen extends Component {
                     paddingTop: 10 }}
                   underlineColorAndroid='transparent'
                   placeholder="Email Id"
-                  defaultValue={this.state.defaultValue2} 
+        
                   onChange={this.changeName} 
-                  value={this.state.nameNow}
+                  value={this.state.email}
+                  onChangeText = {(email) => this.setState({email})}
                  
                 />
                 
@@ -104,10 +189,9 @@ class EditProfileScreen extends Component {
                   style={styles.inputTextStyle}
                   underlineColorAndroid='transparent'
                   placeholder="Contact No"
-              
-                  defaultValue={this.state.defaultValue3} 
                   onChange={this.changeName} 
-                  value={this.state.nameNow}
+                  value={this.state.phone}
+                  onChangeText = {(phone) => this.setState({phone})}
                  
                 />
                    
@@ -123,25 +207,9 @@ class EditProfileScreen extends Component {
                     />
 
 
-<TextInput
-                   style={styles.inputTextStyle}
-                  underlineColorAndroid='transparent'
-                  placeholder="Contact No"
-                 secureTextEntry ={true}
-                 defaultValue={this.state.defaultValue4} 
-                  onChange={this.changeName} 
-                  value={this.state.nameNow}
-                />
+
                    
 
-                    <View
-                        style={{
-                            borderBottomColor: 'grey',
-                            borderBottomWidth: 1,
-                            marginStart: 10,
-                            marginEnd: 10
-                        }}
-                    />
                 </View>
                 <View
                 style={{ flex: 1, backgroundColor: '#fff', 
@@ -161,6 +229,26 @@ class EditProfileScreen extends Component {
                 height: 35,
               }}
             >UPDATE</Text>
+          </View>
+          </View>
+
+           <View
+                style={{ flex: 1, backgroundColor: '#fff', 
+                alignItems: 'center', }}>
+                 <View
+            style={styles.changePasswordButtonContainer}>
+
+            <Text
+             onPress={this.onChangePasswordButtonPress.bind(this)}
+              style={{
+                color: '#14136d',
+                fontWeight: 'bold',
+                fontSize: 16,
+                textAlign: 'center',
+                width: 250,
+                height: 35,
+              }}
+            >CHANGE PASSWORD</Text>
           </View>
           </View>
             </View>
@@ -190,9 +278,8 @@ const styles = StyleSheet.create({
     }
 ,  buttonContainer: {
 
-    margin: 20,
-    marginTop: 40,
-    padding: 5,
+   
+    marginTop: 60,
     width: 150,
     height: 35,
     alignItems: 'center',
@@ -207,14 +294,46 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 10,
     shadowOpacity: 0.25,
-    marginTop: 30,
+   
 
 
 
   },
+  changePasswordButtonContainer: {
+
+    
+    width: 250,
+    height: 35,
+    alignItems: 'center',
+    borderRadius: 25,
+    padding: 5,
+    borderColor: '#14136d',
+    borderWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    
+
+
+
+  }
 
 
 
 });
 
-export default EditProfileScreen;
+const mapStateToProps = ({ profile }) => {
+    const { updateProfileResponseData, isLoading } = profile;
+    
+  
+    return {
+        updateProfileResponseData: updateProfileResponseData,
+        isLoading: isLoading
+    }
+  }
+
+export default connect(mapStateToProps,{userProfileUpdate,showUpdateProfileLoading})(EditProfileScreen);

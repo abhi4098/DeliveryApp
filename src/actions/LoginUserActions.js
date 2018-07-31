@@ -4,7 +4,7 @@ import {
       PASSWORD_CHANGED,
        LOGIN_USER,
        SHOW_LOADING,
-       CLEAR_LOGIN_RECORD
+    CLEAR_LOGIN_RECORD                               
     } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
