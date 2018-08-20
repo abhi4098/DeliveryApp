@@ -14,7 +14,13 @@ import  {
 
 const window = Dimensions.get('window');
 import AppLogo from "../../assets/app_logo.png";
-import TestImage from "../../assets/test_image.png";
+import Dashboard from "../../assets/dashboard.png";
+import Profile from "../../assets/profile.png";
+import OrderDelivered from "../../assets/order_delivered.png";
+import Logout from "../../assets/logout.png";
+import AcceptedReq from "../../assets/current_orders.png";
+
+
 
 
 
@@ -164,8 +170,8 @@ export default class Menu extends Component {
                   style={styles.inputIcon}
                   resizeMode="contain"
                 />
-        <Text style={styles.welcomeText}>Abhinandan Sharma</Text>
-        <Text style={{fontSize:15,color:'white'}}>Chandigarh</Text>
+        <Text style={styles.welcomeText}>xyz</Text>
+        <Text style={{fontSize:15,color:'white'}}>Abc</Text>
         <Text style={{fontSize:15,color:'white'}}>+91 9876450321</Text>
        
       </View>
@@ -182,7 +188,7 @@ export default class Menu extends Component {
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'Dashboard') ? '#014292' : 'transparent'
             }}>
-          <Image style={styles.itemImage} source={TestImage}>
+          <Image style={styles.itemImage} source={Dashboard}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('Dashboard')}>
                 <Text
@@ -200,7 +206,7 @@ export default class Menu extends Component {
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'DriverProfileScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={TestImage}>
+ <Image style={styles.itemImage} source={Profile}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('DriverProfileScreen')}>
                 <Text
@@ -218,7 +224,7 @@ export default class Menu extends Component {
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={TestImage}>
+ <Image style={styles.itemImage} source={AcceptedReq}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('AcceptedDeliveryRequestScreen')}>
                 <Text
@@ -236,7 +242,7 @@ export default class Menu extends Component {
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'OrderDeliveredScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={TestImage}>
+ <Image style={styles.itemImage} source={OrderDelivered}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('OrderDeliveredScreen')}>
                 <Text
@@ -254,7 +260,7 @@ export default class Menu extends Component {
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'Logout') ? '#014292' : 'transparent'
             }}>
-              <Image style={styles.itemImage} source={TestImage}>
+              <Image style={styles.itemImage} source={Logout}>
               </Image>
 
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('Logout')}>

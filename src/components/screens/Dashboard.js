@@ -24,7 +24,7 @@ class Dashboard extends Component {
 		super();
 
 		// Creating Global Variable.
-		global.isLogin = true;
+		//global.isLogin = true;
 		console.log(global.isLogin)
 	}
 

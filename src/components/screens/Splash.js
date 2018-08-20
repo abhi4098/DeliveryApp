@@ -12,7 +12,7 @@ import {
   	AsyncStorage,
 } from 'react-native';
 
-var isLogin = false;
+//var isLogin = false;
 import {Actions} from 'react-native-router-flux';
 
 import splashImage from "../../assets/splash_screen.png";
@@ -29,10 +29,10 @@ export default class Splash extends Component{
 			    	if(token.length > 0){
 			    		Actions.Dashboard();
 			    	}else{
-			    		Actions.LoginScreen();
+			    		Actions.AppSelectionScreen();
 					}
 				}else{
-						Actions.LoginScreen();
+						Actions.AppSelectionScreen();
 					}
 				}
 		
