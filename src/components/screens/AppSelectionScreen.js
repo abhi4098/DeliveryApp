@@ -4,7 +4,8 @@ import {
     View,
     Image,
     Text,
-    BackHandler
+    BackHandler,
+    TouchableHighlight
 
 } from "react-native";
 import { Actions } from "react-native-router-flux";
@@ -17,14 +18,28 @@ import UserIcon from "../../assets/user_icon.png";
 
 
 class AppSelectionScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { pressStatus: false,selectedButton: null  };
+    }
 
+    _onHideUnderlay() {
+        this.setState({ pressStatus: false });
+    }
+    _onShowUnderlay() {
+        this.setState({ pressStatus: true });
+    }
 
     onDriverButtonPress() {
-        Actions.LoginScreen();
+        this.setState({ selectedButton: "driver" });
+       Actions.LoginScreen();
+        
     }
 
     onClientButtonPress() {
+        this.setState({ selectedButton: "client" });
         Actions.CustomerLoginScreen();
+       
     }
 
     componentDidMount() {
@@ -68,7 +83,7 @@ class AppSelectionScreen extends Component {
 
 
                         <View
-                            style={styles.iconsStyle1} 
+                            style={styles.iconsStyle1}
 
                         >
                             <Image
@@ -93,40 +108,40 @@ class AppSelectionScreen extends Component {
                         style={{ flexDirection: 'row', marginTop: 20, marginStart: 10, marginEnd: 10 }}>
 
 
-                        <View
+                        <TouchableHighlight
+
                             style={styles.buttonContainer1}
-
+                            underlayColor={'#14136d'}
+                            onPress={this.onDriverButtonPress.bind(this)}
+                            onHideUnderlay={this._onHideUnderlay.bind(this)}
+                            onShowUnderlay={this._onShowUnderlay.bind(this)}
                         >
                             <Text
-                                onPress={this.onDriverButtonPress.bind(this)}
-                                style={{
-                                    color: '#14136d',
-                                    fontWeight: 'bold',
-                                    fontSize: 16,
-                                    textAlign: 'center',
-                                    width: 120,
-                                    height: 35,
+                                style={
+                                    this.state.pressStatus && this.state.selectedButton == "driver"
+                                        ? styles.buttonTextOnPress
+                                        : styles.buttonText
+                                }
 
-                                }}
                             >DRIVER</Text>
-                        </View>
+                        </TouchableHighlight>
 
-                        <View
+                        <TouchableHighlight
                             style={styles.buttonContainer2}
-
+                            underlayColor={'#14136d'}
+                            onPress={this.onClientButtonPress.bind(this)}
+                            onHideUnderlay={this._onHideUnderlay.bind(this)}
+                            onShowUnderlay={this._onShowUnderlay.bind(this)}
                         >
                             <Text
-                                onPress={this.onClientButtonPress.bind(this)}
-                                style={{
-                                    color: '#14136d',
-                                    fontWeight: 'bold',
-                                    fontSize: 16,
-                                    textAlign: 'center',
-                                    width: 120,
-                                    height: 35,
-                                }}
+
+                                style={
+                                    this.state.pressStatus && this.state.selectedButton == "client"
+                                        ? styles.buttonTextOnPress
+                                        : styles.buttonText
+                                }
                             >CLIENT</Text>
-                        </View>
+                        </TouchableHighlight>
                     </View>
 
                 </View>
@@ -145,9 +160,32 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    buttonContainer: {
 
-    loginText: {   
-        fontSize: 23, 
+        marginTop: 50,
+        padding: 5,
+        width: 120,
+        height: 35,
+        alignItems: 'center',
+        borderRadius: 25,
+        padding: 5,
+        borderColor: '#14136d',
+        borderWidth: 1,
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 3
+        },
+        shadowRadius: 10,
+        shadowOpacity: 0.25,
+        marginTop: 30,
+
+
+
+    },
+
+    loginText: {
+        fontSize: 23,
         fontWeight: 'normal',
         marginTop: 20,
         marginBottom: 30,
@@ -297,7 +335,25 @@ const styles = StyleSheet.create({
         marginStart: 15,
 
 
+    },
+    buttonTextOnPress: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 16,
+        textAlign: 'center',
+        width: 120,
+        height: 35,
+    },
+    buttonText: {
+        color: '#14136d',
+        fontWeight: 'bold',
+        fontSize: 16,
+        textAlign: 'center',
+        width: 120,
+        height: 35,
     }
+
+
 
 });
 export default AppSelectionScreen;

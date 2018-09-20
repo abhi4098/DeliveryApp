@@ -30,9 +30,11 @@ class CustomerLoginScreen extends Component {
 
   constructor(props) {
     super(props);
+   // this.state = { pressStatus: false};
     this.onPressFlag = this.onPressFlag.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.state = {
+      pressStatus: false,
       cca2: 'US',
       callingCode:'1',
       phone: '',
@@ -41,11 +43,20 @@ class CustomerLoginScreen extends Component {
     }
   }
 
+
+  _onHideUnderlay() {
+    this.setState({ pressStatus: false });
+}
+_onShowUnderlay() {
+    this.setState({ pressStatus: true });
+}
+
   onPhoneChanged(phone) {
     this.props.userPhoneChanged(phone);
   }
 
   onSubmitButtonPress() {
+  
     Keyboard.dismiss();
     if (this.props.phone == '') {
       Alert.alert("Please Enter Phone Number");
@@ -53,12 +64,12 @@ class CustomerLoginScreen extends Component {
     else {
 
       phoneNumber = '+'+ this.state.callingCode + this.props.phone;
-      console.log("phone num-----------------------------------"+phoneNumber);
      
-      var optRequest = {
-         phoneNumber: phoneNumber
-      };
-      this.props.receiveOtp(optRequest);
+     Actions.OtpVerificationScreen();
+      // var optRequest = {
+      //    phoneNumber: phoneNumber
+      // };
+      // this.props.receiveOtp(optRequest);
     }
   }
 
@@ -142,22 +153,23 @@ class CustomerLoginScreen extends Component {
 
           </View>
 
-          <View
-            style={styles.buttonContainer}
-
-          >
+         
+          <TouchableHighlight
+                style={styles.buttonContainer}
+                 underlayColor={'#14136d'}
+                  onPress={this.onSubmitButtonPress.bind(this)}
+                  onHideUnderlay={this._onHideUnderlay.bind(this)}
+                  onShowUnderlay={this._onShowUnderlay.bind(this)}
+              >
             <Text
-              onPress={this.onSubmitButtonPress.bind(this)}
-              style={{
-                color: '#14136d',
-                fontWeight: 'bold',
-                fontSize: 16,
-                textAlign: 'center',
-                width: 150,
-                height: 35,
-              }}
+              style={
+                this.state.pressStatus 
+                    ? styles.buttonTextOnPress
+                    : styles.buttonText
+            }
             >SEND OTP</Text>
-          </View>
+            </TouchableHighlight>
+        
 
 
 
@@ -245,7 +257,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 5,
     width: 120,
-    height: 35,
+    height: 33,
     alignItems: 'center',
     borderRadius: 25,
     padding: 5,
@@ -299,6 +311,25 @@ const styles = StyleSheet.create({
   progress: {
     margin: 10,
   },
+
+  buttonTextOnPress: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+    width: 120,
+    height: 35,
+  
+},
+buttonText: {
+    color: '#14136d',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+    width: 120,
+    height: 35,
+   
+}
 
 });
 
