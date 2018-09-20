@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware} from "redux";
+import { createStore, applyMiddleware } from "redux";
 import reducers from './reducers';
 import ReduxThunk from "redux-thunk";
 import Router from './Router'
@@ -29,7 +29,7 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
 
-    const store =createStore(reducers ,{},applyMiddleware(ReduxThunk));
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     if (module.hot) {
       // Enable Webpack hot module replacement for reducers
       module.hot.accept('./reducers', () => {
@@ -38,9 +38,9 @@ export default class App extends Component<Props> {
       });
     }
     return (
-      <Provider store = {store}>
-      <Router/>
-     </Provider> 
+      <Provider store={store}>
+        <Router />
+      </Provider>
     );
   }
 }

@@ -21,6 +21,9 @@ import DriverStatusScreen from './components/screens/DriverStatusScreen';
 import UpdatePasswordScreen from './components/screens/UpdatePasswordScreen';
 import AppSelectionScreen from './components/screens/AppSelectionScreen';
 import CustomerLoginScreen from './components/screens/CustomerLoginScreen';
+import OtpVerificationScreen from './components/screens/OtpVerificationScreen';
+
+
 
 
 
@@ -149,6 +152,14 @@ const RouterComponent = () => {
 					 <Scene
 	                key="CustomerLoginScreen"      
 	                component={CustomerLoginScreen}  
+					hideNavBar={true}
+				
+					
+	                />
+
+						 <Scene
+	                key="OtpVerificationScreen"      
+	                component={OtpVerificationScreen}  
 					hideNavBar={true}
 				
 					

@@ -16,6 +16,8 @@ import {
 import { connect } from "react-redux";
 import Loader from '../common/Loader';
 
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
+
 import { Actions } from "react-native-router-flux";
 import UsernameIcon from "../../assets/username.png";
 import PasswordIcon from "../../assets/password.png";
@@ -188,7 +190,7 @@ class LoginScreen extends Component {
   }
   render() {
     return (
-
+      
       <View style={{ flex: 1, backgroundColor: "#f1f1fd" }}>
  <Loader
           loading={this.props.isLoading} />
@@ -199,10 +201,12 @@ class LoginScreen extends Component {
             source={AppLogo
             }></Image>
           <View>
+          <ShimmerPlaceHolder autoRun={true} duration = {1000}>
             <Text
               style={styles.loginText}>
               LOGIN
 						</Text>
+            </ShimmerPlaceHolder>
           </View>
 
           <View style={styles.inputsContainer}>
@@ -414,7 +418,7 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 3
-    },
+    },  
     shadowRadius: 10,
     shadowOpacity: 0.25,
     marginTop: 2
