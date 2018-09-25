@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-android-sms-listener')
     compile project(':react-native-linear-gradient')
     compile fileTree(dir: "lcom.android.toolsibs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:24.0.0"

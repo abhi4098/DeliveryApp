@@ -8,7 +8,8 @@ import {
   Text,
   BackHandler,
   Keyboard,
-  Alert
+  Alert,
+  AsyncStorage
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import AppLogo from "../../assets/app_logo.png";
@@ -16,6 +17,8 @@ import PhoneIcon from "../../assets/phone.png";
 import { connect } from "react-redux";
 import PhoneInput from "react-native-phone-input";
 import CountryPicker from 'react-native-country-picker-modal';
+import Loader from '../common/Loader';
+
 
 import {
   userPhoneChanged,
@@ -53,6 +56,7 @@ _onShowUnderlay() {
 
   onPhoneChanged(phone) {
     this.props.userPhoneChanged(phone);
+    
   }
 
   onSubmitButtonPress() {
@@ -64,19 +68,48 @@ _onShowUnderlay() {
     else {
 
       phoneNumber = '+'+ this.state.callingCode + this.props.phone;
-     
-     Actions.OtpVerificationScreen();
-      // var optRequest = {
-      //    phoneNumber: phoneNumber
-      // };
-      // this.props.receiveOtp(optRequest);
+      AsyncStorage.setItem("userPhoneNumber", phoneNumber);
+
+      this.props.showReceiveOtpLoading(true);
+      //Actions.OtpVerificationScreen();
+      var optRequest = {
+         phoneNumber: phoneNumber
+      };
+      this.props.receiveOtp(optRequest);
     }
+    
   }
 
   componentDidMount() {
     this.setState({
       pickerData: this.phone.getPickerData(),
     });
+  }
+  componentWillReceiveProps(nextProps){
+    
+
+    if(nextProps.receiveOtpResponseData != undefined && nextProps.receiveOtpResponseData != ''){
+      console.log("nextProps.receiveOtpResponseData'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData);
+      console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData.status);
+
+        if(nextProps.receiveOtpResponseData.status == 200){
+
+          this.props.showReceiveOtpLoading(false);
+          AsyncStorage.setItem("verificationCode", nextProps.receiveOtpResponseData.verificationCode);
+          console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData.verificationCode);
+
+          
+            Actions.OtpVerificationScreen();
+        }
+      
+      else{
+        this.props.showReceiveOtpLoading(false);
+
+        alert(nextProps.receiveOtpResponseData.message);
+       // this.props.clearLoginRecord();
+      }
+   
+    }
   }
 
   onPressFlag() {
@@ -96,7 +129,8 @@ _onShowUnderlay() {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#f1f1fd" }}>
-
+<Loader
+          loading={this.props.isLoading} />
         <View style={styles.controlsContainer}>
 
           <Image

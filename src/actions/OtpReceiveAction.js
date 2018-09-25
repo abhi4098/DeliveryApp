@@ -62,7 +62,7 @@ export const receiveOtp = ({phoneNumber}) => {
         console.log('Error==='+e);
         alert('Server not responding');
         dispatch({
-          type: SHOW_LOADING,
+          type: SHOW_OTP_LOADING,
           payload: false
         });
   

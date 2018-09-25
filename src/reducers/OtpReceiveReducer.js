@@ -1,13 +1,15 @@
 import {
     PHONE_NUM_CHANGED,
     RECEIVE_OTP,
-    SHOW_OTP_LOADING
+    SHOW_OTP_LOADING,
+    
 } from "../actions/actionTypes";
 
 const INITIAL_STATE = {
     phone: '',
     isLoading:false,
-    receiveOtpResponseData:''
+    receiveOtpResponseData:'',
+    
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,8 +21,8 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, isLoading:action.payload}
 
             case RECEIVE_OTP:
-            console.log('RECEIVE_OTP action.payload reducer============== ' + action.payload);
-            return {...state, receiveOtpResponseData:action.payload}
+             return {...state, receiveOtpResponseData:action.payload}
+           
             
         default:
             return state;

@@ -39,6 +39,7 @@ const RouterComponent = () => {
 				   component={Splash}              
 				   hideNavBar={true} 
 				   initial
+				   
 				    />
 			
 			<Scene 
@@ -161,6 +162,8 @@ const RouterComponent = () => {
 	                key="OtpVerificationScreen"      
 	                component={OtpVerificationScreen}  
 					hideNavBar={true}
+					
+					
 				
 					
 	                />

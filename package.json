@@ -10,7 +10,10 @@
   "dependencies": {
     "react": "16.3.1",
     "react-native": "^0.55.4",
+    "react-native-android-sms-listener": "^0.5.0",
     "react-native-busy-indicator": "^1.1.0",
+    "react-native-confirmation-code-input": "^1.0.4",
+    "react-native-countdown-component": "^1.7.3",
     "react-native-country-picker-modal": "^0.6.2",
     "react-native-flip-toggle-button": "^1.0.5",
     "react-native-image-picker": "^0.26.10",

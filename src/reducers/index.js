@@ -6,6 +6,7 @@ import ForgotPasswordReducer from "./ForgotPasswordReducer";
 import RegistrationReducer from "./RegistrationReducer";
 import ProfileReducer from './ProfileReducer';
 import OtpReceiveReducer from './OtpReceiveReducer';
+import VerifyOtpReducer from './VerifyOtpReducer';
 
 
 export default combineReducers({
@@ -14,5 +15,7 @@ export default combineReducers({
   forgot: ForgotPasswordReducer,
   register: RegistrationReducer,
   profile: ProfileReducer,
-  otpReceive: OtpReceiveReducer
+  otpReceive: OtpReceiveReducer,
+  verifyReceivedOtp:VerifyOtpReducer
+
 });
