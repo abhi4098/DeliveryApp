@@ -2,6 +2,7 @@ import {
     PHONE_NUM_CHANGED,
     RECEIVE_OTP,
     SHOW_OTP_LOADING,
+    CLEAR_RECEIVE_OTP_DATA
     
 } from "../actions/actionTypes";
 
@@ -23,7 +24,8 @@ export default (state = INITIAL_STATE, action) => {
             case RECEIVE_OTP:
              return {...state, receiveOtpResponseData:action.payload}
            
-            
+             case CLEAR_RECEIVE_OTP_DATA:
+             return {...state, receiveOtpResponseData:''}
         default:
             return state;
     }

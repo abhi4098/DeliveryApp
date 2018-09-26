@@ -13,7 +13,7 @@ import {
   Alert
 
 } from "react-native";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import PhoneIcon from "../../assets/phone.png";
 import EmailIcon from "../../assets/message.png";
@@ -21,7 +21,7 @@ import EmailIcon from "../../assets/message.png";
 import AppLogo from "../../assets/app_logo.png";
 import UsernameIcon from "../../assets/username.png";
 import PasswordIcon from "../../assets/password.png";
-import { 
+import {
   nameChanged,
   passChanged,
   emailIsChanged,
@@ -29,30 +29,37 @@ import {
   clearRegistrationRecord,
   showRegistrationLoading,
   registerUser
-  
- } from "../../actions/index";
- import Loader from '../common/Loader';
+
+} from "../../actions/index";
+import Loader from '../common/Loader';
 
 
 
 
 class RegistrationScreen extends Component {
 
-  onUsernameChanged(username){
+  constructor(props) {
+    super(props);
+    this.state = {
+      userType: ''
+    }
+  }
+
+  onUsernameChanged(username) {
     this.props.nameChanged(username)
-}
+  }
 
-onEmailChange(email){
-  this.props.emailIsChanged(email)
-}
+  onEmailChange(email) {
+    this.props.emailIsChanged(email)
+  }
 
-onPhoneChanged(phone){
-  this.props.phoneChanged(phone)
-}
+  onPhoneChanged(phone) {
+    this.props.phoneChanged(phone)
+  }
 
-onPasswordChanged(password){
-  this.props.passChanged(password)
-}
+  onPasswordChanged(password) {
+    this.props.passChanged(password)
+  }
 
   onSendOtpButtonPress() {
     Actions.OtpVerificationScreen();
@@ -61,7 +68,7 @@ onPasswordChanged(password){
 
   componentDidUpdate() {
 
-    if(this.props.registerResponseData != undefined && this.props.registerResponseData != ''){
+    if (this.props.registerResponseData != undefined && this.props.registerResponseData != '') {
       this.props.clearRegistrationRecord();
     }
   }
@@ -72,76 +79,104 @@ onPasswordChanged(password){
 
     Keyboard.dismiss();
 
-    if (this.props.username == ''){
+    if (this.props.username == '') {
       Alert.alert("Please Enter Username");
     }
-    else if (this.props.password == ''){
+    else if (this.props.password == '') {
       Alert.alert("Please Enter Password");
     }
-    else if (this.props.phone == ''){
-    Alert.alert("Please Enter Phone");
+    // else if (this.props.phone == '') {
+    //   Alert.alert("Please Enter Phone");
+    // }
+    else if (this.props.email == '') {
+      Alert.alert("Please Enter Email");
     }
-    else if (this.props.email == ''){
-    Alert.alert("Please Enter Email");
-    }
-else{
+    else {
       this.props.showRegistrationLoading(true);
-      var register={
-        name:this.props.username,
-        password:this.props.password,
-        phone:this.props.phone,
-        email:this.props.email,
-        
-};
-    
-      this.props.registerUser(register); 
+      AsyncStorage.getItem("nboxitUserType").then((nboxitUserType) => {
+        if (nboxitUserType) {
+          userType = nboxitUserType;
+          var register = {
+            name: this.props.username,
+            password: this.props.password,
+            phone: this.state.phone,
+            email: this.props.email,
+            type: userType
+
+          };
+          this.props.registerUser(register);
+
+        } else {
+          Alert.alert("User type is not selected");
+        }
+      }).done();
+
+
+
     }
   }
 
 
   componentWillReceiveProps(nextProps) {
-            
-    console.log("nextProps.registerResponseData..................---------------------" ,nextProps.registerResponseData);
+
+    console.log("nextProps.registerResponseData..................---------------------", nextProps.registerResponseData);
     console.log("registration status..........", nextProps.registerResponseData.status)
- 
 
 
 
-    if(nextProps.registerResponseData != undefined && nextProps.registerResponseData != ''){
 
-        if(nextProps.registerResponseData.status == 200){
+    if (nextProps.registerResponseData != undefined && nextProps.registerResponseData != '') {
 
-            this.props.showRegistrationLoading(false);
-  
-            AsyncStorage.clear(); // Clear any previous data if exist.
-            
-            //AsyncStorage.setItem("role", nextProps.registerResponseData.role);
-           // AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
-           alert("Verification link send \n Please verify to Login");
-            this.props.nameChanged('');
-            this.props.passChanged('');
-            this.props.phoneChanged('');
-            this.props.emailIsChanged('');
-             Actions.pop();
-             Actions.LoginScreen();
+      if (nextProps.registerResponseData.status == 200) {
 
+        this.props.showRegistrationLoading(false);
+
+        AsyncStorage.clear(); // Clear any previous data if exist.
+
+        //AsyncStorage.setItem("role", nextProps.registerResponseData.role);
+        // AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
+        if(userType == "driver")
+        {
+          alert("Verification link send");
+          this.props.nameChanged('');
+          this.props.passChanged('');
+          this.props.phoneChanged('');
+          this.props.emailIsChanged('');
+          Actions.pop();
+          Actions.LoginScreen();
         }
-      
-      else{
+        else{
+          AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
+                Actions.pop();
+                Actions.Dashboard();
+        }
+
+        
+
+      }
+
+      else {
         this.props.showRegistrationLoading(false);
         alert(nextProps.registerResponseData.message);
         this.props.clearRegistrationRecord();
       }
-   
+
     }
-   
-  
 
 
-}
+
+
+  }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    AsyncStorage.getItem("userPhoneNumber").then((userPhoneNumber) => {
+      if (userPhoneNumber) {
+        phone = userPhoneNumber;
+        this.setState({phone: userPhoneNumber});
+      } 
+  }).done();
+    
   }
 
   componentWillUnmount() {
@@ -150,7 +185,7 @@ else{
     this.props.passChanged('');
     this.props.phoneChanged('');
     this.props.emailIsChanged('');
-    
+
   }
 
   onBackPress() {
@@ -168,7 +203,7 @@ else{
     return (
 
       <View style={{ flex: 1, backgroundColor: "#f1f1fd" }}>
-<Loader
+        <Loader
           loading={this.props.isRegisterLoading} />
         <View style={styles.controlsContainer}>
 
@@ -199,7 +234,6 @@ else{
                   style={{ width: 250, flex: 1, marginLeft: 10, fontSize: 18 }}
                   underlineColorAndroid='transparent'
                   autoCapitalize='none'
-                 
                   returnKeyType='next'
                   placeholder="Your Name"
                   placeholderTextColor="#696969"
@@ -235,7 +269,7 @@ else{
                   placeholderTextColor="#696969"
                   onChangeText={this.onEmailChange.bind(this)}
                   value={this.props.email}
-                 
+
                 />
               </View>
             </View>
@@ -258,12 +292,14 @@ else{
                 <TextInput
                   style={{ width: 250, flex: 1, marginLeft: 10, fontSize: 18 }}
                   underlineColorAndroid='transparent'
-                  keyboardType = "numeric"
+                  //keyboardType="phone-pad"
                   placeholder="Phone Number"
                   placeholderTextColor="#696969"
                   onChangeText={this.onPhoneChanged.bind(this)}
-                  value={this.props.phone}
-               
+                  value={this.state.phone}
+                  editable={false} 
+                  selectTextOnFocus={false}
+
                 />
               </View>
             </View>
@@ -291,7 +327,7 @@ else{
                   placeholderTextColor="#696969"
                   onChangeText={this.onPasswordChanged.bind(this)}
                   value={this.props.password}
-                  
+
                 />
               </View>
             </View>
@@ -456,10 +492,10 @@ const styles = StyleSheet.create({
 
 });
 
-const mapStateToProps = ({register}) => {
+const mapStateToProps = ({ register }) => {
 
-  const {username, password, phone, email, isRegisterLoading, registerResponseData} = register;
-   return{
+  const { username, password, phone, email, isRegisterLoading, registerResponseData } = register;
+  return {
     username: username,
     password: password,
     phone: phone,
@@ -468,7 +504,7 @@ const mapStateToProps = ({register}) => {
     registerResponseData: registerResponseData
 
 
-   }
+  }
 }
 
-export default connect(mapStateToProps, {nameChanged,emailIsChanged,phoneChanged,passChanged,clearRegistrationRecord,showRegistrationLoading,registerUser})(RegistrationScreen);
+export default connect(mapStateToProps, { nameChanged, emailIsChanged, phoneChanged, passChanged, clearRegistrationRecord, showRegistrationLoading, registerUser })(RegistrationScreen);

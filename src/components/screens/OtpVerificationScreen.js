@@ -9,7 +9,8 @@ import {
     Alert,
     AsyncStorage,
     TouchableHighlight,
-    StyleSheet
+    StyleSheet,
+    BackHandler
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import AppLogo from "../../assets/app_logo.png";
@@ -25,7 +26,7 @@ import {
     showVerifyOtpLoading,
     resendOtp,
     clearVerifyOtpData
-    
+
 } from "../../actions/index";
 class OtpVerificationScreen extends Component {
 
@@ -45,8 +46,8 @@ class OtpVerificationScreen extends Component {
 
     componentDidUpdate() {
 
-        if(this.props.verifyOtpResponseData != undefined && this.props.verifyOtpResponseData != ''){
-          this.props.clearVerifyOtpData();
+        if (this.props.verifyOtpResponseData != undefined && this.props.verifyOtpResponseData != '') {
+            this.props.clearVerifyOtpData();
         }
     }
     async requestReadSmsPermission() {
@@ -68,15 +69,21 @@ class OtpVerificationScreen extends Component {
 
     }
 
+    componentWillUnmount()
+    {
+        subscription.remove();
+    }
     componentDidMount() {
-
+        console.log("otpverificationscree----------------------------------")
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         this.requestReadSmsPermission();
-        SmsListener.addListener(message => {
+        let subscription = SmsListener.addListener(message => {
             console.log("sms listerner response........................", message.body);
-            code = message.body;
-            this.setState({ code: message.body });
+            var codeFromSMS = message.body;; 
+            code = codeFromSMS.substring(11, 17);
+            this.setState({ code: code });
 
-            
+
 
         });
 
@@ -93,6 +100,7 @@ class OtpVerificationScreen extends Component {
         AsyncStorage.getItem("verificationCode").then((otp) => {
             if (otp) {
                 smsOTP = otp;
+                // this.setState({ smsOTP: otp });
 
             } else {
                 smsOTP = "";
@@ -100,6 +108,12 @@ class OtpVerificationScreen extends Component {
         }).done();
 
     }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+
+    }
+
     _onHideUnderlay() {
         this.setState({ pressStatus: false });
     }
@@ -108,41 +122,61 @@ class OtpVerificationScreen extends Component {
     }
 
     onVerifyOtpButtonPress() {
+        code = this.state.code;
+       // Actions.RegistrationScreen();
+       console.log("code----------------------------------------",code);
+       console.log("smsOTP----------------------------------------",smsOTP);
+       if (code == null)
+       alert("Please enter OTP");
 
-        Actions.RegistrationScreen();
+   if (code == smsOTP) {
+       this.props.showVerifyOtpLoading(true);
+       var optVerifyRequest = {
+           phoneNumber: phoneNumber,
+           code: code,
+           mode:"mobile"
+       };
+       this.props.verifyOtp(optVerifyRequest);
+
+   } else {
+
+       Alert.alert(
+           'Confirmation Code',
+           'Code not match!',
+           [{ text: 'OK' }],
+           { cancelable: false }
+       );
+
+       this.refs.codeInputRef1.clear();
+   }
     }
 
 
 
     _onFulfill(code) {
-        // TODO: call API to check code here
-        // If code does not match, clear input with: this.refs.codeInputRef1.clear()
-        if (code == null)
-            alert("Please enter OTP");
-            console.error("code-----------------------------------------", code)
-            console.error("sms otp............................................", smsOTP)
-        if (code == smsOTP) {
-            this.props.showVerifyOtpLoading(true);
-            var optVerifyRequest = {
-                phoneNumber: phoneNumber,
-                code: code
-            };
-            this.props.verifyOtp(optVerifyRequest);
-
-        } else {
-            console.log("code-----------------------------------------", code)
-            console.log("sms otp............................................", smsOTP)
-            Alert.alert(
-                'Confirmation Code',
-                'Code not match!',
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-
-            this.refs.codeInputRef1.clear();
-        }
+        console.log("inside on fullfill method---------------------------------",code);
+        this.setState({code:code});
+       
     }
 
+
+    onBackPress() {
+        if (Actions.state.index === 1) {
+            console.log("onBackPress1.................", Actions.state.index)
+            BackHandler.exitApp();
+            return false;
+        }
+        console.log("onBackPress22222..............", Actions.state.index)
+        // Actions.pop();
+        // Actions.refresh();
+
+        Actions.pop('CustomerLoginScreen');
+        setTimeout(() => {
+            Actions.refresh({ name: 'CustomerLoginScreen' });
+            console.log("CustomerLoginScreen");
+        }, 10);
+        return true;
+    }
 
     componentWillReceiveProps(nextProps) {
 
@@ -151,10 +185,22 @@ class OtpVerificationScreen extends Component {
             console.log("nextProps.verifyOtpResponseData'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData);
             console.log("nextProps.verifyOtpResponseData.status'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData.status);
 
-            if (nextProps.verifyOtpResponseData.status == 200) {
+            if (nextProps.verifyOtpResponseData.message == "success") {
 
                 this.props.showVerifyOtpLoading(false);
-                //AsyncStorage.setItem("verificationCode", nextProps.receiveOtpResponseData.verificationCode);
+               
+
+                if(nextProps.verifyOtpResponseData.userstatus)
+                {
+                AsyncStorage.setItem("userData", JSON.stringify(nextProps.verifyOtpResponseData.data));
+                Actions.pop();
+                Actions.Dashboard();
+               }
+               else{
+                Actions.pop();
+                Actions.RegistrationScreen();
+               }
+               
 
 
                 // Actions.RegistrationScreen();
@@ -177,8 +223,8 @@ class OtpVerificationScreen extends Component {
 
                 this.props.showVerifyOtpLoading(false);
                 //AsyncStorage.setItem("verificationCode", nextProps.receiveOtpResponseData.verificationCode);
-
-
+                //this.setState({ smsOTP: otp });
+                smsOTP = nextProps.resendOTPResponseData.verificationCode;
                 // Actions.RegistrationScreen();
             }
 
@@ -192,13 +238,14 @@ class OtpVerificationScreen extends Component {
         }
     }
 
-    onResendOTPPressed(){
+    onResendOTPPressed() {
+        this.refs.codeInputRef1.clear();
         this.props.showVerifyOtpLoading(true);
         var resendOptRequest = {
             phoneNumber: phoneNumber
-         };
-         this.props.resendOtp(resendOptRequest);
-        this.setState({ isTimerVisible: true })  
+        };
+        this.props.resendOtp(resendOptRequest);
+        this.setState({ isTimerVisible: true })
     }
 
 
@@ -206,7 +253,7 @@ class OtpVerificationScreen extends Component {
         if (this.state.isTimerVisible) {
             return <CountDown
                 style={{ marginTop: 40, borderColor: "#14136d" }}
-                until={10}
+                until={60}
                 onFinish={() => this.onTimerFinish()}
                 onPress={() => alert('hello')}
                 size={15}
@@ -269,7 +316,7 @@ class OtpVerificationScreen extends Component {
                         />
                         {this.displayTimer()}
 
-                      
+
                         <TouchableHighlight
                             style={styles.buttonContainer}
                             underlayColor={'#14136d'}
@@ -383,7 +430,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ verifyReceivedOtp }) => {
-    const { verifyOtpResponseData, isLoading,resendOTPResponseData } = verifyReceivedOtp;
+    const { verifyOtpResponseData, isLoading, resendOTPResponseData } = verifyReceivedOtp;
 
 
     return {
@@ -392,4 +439,4 @@ const mapStateToProps = ({ verifyReceivedOtp }) => {
         resendOTPResponseData: resendOTPResponseData
     }
 }
-export default connect(mapStateToProps, { verifyOtp, showVerifyOtpLoading,resendOtp,clearVerifyOtpData })(OtpVerificationScreen);
+export default connect(mapStateToProps, { verifyOtp, showVerifyOtpLoading, resendOtp, clearVerifyOtpData })(OtpVerificationScreen);

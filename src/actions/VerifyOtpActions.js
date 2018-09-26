@@ -18,11 +18,11 @@ import {
     }
   };
   
-  export const verifyOtp = ({phoneNumber,code}) => {
+  export const verifyOtp = ({phoneNumber,code,mode}) => {
   
       
       console.log(APIURLCONSTANTS.VERIFY_RECEIVED_OTP);
-      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,code}));
+      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,code,mode}));
      
     
       return (dispatch) => {
@@ -36,7 +36,7 @@ import {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({phoneNumber,code})
+          body: JSON.stringify({phoneNumber,code,mode})
         })
         .then( (response) => {
           console.log('Received response verify otp--------------------: ', response);

@@ -23,7 +23,8 @@ import Loader from '../common/Loader';
 import {
   userPhoneChanged,
   receiveOtp,
-  showReceiveOtpLoading
+  showReceiveOtpLoading,
+  clearReceiveOtpData
 } from "../../actions/index";
 
 
@@ -33,13 +34,13 @@ class CustomerLoginScreen extends Component {
 
   constructor(props) {
     super(props);
-   // this.state = { pressStatus: false};
+    // this.state = { pressStatus: false};
     this.onPressFlag = this.onPressFlag.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.state = {
       pressStatus: false,
       cca2: 'US',
-      callingCode:'1',
+      callingCode: '1',
       phone: '',
       receiveOtp: '',
       loading: false
@@ -49,66 +50,83 @@ class CustomerLoginScreen extends Component {
 
   _onHideUnderlay() {
     this.setState({ pressStatus: false });
-}
-_onShowUnderlay() {
+  }
+  _onShowUnderlay() {
     this.setState({ pressStatus: true });
-}
+  }
 
   onPhoneChanged(phone) {
     this.props.userPhoneChanged(phone);
-    
+
   }
 
   onSubmitButtonPress() {
-  
+
     Keyboard.dismiss();
     if (this.props.phone == '') {
       Alert.alert("Please Enter Phone Number");
     }
     else {
 
-      phoneNumber = '+'+ this.state.callingCode + this.props.phone;
+      phoneNumber = '+' + this.state.callingCode + this.props.phone;
       AsyncStorage.setItem("userPhoneNumber", phoneNumber);
 
       this.props.showReceiveOtpLoading(true);
-      //Actions.OtpVerificationScreen();
+      //.OtpVerificationScreen();
       var optRequest = {
          phoneNumber: phoneNumber
       };
       this.props.receiveOtp(optRequest);
     }
-    
+
   }
 
   componentDidMount() {
+
+
+
+    if (this.props.receiveOtpResponseData != undefined && this.props.receiveOtpResponseData != '') {
+      this.props.clearReceiveOtpData();
+    }
     this.setState({
       pickerData: this.phone.getPickerData(),
     });
   }
-  componentWillReceiveProps(nextProps){
-    
 
-    if(nextProps.receiveOtpResponseData != undefined && nextProps.receiveOtpResponseData != ''){
-      console.log("nextProps.receiveOtpResponseData'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData);
-      console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData.status);
 
-        if(nextProps.receiveOtpResponseData.status == 200){
 
-          this.props.showReceiveOtpLoading(false);
-          AsyncStorage.setItem("verificationCode", nextProps.receiveOtpResponseData.verificationCode);
-          console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------" ,nextProps.receiveOtpResponseData.verificationCode);
 
-          
-            Actions.OtpVerificationScreen();
-        }
-      
-      else{
+
+
+  componentDidUpdate() {
+
+    if (this.props.receiveOtpResponseData != undefined && this.props.receiveOtpResponseData != '') {
+      this.props.clearReceiveOtpData();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+
+    if (nextProps.receiveOtpResponseData != undefined && nextProps.receiveOtpResponseData != '') {
+      console.log("nextProps.receiveOtpResponseData'''''''''''''''''''''''---------------------", nextProps.receiveOtpResponseData);
+      console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------", nextProps.receiveOtpResponseData.status);
+
+      if (nextProps.receiveOtpResponseData.status == 200) {
+
+        this.props.showReceiveOtpLoading(false);
+        AsyncStorage.setItem("verificationCode", nextProps.receiveOtpResponseData.verificationCode);
+        Actions.pop();
+        Actions.OtpVerificationScreen();
+      }
+
+      else {
         this.props.showReceiveOtpLoading(false);
 
         alert(nextProps.receiveOtpResponseData.message);
-       // this.props.clearLoginRecord();
+        // this.props.clearLoginRecord();
       }
-   
+
     }
   }
 
@@ -129,7 +147,7 @@ _onShowUnderlay() {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#f1f1fd" }}>
-<Loader
+        <Loader
           loading={this.props.isLoading} />
         <View style={styles.controlsContainer}>
 
@@ -187,23 +205,23 @@ _onShowUnderlay() {
 
           </View>
 
-         
+
           <TouchableHighlight
-                style={styles.buttonContainer}
-                 underlayColor={'#14136d'}
-                  onPress={this.onSubmitButtonPress.bind(this)}
-                  onHideUnderlay={this._onHideUnderlay.bind(this)}
-                  onShowUnderlay={this._onShowUnderlay.bind(this)}
-              >
+            style={styles.buttonContainer}
+            underlayColor={'#14136d'}
+            onPress={this.onSubmitButtonPress.bind(this)}
+            onHideUnderlay={this._onHideUnderlay.bind(this)}
+            onShowUnderlay={this._onShowUnderlay.bind(this)}
+          >
             <Text
               style={
-                this.state.pressStatus 
-                    ? styles.buttonTextOnPress
-                    : styles.buttonText
-            }
+                this.state.pressStatus
+                  ? styles.buttonTextOnPress
+                  : styles.buttonText
+              }
             >SEND OTP</Text>
-            </TouchableHighlight>
-        
+          </TouchableHighlight>
+
 
 
 
@@ -353,17 +371,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 120,
     height: 35,
-  
-},
-buttonText: {
+
+  },
+  buttonText: {
     color: '#14136d',
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
     width: 120,
     height: 35,
-   
-}
+
+  }
 
 });
 
@@ -377,4 +395,4 @@ const mapStateToProps = ({ otpReceive }) => {
     receiveOtpResponseData: receiveOtpResponseData
   }
 }
-export default connect(mapStateToProps, { userPhoneChanged, receiveOtp, showReceiveOtpLoading })(CustomerLoginScreen);
+export default connect(mapStateToProps, { userPhoneChanged, receiveOtp, showReceiveOtpLoading, clearReceiveOtpData })(CustomerLoginScreen);

@@ -5,7 +5,8 @@ import {
     Image,
     Text,
     BackHandler,
-    TouchableHighlight
+    TouchableHighlight,
+    AsyncStorage
 
 } from "react-native";
 import { Actions } from "react-native-router-flux";
@@ -31,12 +32,14 @@ class AppSelectionScreen extends Component {
     }
 
     onDriverButtonPress() {
+        AsyncStorage.setItem("nboxitUserType", "driver");
         this.setState({ selectedButton: "driver" });
        Actions.LoginScreen();
         
     }
 
     onClientButtonPress() {
+        AsyncStorage.setItem("nboxitUserType", "customer");
         this.setState({ selectedButton: "client" });
         Actions.CustomerLoginScreen();
        

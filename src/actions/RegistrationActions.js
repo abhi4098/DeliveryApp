@@ -53,11 +53,11 @@ export const showRegistrationLoading =(value)=>{
   }
 };
 
-export const registerUser = ({name,password,phone,email}) => {
+export const registerUser = ({name,password,phone,email,type}) => {
 
   
-  console.log(APIURLCONSTANTS.LOGIN);
-  console.log('Postdata JSON='+JSON.stringify({name,password,phone,email}));
+  console.log(APIURLCONSTANTS.REGISTER_USER_URL);
+  console.log('Postdata JSON='+JSON.stringify({name,password,phone,email,type}));
  
 
   return (dispatch) => {
@@ -71,7 +71,7 @@ export const registerUser = ({name,password,phone,email}) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({name,password,phone,email})
+      body: JSON.stringify({name,password,phone,email,type})
     })
     .then( (response) => {
       console.log('Received response Login: ', response);
@@ -92,7 +92,7 @@ export const registerUser = ({name,password,phone,email}) => {
       console.log('Error==='+e);
       alert('Server not responding');
       dispatch({
-        type: SHOW_LOADING,
+        type: SHOW_LOADING_REGISTRATION,
         payload: false
       });
 

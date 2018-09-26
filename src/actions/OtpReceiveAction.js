@@ -2,7 +2,8 @@ import {
     
   PHONE_NUM_CHANGED,
   RECEIVE_OTP ,
-  SHOW_OTP_LOADING                              
+  SHOW_OTP_LOADING ,
+  CLEAR_RECEIVE_OTP_DATA                             
   } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
@@ -70,3 +71,7 @@ export const receiveOtp = ({phoneNumber}) => {
     }
   
   };
+
+  export const clearReceiveOtpData = () => ({
+      type: CLEAR_RECEIVE_OTP_DATA
+    });
