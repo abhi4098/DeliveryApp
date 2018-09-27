@@ -40,7 +40,8 @@ class OtpVerificationScreen extends Component {
             code: '',
             phoneNumber: '',
             smsOTP: '',
-            isTimerVisible: true
+            isTimerVisible: true,
+            
         }
     }
 

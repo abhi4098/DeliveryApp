@@ -16,10 +16,10 @@ import {
     userProfile,
     showProfileLoading,
 
-    
-  } from "../../actions/ProfileActions";
-  import Loader from '../common/Loader';
-  import { connect } from "react-redux";
+
+} from "../../actions/ProfileActions";
+import Loader from '../common/Loader';
+import { connect } from "react-redux";
 import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
 class DriverProfileScreen extends Component {
@@ -27,80 +27,82 @@ class DriverProfileScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          loading: false,
-          userProfile:'',
-          profileResponseData: '',
-          username:'',
-          email:'',
-          phone:''
-          
-        }
-      }
+            loading: false,
+            userProfile: '',
+            profileResponseData: '',
+            username: '',
+            email: '',
+            phone: ''
 
-      componentWillMount(){
-          console.log("componentWillMount.........................")
-      }
-      componentDidMount(){
+        }
+    }
+    _onHideUnderlay() {
+        this.setState({ pressStatus: false });
+    }
+    _onShowUnderlay() {
+        this.setState({ pressStatus: true });
+    }
+    componentWillMount() {
+        console.log("componentWillMount.........................")
+    }
+    componentDidMount() {
         console.log("componentDidMount.........................")
 
-          this.getProfileData();
-      }
+        this.getProfileData();
+    }
 
-      componentWillUpdate(){
+    componentWillUpdate() {
         console.log("componentWillUpdate.........................")
 
-      }
-    
+    }
 
 
-      componentWillReceiveProps(nextProps)
-      {
-        if(nextProps.profileResponseData != undefined && nextProps.profileResponseData != '')
-        {
-            if(nextProps.profileResponseData.status == 200){
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.profileResponseData != undefined && nextProps.profileResponseData != '') {
+            if (nextProps.profileResponseData.status == 200) {
 
                 this.props.showProfileLoading(false);
-      
-                 // Clear any previous data if exist.
-                 if(nextProps.profileResponseData.message == "success")
-            {
-            AsyncStorage.setItem("userData", JSON.stringify(nextProps.profileResponseData.data));
-            }
-                this.setState({username: nextProps.profileResponseData.data.firstname +" " +nextProps.profileResponseData.data.lastname })
-                this.setState({email: nextProps.profileResponseData.data.email});
-                this.setState({phone: nextProps.profileResponseData.data.phone});
-            }
-          
-          else{
-            this.props.showProfileLoading(false);
-            alert(nextProps.loginResponseData.message);
-            //this.props.clearLoginRecord();
-          }
-        }
-      }
 
-      getProfileData(){
+                // Clear any previous data if exist.
+                if (nextProps.profileResponseData.message == "success") {
+                    AsyncStorage.setItem("userData", JSON.stringify(nextProps.profileResponseData.data));
+                }
+                this.setState({ username: nextProps.profileResponseData.data.firstname + " " + nextProps.profileResponseData.data.lastname })
+                this.setState({ email: nextProps.profileResponseData.data.email });
+                this.setState({ phone: nextProps.profileResponseData.data.phone });
+            }
+
+            else {
+                this.props.showProfileLoading(false);
+                alert(nextProps.loginResponseData.message);
+                //this.props.clearLoginRecord();
+            }
+        }
+    }
+
+    getProfileData() {
         this.props.showProfileLoading(true);
-          console.log("getprofile data.....................")
+        console.log("getprofile data.....................")
         AsyncStorage.getItem("userData").then((value) => {
-            if(value) {
+            if (value) {
                 userId = JSON.parse(value)._id;
                 console.log("userId..........................", userId)
-              
 
-              var profile={
-                userId: userId
-                
-              }
-            
-              this.props.userProfile(profile);
-               
-            
-          }
-        
+
+                var profile = {
+                    userId: userId
+
+                }
+
+                this.props.userProfile(profile);
+
+
+            }
+
         }).done();
-       
-      }
+
+    }
 
     onEditButtonPress() {
         Actions.pop();
@@ -112,12 +114,12 @@ class DriverProfileScreen extends Component {
             <View
                 style={{ flex: 1, backgroundColor: '#fff', }}>
                 <Loader
-          loading={this.props.isLoading} />
+                    loading={this.props.isLoading} />
                 <View
                     style={styles.imageContainer}>
 
                     <Image
-                       // style={{ width: 200, height: 50 }}
+                        // style={{ width: 200, height: 50 }}
                         source={AppLogo
                         }></Image>
 
@@ -131,8 +133,8 @@ class DriverProfileScreen extends Component {
                     style={{ backgroundColor: '#f1f1fd', paddingBottom: 20 }}>
                     <Text
                         style={styles.inputTextStyle} >
-                       {this.state.username}
-                                   </Text>
+                        {this.state.username}
+                    </Text>
                     <View
                         style={{
                             borderBottomColor: 'grey',
@@ -156,7 +158,7 @@ class DriverProfileScreen extends Component {
                             paddingTop: 10
                         }}>
                         {this.state.email}
-                                   </Text>
+                    </Text>
 
 
                     <View
@@ -172,7 +174,7 @@ class DriverProfileScreen extends Component {
                     <Text
                         style={styles.inputTextStyle} >
                         {this.state.phone}
-                                   </Text>
+                    </Text>
 
 
                     <View
@@ -192,23 +194,23 @@ class DriverProfileScreen extends Component {
                         flex: 1, backgroundColor: '#fff', justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <View
+                    <TouchableHighlight
                         style={styles.buttonContainer}
-
+                        underlayColor={'#14136d'}
+                        onPress={this.onEditButtonPress.bind(this)}
+                        onHideUnderlay={this._onHideUnderlay.bind(this)}
+                        onShowUnderlay={this._onShowUnderlay.bind(this)}
                     >
                         <Text
-                            onPress={this.onEditButtonPress.bind(this)}
-                            style={{
-                                color: '#14136d',
-                                fontWeight: 'bold',
-                                fontSize: 16,
-                                textAlign: 'center',
-                                width: 150,
-                                height: 35,
-                            }}
+                            style={
+                                this.state.pressStatus
+                                    ? styles.buttonTextOnPress
+                                    : styles.buttonText
+                            }
                         >EDIT PROFILE</Text>
-                    </View>
+                    </TouchableHighlight>
                 </View>
+
             </View>
         );
     }
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
     }
     , buttonContainer: {
 
-        margin: 20,
+      
         marginTop: 30,
         padding: 5,
         width: 150,
@@ -258,6 +260,24 @@ const styles = StyleSheet.create({
 
 
     },
+    buttonTextOnPress: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 16,
+        textAlign: 'center',
+        width: 120,
+        height: 35,
+
+    },
+    buttonText: {
+        color: '#14136d',
+        fontWeight: 'bold',
+        fontSize: 16,
+        textAlign: 'center',
+        width: 120,
+        height: 35,
+
+    }
 
 
 
@@ -265,11 +285,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ profile }) => {
     const { profileResponseData, isLoading } = profile;
-    
-  
+
+
     return {
         profileResponseData: profileResponseData,
         isLoading: isLoading
     }
-  }
-export default connect(mapStateToProps,{userProfile,showProfileLoading})(DriverProfileScreen);
+}
+export default connect(mapStateToProps, { userProfile, showProfileLoading })(DriverProfileScreen);

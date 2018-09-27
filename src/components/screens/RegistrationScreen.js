@@ -32,6 +32,8 @@ import {
 
 } from "../../actions/index";
 import Loader from '../common/Loader';
+import CountryPicker from 'react-native-country-picker-modal';
+import PhoneInput from "react-native-phone-input";
 
 
 
@@ -40,8 +42,14 @@ class RegistrationScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.onPressFlag = this.onPressFlag.bind(this);
+    this.selectCountry = this.selectCountry.bind(this);
     this.state = {
-      userType: ''
+      userType: '',
+      isCustomer: false,
+      cca2: 'US',
+      callingCode: '1',
+      phone: '',
     }
   }
 
@@ -65,6 +73,19 @@ class RegistrationScreen extends Component {
     Actions.OtpVerificationScreen();
   }
 
+  onPressFlag() {
+    this.countryPicker.openModal();
+  }
+
+  selectCountry(country) {
+    this.phone.selectCountry(country.cca2.toLowerCase());
+    this.setState({
+      cca2: country.cca2,
+      callingCode: country.callingCode
+    });
+
+  }
+
 
   componentDidUpdate() {
 
@@ -85,31 +106,37 @@ class RegistrationScreen extends Component {
     else if (this.props.password == '') {
       Alert.alert("Please Enter Password");
     }
-    // else if (this.props.phone == '') {
-    //   Alert.alert("Please Enter Phone");
-    // }
+    else if (this.props.phone == '' && !isCustomer) {
+      Alert.alert("Please Enter Phone");
+    }
     else if (this.props.email == '') {
       Alert.alert("Please Enter Email");
     }
     else {
       this.props.showRegistrationLoading(true);
-      AsyncStorage.getItem("nboxitUserType").then((nboxitUserType) => {
-        if (nboxitUserType) {
-          userType = nboxitUserType;
-          var register = {
-            name: this.props.username,
-            password: this.props.password,
-            phone: this.state.phone,
-            email: this.props.email,
-            type: userType
+      if (userType == "driver") {
+        completePhoneNumber = '+' + this.state.callingCode + this.props.phone;
+        var register = {
+          name: this.props.username,
+          password: this.props.password,
+          phone: completePhoneNumber,
+          email: this.props.email,
+          type: userType
 
-          };
-          this.props.registerUser(register);
+        };
+        this.props.registerUser(register);
+      }
+      else {
+        var register = {
+          name: this.props.username,
+          password: this.props.password,
+          phone: this.state.phone,
+          email: this.props.email,
+          type: userType
 
-        } else {
-          Alert.alert("User type is not selected");
-        }
-      }).done();
+        };
+        this.props.registerUser(register);
+      }
 
 
 
@@ -135,8 +162,7 @@ class RegistrationScreen extends Component {
 
         //AsyncStorage.setItem("role", nextProps.registerResponseData.role);
         // AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
-        if(userType == "driver")
-        {
+        if (userType == "driver") {
           alert("Verification link send");
           this.props.nameChanged('');
           this.props.passChanged('');
@@ -145,13 +171,13 @@ class RegistrationScreen extends Component {
           Actions.pop();
           Actions.LoginScreen();
         }
-        else{
+        else {
           AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));
-                Actions.pop();
-                Actions.Dashboard();
+          Actions.pop();
+          Actions.Dashboard();
         }
 
-        
+
 
       }
 
@@ -173,10 +199,25 @@ class RegistrationScreen extends Component {
     AsyncStorage.getItem("userPhoneNumber").then((userPhoneNumber) => {
       if (userPhoneNumber) {
         phone = userPhoneNumber;
-        this.setState({phone: userPhoneNumber});
-      } 
-  }).done();
-    
+        this.setState({ phone: userPhoneNumber });
+      }
+    }).done();
+
+    AsyncStorage.getItem("nboxitUserType").then((nboxitUserType) => {
+      userType = nboxitUserType;
+      if (nboxitUserType == 'customer') {
+        this.setState({ isCustomer: true })
+      }
+      else {
+        this.setState({ isCustomer: false })
+      }
+    }).done();
+
+
+    this.setState({
+      pickerData: this.phone.getPickerData(),
+    });
+
   }
 
   componentWillUnmount() {
@@ -197,6 +238,73 @@ class RegistrationScreen extends Component {
     console.log("onBackPress2", Actions.state.index)
     Actions.pop();
     return true;
+  }
+
+  showPhoneNumber() {
+    if (this.state.isCustomer) {
+      return <View style={styles.inputContainer}>
+        <View style={styles.iconContainer}>
+        <Image
+                  source={PhoneIcon}
+                  style={styles.inputIcon}
+                  resizeMode="contain"
+                />
+        </View>
+        <View>
+          <TextInput
+            style={{ width: 250, flex: 1, marginLeft: 10, fontSize: 18 }}
+            underlineColorAndroid='transparent'
+            //keyboardType="phone-pad"
+            placeholder="Phone Number"
+            placeholderTextColor="#696969"
+            onChangeText={this.onPhoneChanged.bind(this)}
+            value={this.state.phone}
+            editable={false}
+
+
+          />
+
+
+        </View>
+      </View>;
+    } else {
+      return <View style={styles.inputContainer}>
+        <View style={styles.container}>
+          <PhoneInput
+            ref={(ref) => {
+              this.phone = ref;
+            }}
+            onPressFlag={this.onPressFlag}
+          />
+
+          <CountryPicker
+            ref={(ref) => {
+              this.countryPicker = ref;
+            }}
+            onChange={value => this.selectCountry(value)}
+            translation="eng"
+            cca2={this.state.cca2}
+          >
+            <View />
+          </CountryPicker>
+        </View>
+        <View>
+          <TextInput
+            style={{ width: 220, flex: 1, marginLeft: 10, fontSize: 18 }}
+            underlineColorAndroid='transparent'
+            keyboardType="phone-pad"
+            placeholder="Phone Number"
+            placeholderTextColor="#696969"
+            onChangeText={this.onPhoneChanged.bind(this)}
+            value={this.props.phone}
+
+
+          />
+
+
+        </View>
+      </View>;
+    }
   }
 
   render() {
@@ -279,37 +387,6 @@ class RegistrationScreen extends Component {
                 borderBottomWidth: 1,
               }}
             />
-
-            <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Image
-                  source={PhoneIcon}
-                  style={styles.inputIcon}
-                  resizeMode="contain"
-                />
-              </View>
-              <View>
-                <TextInput
-                  style={{ width: 250, flex: 1, marginLeft: 10, fontSize: 18 }}
-                  underlineColorAndroid='transparent'
-                  //keyboardType="phone-pad"
-                  placeholder="Phone Number"
-                  placeholderTextColor="#696969"
-                  onChangeText={this.onPhoneChanged.bind(this)}
-                  value={this.state.phone}
-                  editable={false} 
-                  selectTextOnFocus={false}
-
-                />
-              </View>
-            </View>
-            <View
-              style={{
-                borderBottomColor: 'grey',
-                borderBottomWidth: 1,
-              }}
-            />
-
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
                 <Image
@@ -331,6 +408,16 @@ class RegistrationScreen extends Component {
                 />
               </View>
             </View>
+            <View
+              style={{
+                borderBottomColor: 'grey',
+                borderBottomWidth: 1,
+              }}
+            />
+
+
+            {this.showPhoneNumber()}
+
             <View
               style={{
                 borderBottomColor: 'grey',
@@ -397,7 +484,11 @@ const styles = StyleSheet.create({
 
 
   },
+  container: {
+    flex: 1,
+    marginBottom: 5
 
+  },
   inputsContainer: {
     alignContent: 'space-between'
   },

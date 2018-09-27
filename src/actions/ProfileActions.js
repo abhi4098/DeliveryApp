@@ -80,7 +80,7 @@ export const userProfile = ({userId}) => {
         console.log('Error==='+e);
         alert('Server not responding');
         dispatch({
-          type: SHOW_LOADING,
+          type: SHOW_PROFILE_LOADING,
           payload: false
         });
   
@@ -90,11 +90,11 @@ export const userProfile = ({userId}) => {
   };
 
 
-  export const userProfileUpdate = ({name,email,phone,userId}) => {
+  export const userProfileUpdate = ({name,email,phone,userId,type,mode}) => {
 
     
     console.log(APIURLCONSTANTS.USER_UPDATE_PROFILE);
-    console.log('Postdata JSON='+JSON.stringify({name,email,phone,userId}));
+    console.log('Postdata JSON='+JSON.stringify({name,email,phone,userId,type,mode}));
    
   
     return (dispatch) => {
@@ -108,7 +108,7 @@ export const userProfile = ({userId}) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name,email,phone,userId})
+        body: JSON.stringify({name,email,phone,userId,type,mode})
       })
       .then( (response) => {
         console.log('Received response profile update: ', response);
@@ -129,7 +129,7 @@ export const userProfile = ({userId}) => {
         console.log('Error==='+e);
         alert('Server not responding');
         dispatch({
-          type: SHOW_LOADING,
+          type: SHOW_UPDATE_PROFILE_LOADING,
           payload: false
         });
   
@@ -177,7 +177,7 @@ export const userProfile = ({userId}) => {
         console.log('Error==='+e);
         alert('Server not responding');
         dispatch({
-          type: SHOW_LOADING,
+          type: SHOW_UPDATE_PASSWORD_LOADING,
           payload: false
         });
   
