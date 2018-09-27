@@ -60,6 +60,11 @@ class CustomerLoginScreen extends Component {
 
   }
 
+  onLoginViaEmailNowPress(){
+    Actions.pop();
+    Actions.LoginScreen();
+  }
+
   onSubmitButtonPress() {
 
     Keyboard.dismiss();
@@ -222,8 +227,25 @@ class CustomerLoginScreen extends Component {
             >SEND OTP</Text>
           </TouchableHighlight>
 
+<Text
+style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50,marginBottom:50,fontSize: 18}}>
+  -OR-
+</Text>
 
 
+   <View
+            style={{ alignItems: 'center', flexDirection: 'row'}}>
+            <View>
+              <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }} >If Already Registered?</Text>
+            </View>
+            <TouchableHighlight underlayColor="transparent" >
+              <View>
+                <Text
+                  onPress={this.onLoginViaEmailNowPress.bind(this)}
+                  style={{ color: '#14136d', marginLeft: 5, fontSize: 16, fontWeight: 'bold' }} >Login Via Email/Phone</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
 
 
 

@@ -161,7 +161,7 @@ const RouterComponent = () => {
 						 <Scene
 	                key="OtpVerificationScreen"      
 	                component={OtpVerificationScreen}  
-					hideNavBar={true}
+		 			hideNavBar={true}
 					
 					
 				

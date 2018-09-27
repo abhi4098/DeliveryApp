@@ -43,28 +43,32 @@ class LoginScreen extends Component {
     this.state = {
       loading: false,
       loginUser: '',
-      password:'',
-      username: ''
+      password: '',
+      username: '',
+      isCustomer: false
     }
   }
 
 
   componentWillMount() {
+    this.props.usernameChanged('');
+    this.props.passwordChanged('');
 
     this.props.showLoading(true);
-    setTimeout(()=>{    
-    AsyncStorage.getItem("userData").then((token) => {
-          if(token) {
-            if(token.length > 0){
-              Actions.Dashboard();
-              this.props.showLoading(false);
-            }
-          }else{
+   
+    setTimeout(() => {
+      AsyncStorage.getItem("userData").then((token) => {
+        if (token) {
+          if (token.length > 0) {
+            Actions.Dashboard();
             this.props.showLoading(false);
           }
+        } else {
+          this.props.showLoading(false);
+        }
       }).done();
-    },500);
-    
+    }, 500);
+
   }
 
   onUserNameChanged(username) {
@@ -78,6 +82,7 @@ class LoginScreen extends Component {
   onClickHerePress() {
     this.props.usernameChanged('');
     this.props.passwordChanged('');
+    Actions.pop();
     Actions.ForgotPasswordScreen();
   }
 
@@ -91,91 +96,115 @@ class LoginScreen extends Component {
     /* Actions.pop();
     Actions.DriverStatusScreen(); */
 
-     Keyboard.dismiss();
+    Keyboard.dismiss();
 
-    if (this.props.username == ''){
+    if (this.props.username == '') {
       Alert.alert("Please Enter Username");
     }
-    else if (this.props.password == ''){
+    else if (this.props.password == '') {
       Alert.alert("Please Enter Password");
     }
-    else{
+    else {
       this.props.showLoading(true);
-      var user={
-        phone:this.props.username,
-        password:this.props.password,
+      var user = {
+        phone: this.props.username,
+        password: this.props.password,
         accountstatus: 'active'
-        
+
       };
-    
-      this.props.loginUser(user); 
+
+      this.props.loginUser(user);
     }
- 
-  
+
+
   }
 
-  
+
 
   componentWillReceiveProps(nextProps) {
-            
-     
 
 
 
-    if(nextProps.loginResponseData != undefined && nextProps.loginResponseData != ''){
-      console.log("nextProps.loginResponseData'''''''''''''''''''''''---------------------" ,nextProps.loginResponseData);
 
-        if(nextProps.loginResponseData.status == 200){
 
-            this.props.showLoading(false);
-  
-            // Clear any previous data if exist.
-            
-            
-            if(nextProps.loginResponseData.message == "UserExist")
-            {
-            AsyncStorage.setItem("userData", JSON.stringify(nextProps.loginResponseData.data));
-            }
+    if (nextProps.loginResponseData != undefined && nextProps.loginResponseData != '') {
+      console.log("nextProps.loginResponseData'''''''''''''''''''''''---------------------", nextProps.loginResponseData);
 
+      if (nextProps.loginResponseData.status == 200) {
+
+        this.props.showLoading(false);
+
+        // Clear any previous data if exist.
+
+
+        if (nextProps.loginResponseData.message == "UserExist" && nextProps.loginResponseData.data.type == userType) {
+          AsyncStorage.setItem("userData", JSON.stringify(nextProps.loginResponseData.data));
+          if (userType == 'driver') {
             this.props.usernameChanged('');
             this.props.passwordChanged('');
 
             Actions.pop();
             Actions.DriverStatusScreen();
+          }
+          else {
+            Actions.pop();
+            Actions.Dashboard();
+          }
         }
-      
-      else{
+
+        else {
+          Alert.alert("Invalid Credentials")
+        }
+
+
+      }
+
+      else {
         this.props.showLoading(false);
         alert(nextProps.loginResponseData.message);
         this.props.clearLoginRecord();
       }
-   
+
     }
-   
-  
 
 
-}
+
+
+  }
 
 
   componentDidMount() {
+    console.log("componentDidMount...............................................");
+    AsyncStorage.getItem("nboxitUserType").then((nboxitUserType) => {
+      userType = nboxitUserType;
+      if (nboxitUserType == 'customer') {
+        this.setState({ isCustomer: true })
+      }
+      else {
+        this.setState({ isCustomer: false })
+      }
+
+    }).done();
+
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
-    if(this.props.loginResponseData != undefined && this.props.loginResponseData != ''){
+    if (this.props.loginResponseData != undefined && this.props.loginResponseData != '') {
       this.props.clearLoginRecord();
     }
 
   }
 
-  componentDidUpdate() {
 
-    if(this.props.loginResponseData != undefined && this.props.loginResponseData != ''){
+  componentDidUpdate() {
+    console.log("componentDidUpdate...............................................");
+    if (this.props.loginResponseData != undefined && this.props.loginResponseData != '') {
       this.props.clearLoginRecord();
     }
   }
 
   componentWillUnmount() {
+    console.log("componentWillUnmount...............................................");
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-    
+
   }
 
   onBackPress() {
@@ -188,25 +217,48 @@ class LoginScreen extends Component {
     Actions.pop();
     return true;
   }
+
+
+  renderRegisrationText() {
+    if (this.state.isCustomer) {
+      return ;
+    } else {
+      return<View
+      style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50 }}>
+      <View>
+        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }} >Don't Have Account,</Text>
+      </View>
+      <TouchableHighlight underlayColor="transparent" >
+        <View>
+          <Text
+            onPress={this.onRegisteNowPress.bind(this)}
+            style={{ color: '#14136d', marginLeft: 5, fontSize: 16, fontWeight: 'bold' }} >Register Now</Text>
+        </View>
+      </TouchableHighlight>
+    </View>;
+    }
+  }
+
+
   render() {
     return (
-      
+
       <View style={{ flex: 1, backgroundColor: "#f1f1fd" }}>
- <Loader
+        <Loader
           loading={this.props.isLoading} />
         <View style={styles.controlsContainer}>
 
           <Image
-            
+
             source={AppLogo
             }></Image>
           <View>
-          <ShimmerPlaceHolder autoRun={true} duration = {1000}>
+
             <Text
               style={styles.loginText}>
               LOGIN
 						</Text>
-            </ShimmerPlaceHolder>
+
           </View>
 
           <View style={styles.inputsContainer}>
@@ -232,7 +284,7 @@ class LoginScreen extends Component {
                   placeholderTextColor="#696969"
                   onChangeText={this.onUserNameChanged.bind(this)}
                   value={this.props.username}
-           
+
                 />
               </View>
             </View>
@@ -271,11 +323,9 @@ class LoginScreen extends Component {
               }}
             />
           </View>
-
-
           <View style={styles.forgotPasswordContainer}>
             <View>
-              <Text style={{ color: 'black', marginLeft: 5, fontWeight: 'bold', fontSize: 16 }} >Forgot Password</Text>
+              <Text style={{ color: 'black', marginLeft: 5, fontWeight: 'bold', fontSize: 16 }} >Forgot Password,</Text>
             </View>
             <TouchableHighlight underlayColor="transparent" >
               <View>
@@ -285,6 +335,8 @@ class LoginScreen extends Component {
               </View>
             </TouchableHighlight>
           </View>
+
+
           <View
             style={styles.buttonContainer}
 
@@ -301,20 +353,8 @@ class LoginScreen extends Component {
               }}
             >LOGIN</Text>
           </View>
-
-          <View
-            style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50 }}>
-            <View>
-              <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }} >Don't Have Account,</Text>
-            </View>
-            <TouchableHighlight underlayColor="transparent" >
-              <View>
-                <Text
-                  onPress={this.onRegisteNowPress.bind(this)}
-                  style={{ color: '#14136d', marginLeft: 5, fontSize: 16, fontWeight: 'bold' }} >Register Now</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
+          {this.renderRegisrationText()}
+         
 
 
 
@@ -418,7 +458,7 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 3
-    },  
+    },
     shadowRadius: 10,
     shadowOpacity: 0.25,
     marginTop: 2
@@ -435,7 +475,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ login }) => {
   const { username, password, loginResponseData, isLoading } = login;
-  
+
 
   return {
     username: username,
@@ -444,4 +484,4 @@ const mapStateToProps = ({ login }) => {
     isLoading: isLoading
   }
 }
-export default connect(mapStateToProps, { usernameChanged, passwordChanged,showLoading,loginUser,clearLoginRecord })(LoginScreen);
+export default connect(mapStateToProps, { usernameChanged, passwordChanged, showLoading, loginUser, clearLoginRecord })(LoginScreen);

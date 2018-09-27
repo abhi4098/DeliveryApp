@@ -275,7 +275,7 @@ class EditProfileScreen extends Component {
                                         : styles.buttonText
                                 }
 
-                            >CHANGEPASSWORD</Text>
+                            >CHANGE PASSWORD</Text>
                         </TouchableHighlight>
                        
                 </View>
@@ -308,8 +308,7 @@ const styles = StyleSheet.create({
 
 
         marginTop: 70,
-        marginEnd: 30,
-        marginStart: 10,
+       
         padding: 5,
         width: 150,
         height: 35,

@@ -93,6 +93,7 @@ class ForgotPasswordScreen extends Component {
     }
     
     componentDidMount () {
+      this.props.emailChanged('');
       BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
   
