@@ -10,5 +10,6 @@ const APIURLCONSTANTS = {
     USER_UPDATE_PROFILE                    :  BASE_URL+'users/updateProfile',
     OTP_RECEIVE                            : BASE_URL+ 'users/sendClientOtp',
     VERIFY_RECEIVED_OTP                            : BASE_URL+ 'users/verifyUser',
+    DASHBOARD_URL                            : BASE_URL+ 'shipments/ShipmentsList/',
 }
 export default APIURLCONSTANTS;

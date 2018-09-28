@@ -7,6 +7,7 @@ import RegistrationReducer from "./RegistrationReducer";
 import ProfileReducer from './ProfileReducer';
 import OtpReceiveReducer from './OtpReceiveReducer';
 import VerifyOtpReducer from './VerifyOtpReducer';
+import DashboardReducer from './DashboardReducer';
 
 
 export default combineReducers({
@@ -16,6 +17,7 @@ export default combineReducers({
   register: RegistrationReducer,
   profile: ProfileReducer,
   otpReceive: OtpReceiveReducer,
-  verifyReceivedOtp:VerifyOtpReducer
+  verifyReceivedOtp:VerifyOtpReducer,
+  dashboardReducer: DashboardReducer
 
 });

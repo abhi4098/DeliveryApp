@@ -14,18 +14,19 @@ import {
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import AppLogo from "../../assets/app_logo.png";
-import CodeInput from 'react-native-confirmation-code-input';
+//import CodeInput from 'react-native-confirmation-code-input';
 import SmsListener from 'react-native-android-sms-listener';
 import { PermissionsAndroid } from 'react-native';
 import Loader from '../common/Loader';
 import { connect } from "react-redux";
 import CountDown from 'react-native-countdown-component';
+//import OtpInput from 'react-otp-input';
 
 import {
     verifyOtp,
     showVerifyOtpLoading,
     resendOtp,
-    clearVerifyOtpData
+    clearVerifyOtpData,
 
 } from "../../actions/index";
 class OtpVerificationScreen extends Component {
@@ -41,9 +42,11 @@ class OtpVerificationScreen extends Component {
             phoneNumber: '',
             smsOTP: '',
             isTimerVisible: true,
-            
+
         }
     }
+
+    
 
     componentDidUpdate() {
 
@@ -70,19 +73,28 @@ class OtpVerificationScreen extends Component {
 
     }
 
-    componentWillUnmount()
-    {
+    componentWillUnmount() {
         subscription.remove();
     }
+
+
+    // componentWillMount() {
+
+    //     console.log("componentWillMount....................................................",code);
+    //    // this.setState({ code: code });
+    // }
+
     componentDidMount() {
         console.log("otpverificationscree----------------------------------")
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         this.requestReadSmsPermission();
         let subscription = SmsListener.addListener(message => {
             console.log("sms listerner response........................", message.body);
-            var codeFromSMS = message.body;; 
-            code = codeFromSMS.substring(11, 17);
-            this.setState({ code: code });
+            var codeFromSMS = message.body;
+            smsCode = codeFromSMS.substring(11, 17);
+            console.log("smscode.......................................",smsCode)
+            this.setState({ code: smsCode });
+            //this.componentWillMount();
 
 
 
@@ -124,40 +136,40 @@ class OtpVerificationScreen extends Component {
 
     onVerifyOtpButtonPress() {
         code = this.state.code;
-       // Actions.RegistrationScreen();
-       console.log("code----------------------------------------",code);
-       console.log("smsOTP----------------------------------------",smsOTP);
-       if (code == null)
-       alert("Please enter OTP");
+        // Actions.RegistrationScreen();
+        console.log("code----------------------------------------", code);
+        console.log("smsOTP----------------------------------------", smsOTP);
+        if (code == null)
+            alert("Please enter OTP");
 
-   if (code == smsOTP) {
-       this.props.showVerifyOtpLoading(true);
-       var optVerifyRequest = {
-           phoneNumber: phoneNumber,
-           code: code,
-           mode:"mobile"
-       };
-       this.props.verifyOtp(optVerifyRequest);
+        if (code == smsOTP) {
+            this.props.showVerifyOtpLoading(true);
+            var optVerifyRequest = {
+                phoneNumber: phoneNumber,
+                code: code,
+                mode: "mobile"
+            };
+            this.props.verifyOtp(optVerifyRequest);
 
-   } else {
+        } else {
 
-       Alert.alert(
-           'Confirmation Code',
-           'Code not match!',
-           [{ text: 'OK' }],
-           { cancelable: false }
-       );
+            Alert.alert(
+                'Confirmation Code',
+                'Code not match!',
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
 
-       this.refs.codeInputRef1.clear();
-   }
+            this.refs.codeInputRef1.clear();
+        }
     }
 
 
 
     _onFulfill(code) {
-        console.log("inside on fullfill method---------------------------------",code);
-        this.setState({code:code});
-       
+        console.log("inside on fullfill method---------------------------------", code);
+        this.setState({ code: code });
+
     }
 
 
@@ -167,9 +179,7 @@ class OtpVerificationScreen extends Component {
             BackHandler.exitApp();
             return false;
         }
-        console.log("onBackPress22222..............", Actions.state.index)
-        // Actions.pop();
-        // Actions.refresh();
+
 
         Actions.pop('CustomerLoginScreen');
         setTimeout(() => {
@@ -189,19 +199,18 @@ class OtpVerificationScreen extends Component {
             if (nextProps.verifyOtpResponseData.message == "success") {
 
                 this.props.showVerifyOtpLoading(false);
-               
 
-                if(nextProps.verifyOtpResponseData.userstatus)
-                {
-                AsyncStorage.setItem("userData", JSON.stringify(nextProps.verifyOtpResponseData.data));
-                Actions.pop();
-                Actions.Dashboard();
-               }
-               else{
-                Actions.pop();
-                Actions.RegistrationScreen();
-               }
-               
+
+                if (nextProps.verifyOtpResponseData.userstatus) {
+                    AsyncStorage.setItem("userData", JSON.stringify(nextProps.verifyOtpResponseData.data));
+                    Actions.pop();
+                    Actions.Dashboard();
+                }
+                else {
+                    Actions.pop();
+                    Actions.RegistrationScreen();
+                }
+
 
 
                 // Actions.RegistrationScreen();
@@ -249,14 +258,15 @@ class OtpVerificationScreen extends Component {
         this.setState({ isTimerVisible: true })
     }
 
+   
 
     displayTimer() {
         if (this.state.isTimerVisible) {
             return <CountDown
-                style={{ marginTop: 40, borderColor: "#14136d" }}
+                style={{ marginTop: 20, borderColor: "#14136d" }}
                 until={60}
                 onFinish={() => this.onTimerFinish()}
-                onPress={() => alert('hello')}
+                // onPress={() => alert('hello')}
                 size={15}
                 timeToShow={['M', 'S']}
                 digitBgColor="#D3D3D3"
@@ -298,8 +308,21 @@ class OtpVerificationScreen extends Component {
                             style={styles.textStyle2}
                         >{this.state.phoneNumber}</Text>
 
+                        
+            <TextInput
+                  style={{ width: 150, flex: 1, fontSize: 18,marginBottom:10,marginTop:40,alignItems: 'center', }}
+                  underlineColorAndroid='grey'
+                  autoCapitalize='none'
+                  keyboardType='phone-pad'
+                  returnKeyType='next'
+                  textAlign={'center'}
+                  placeholderTextColor="#696969"
+                  onChangeText={(code) => this.setState({ code })}
+                  value={this.state.code}
 
-                        <CodeInput
+                />
+
+                        {/* <CodeInput
                             ref="codeInputRef1"
                             secureTextEntry
                             className={'border-b'}
@@ -314,7 +337,7 @@ class OtpVerificationScreen extends Component {
                             onFulfill={(code) => this._onFulfill(code)}
                             containerStyle={{ marginTop: 40, marginBottom: 10, }}
 
-                        />
+                        /> */}
                         {this.displayTimer()}
 
 
@@ -406,7 +429,7 @@ const styles = StyleSheet.create({
     textStyle3: {
         color: '#c70c1a',
         fontSize: 16,
-        marginTop: 40
+        marginTop: 20
     },
 
     buttonTextOnPress: {

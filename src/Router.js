@@ -105,7 +105,7 @@ const RouterComponent = () => {
  <Scene
 					key="DriverProfileScreen"   
 	                component={DriverProfileScreen}  
-					title = "Driver Profile"
+					title = "Profile"
 				
 					
 					

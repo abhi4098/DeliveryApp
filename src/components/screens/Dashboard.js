@@ -5,27 +5,34 @@ import {
 	BackHandler,
 	StyleSheet,
 	Image,
-	TouchableHighlight,  
+	TouchableHighlight,
 	Button,
 	Keyboard,
-    Alert,
-    AsyncStorage
+	Alert,
+	AsyncStorage,
+	FlatList
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
 import SideMenu from "react-native-side-menu";
 import Menu from "./Menu";
+import { connect } from "react-redux";
 import hamburger from "../../assets/hamburger.png";
+import { List, ListItem,Card } from "react-native-elements";
 
+import {
+	dashboardData,
+	showDashBoardLoading,
+} from "../../actions/index";
 
 
 class Dashboard extends Component {
-	constructor() {
+	constructor(props) {
 
-		super();
-
-		// Creating Global Variable.
-		//global.isLogin = true;
-		console.log(global.isLogin)
+		super(props);
+		this.state = {
+			loading: false,
+			dashboardData: ''
+		}
 	}
 
 
@@ -38,7 +45,13 @@ class Dashboard extends Component {
 
 	};
 
-	
+	componentWillMount() {
+		this.getProfileData();
+
+
+	}
+
+
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 	}
@@ -47,13 +60,71 @@ class Dashboard extends Component {
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 	}
 
+	getProfileData() {
+
+		AsyncStorage.getItem("userData").then((value) => {
+			if (value) {
+				usertype = JSON.parse(value).type;
+				phoneNumber = JSON.parse(value).phone;
+				// userId = JSON.parse(value)._id;
+				// this.setState({ name: JSON.parse(value).firstname + " " + JSON.parse(value).lastname })
+				// this.setState({ email: JSON.parse(value).email });
+				// this.setState({ phone: JSON.parse(value).phone });
+				this.props.showDashBoardLoading(true);
+				var dashboard = {
+					shipment_status: "Pending",
+					phone: phoneNumber,
+					type: usertype
+
+				};
+
+				this.props.dashboardData(dashboard);
+
+
+			}
+
+		}).done();
+
+	}
+
+	componentWillReceiveProps(nextProps) {
+
+
+
+
+
+		if (nextProps.dasboardResponseData != undefined && nextProps.dasboardResponseData != '') {
+			console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.dasboardResponseData);
+
+			if (nextProps.dasboardResponseData.status == 200) {
+
+				this.props.showDashBoardLoading(false);
+
+				this.setState({ data: nextProps.dasboardResponseData.data })
+
+			}
+
+			else {
+				this.props.showLoading(false);
+				alert(nextProps.dasboardResponseData.message);
+				this.props.clearLoginRecord();
+			}
+
+		}
+
+
+
+
+	}
+
+
 	onBackPress() {
 		if (Actions.state.index === 1) {
 			console.log("onBackPress.............", Actions.state.index)
 			BackHandler.exitApp();
 			return false;
 		}
-  		console.log("onBackPress..............", Actions.state.index)
+		console.log("onBackPress..............", Actions.state.index)
 		Actions.pop();
 		return true;
 	}
@@ -99,14 +170,19 @@ class Dashboard extends Component {
 			AsyncStorage.setItem("userData", '');
 			Actions.pop();
 			BackHandler.exitApp();
-			
+
 
 		}
 
 	}
 
 
-	
+	_renderItem({item}){
+		return <Card>
+		<Text >{item.packageno}</Text>
+		<Text >{item.sender_phone} </Text>
+		</Card>;
+	}
 
 
 	render() {
@@ -133,25 +209,26 @@ class Dashboard extends Component {
 								resizeMode="contain">
 							</Image>
 						</TouchableHighlight>
-                  <Text
-				  style={{fontSize:20, fontWeight:'bold'}}
-				  >Dashboard</Text>
-				  
+						<Text
+							style={{ fontSize: 20, fontWeight: 'bold' }}
+						>Dashboard</Text>
+
 					</View>
-                     <View
-					   style = {{alignItems:'center',paddingBottom:10}}>
-					<Text>Welcome back </Text>
+					<View
+						style={{ alignItems: 'center', paddingBottom: 10 }}>
+						<Text>Welcome back </Text>
 					</View>
 					<View style={styles.mainContainer}>
 
-				
-
-
-
-
 						
+							<FlatList
+								data={this.state.data}
+								renderItem={this._renderItem}
+								keyExtractor={this._keyExtractor}
+							
+							/>
+					
 
-						 
 
 					</View>
 
@@ -164,10 +241,10 @@ class Dashboard extends Component {
 const styles = StyleSheet.create({
 
 	mainContainer: {
-		alignItems: 'center',
+		//alignItems: 'center',
 		flex: 1,
 		backgroundColor: '#f1f1fd',
-		paddingTop: 30
+		//paddingTop: 30
 	},
 
 	parentContainer: {
@@ -238,4 +315,14 @@ const styles = StyleSheet.create({
 	},
 
 });
-export default Dashboard;
+
+const mapStateToProps = ({ dashboardReducer }) => {
+	const { dasboardResponseData, isLoading } = dashboardReducer;
+
+
+	return {
+		dasboardResponseData: dasboardResponseData,
+		isLoading: isLoading
+	}
+}
+export default connect(mapStateToProps, { dashboardData, showDashBoardLoading })(Dashboard);

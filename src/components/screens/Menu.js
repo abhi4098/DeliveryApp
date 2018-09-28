@@ -26,6 +26,7 @@ import AcceptedReq from "../../assets/current_orders.png";
 
 var userName = '';
 var userEmail = '';
+var userPhone = '';
 
 const styles = StyleSheet.create({
   menu: {
@@ -66,7 +67,9 @@ const styles = StyleSheet.create({
 
   userInfoContainer: {
     flex: 1,
-    padding: 20,
+    padding: 10,
+    marginTop: 30,
+    marginBottom:20,
     alignItems:'center',
     justifyContent: 'center',
   },
@@ -95,9 +98,10 @@ const styles = StyleSheet.create({
 
   welcomeText: {
     color: '#014292',
-    marginTop:10,
+    marginTop:30,
     fontSize: 18,
-    color:'white'
+    color:'white',
+    alignItems:'center'
   },
 
   userNameText: {
@@ -147,14 +151,34 @@ export default class Menu extends Component {
             constructor() {
               super();
               this.state = {
-                selectedMenuColor: 'transparent'
+                selectedMenuColor: 'transparent',
+                userName: '',
+                userEmail:'',
+                userPhone:''
 
               };
             }
  
-         /*    static propTypes = {
-              onItemSelected: PropTypes.func.isRequired,
-            }; */
+            componentWillUpdate() {
+              this.updateUserProfile();
+            }
+          
+            updateUserProfile() {
+              /********************** Call getUsersInfo from ASYNC Storage **********************/
+              AsyncStorage.getItem("userData").then((value) => {
+                if (value) {
+                    userId = JSON.parse(value)._id;
+                    userName = JSON.parse(value).firstname + " " + JSON.parse(value).lastname;
+                    userEmail = JSON.parse(value).email;
+                    userPhone = JSON.parse(value).phone;
+                    
+    
+                }
+    
+            }).done();
+              /*********************************************************************************/
+            }
+          
           
   render() {
 
@@ -170,9 +194,9 @@ export default class Menu extends Component {
                   style={styles.inputIcon}
                   resizeMode="contain"
                 />
-        <Text style={styles.welcomeText}>xyz</Text>
-        <Text style={{fontSize:15,color:'white'}}>Abc</Text>
-        <Text style={{fontSize:15,color:'white'}}>+91 9876450321</Text>
+        <Text style={styles.welcomeText}>{userName}</Text>
+        <Text style={{fontSize:13,color:'white',alignItems:'center',marginTop:5}}>{userEmail}</Text>
+        <Text style={{fontSize:13,color:'white',alignItems:'center',marginTop:5}}>{userPhone}</Text>
        
       </View>
       <View style={styles.lineView}></View>
@@ -211,7 +235,7 @@ export default class Menu extends Component {
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('DriverProfileScreen')}>
                 <Text
                   style={styles.item}>
-                  Driver Profile
+                  Profile
                 </Text>
               </TouchableHighlight>
             </View>
@@ -229,7 +253,7 @@ export default class Menu extends Component {
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('AcceptedDeliveryRequestScreen')}>
                 <Text
                   style={styles.item}>
-                 Accepted Requests
+                 Pending Orders
                 </Text>
               </TouchableHighlight>
             </View>
