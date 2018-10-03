@@ -31,6 +31,8 @@ import Tick from "../../assets/tick.png";
 import {
 	dashboardData,
 	showDashBoardLoading,
+	driverStatusCallFromDashboard,
+	clearDriverStatusResponseRecord
 } from "../../actions/index";
 
 
@@ -57,6 +59,9 @@ class Dashboard extends Component {
 	};
 
 	componentWillMount() {
+		if (this.props.driverStatusResponseData != undefined && this.props.driverStatusResponseData != '') {
+			this.props.clearDriverStatusResponseRecord();
+		  }
 		this.getProfileData();
 
 
@@ -132,12 +137,39 @@ class Dashboard extends Component {
 			}
 
 			else {
-				this.props.showLoading(false);
+				this.props.showDashBoardLoading(false);
 				alert(nextProps.dasboardResponseData.message);
-				this.props.clearLoginRecord();
+				
+				
+			}
+
+
+			
+		}
+
+		if (nextProps.driverStatusResponseData != undefined && nextProps.driverStatusResponseData != '') {
+			console.log("nextProps.driverStatusResponseData'''''''''''''''''''''''---------------------", nextProps.driverStatusResponseData);
+
+			if (nextProps.driverStatusResponseData.status == 200) {
+
+				this.props.showDashBoardLoading(false);
+				AsyncStorage.setItem("userData", '');
+				//AsyncStorage.setItem("driverStatus", JSON.stringify(nextProps.driverStatusResponseData.data));
+				console.log("driverStatus.......................................................");
+				Actions.pop();
+				BackHandler.exitApp();
+
+			}
+
+			else {
+				this.props.showDashBoardLoading(false);
+				alert(nextProps.driverStatusResponseData.message);
+				
 			}
 
 		}
+
+
 
 
 
@@ -194,9 +226,30 @@ class Dashboard extends Component {
 
 		if (item == 'Logout') {
 			//Actions.MapScreen();
-			AsyncStorage.setItem("userData", '');
-			Actions.pop();
-			BackHandler.exitApp();
+			console.log("logout clicked..................................")
+			//AsyncStorage.setItem("userData", '');
+			//AsyncStorage.setItem("driverStatus", '');
+			AsyncStorage.getItem("userData").then((value) => {
+
+				if (value) {
+					userId = JSON.parse(value)._id;
+					this.props.showDashBoardLoading(true);
+				
+					if (JSON.parse(value).type == 'driver') {
+						var driverStatus = {
+							driverid: userId,
+							dutystatus: 'on'
+	
+						};
+					}
+					this.props.driverStatusCallFromDashboard(driverStatus);
+	
+	
+				}
+	
+			}).done();
+			// Actions.pop();
+			// BackHandler.exitApp();
 
 
 		}
@@ -658,12 +711,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ dashboardReducer }) => {
-	const { dasboardResponseData, isLoading } = dashboardReducer;
+	const { dasboardResponseData, isLoading,driverStatusResponseData } = dashboardReducer;
 
 
 	return {
 		dasboardResponseData: dasboardResponseData,
+		driverStatusResponseData:driverStatusResponseData,
 		isLoading: isLoading
 	}
 }
-export default connect(mapStateToProps, { dashboardData, showDashBoardLoading })(Dashboard);
+	
+	export default connect(mapStateToProps, { dashboardData, showDashBoardLoading, clearDriverStatusResponseRecord,driverStatusCallFromDashboard})(Dashboard);

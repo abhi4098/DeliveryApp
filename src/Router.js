@@ -62,7 +62,8 @@ const RouterComponent = () => {
 					<Scene 
 					key="DriverStatusScreen"             
 					component={DriverStatusScreen}             
-				    hideNavBar={true}  />	
+					hideNavBar={true}
+					  />	
 
 			<Scene
 	                key="Dashboard"      

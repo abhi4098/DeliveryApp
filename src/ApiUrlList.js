@@ -11,5 +11,6 @@ const APIURLCONSTANTS = {
     OTP_RECEIVE                            : BASE_URL+ 'users/sendClientOtp',
     VERIFY_RECEIVED_OTP                            : BASE_URL+ 'users/verifyUser',
     DASHBOARD_URL                            : BASE_URL+ 'shipments/ShipmentsList/',
+    DRIVER_STATUS_URL                            : BASE_URL+ 'users/changedriverStatus',
 }
 export default APIURLCONSTANTS;

@@ -34,6 +34,7 @@ class AppSelectionScreen extends Component {
     onDriverButtonPress() {
         AsyncStorage.setItem("nboxitUserType", "driver");
         this.setState({ selectedButton: "driver" });
+        Actions.pop();
        Actions.LoginScreen();
         
     }
@@ -41,6 +42,7 @@ class AppSelectionScreen extends Component {
     onClientButtonPress() {
         AsyncStorage.setItem("nboxitUserType", "customer");
         this.setState({ selectedButton: "client" });
+        Actions.pop();
         Actions.CustomerLoginScreen();
        
     }

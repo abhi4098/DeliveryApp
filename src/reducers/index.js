@@ -8,6 +8,7 @@ import ProfileReducer from './ProfileReducer';
 import OtpReceiveReducer from './OtpReceiveReducer';
 import VerifyOtpReducer from './VerifyOtpReducer';
 import DashboardReducer from './DashboardReducer';
+import DriverStatusReducer from './DriverStatusReducer';
 
 
 export default combineReducers({
@@ -18,6 +19,7 @@ export default combineReducers({
   profile: ProfileReducer,
   otpReceive: OtpReceiveReducer,
   verifyReceivedOtp:VerifyOtpReducer,
-  dashboardReducer: DashboardReducer
+  dashboardReducer: DashboardReducer,
+  driverStatusReducer:DriverStatusReducer
 
 });
