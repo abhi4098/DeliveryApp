@@ -8,7 +8,7 @@ import {
 const INITIAL_STATE = {
 
     dasboardResponseData: '',
-    driverStatusResponseData: '',
+    driverStatusResData: '',
     isLoading: false
 }
 
@@ -24,10 +24,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, isLoading: action.payload }
 
         case DRIVER_STATUS:
-            return { ...state, driverStatusResponseData: action.payload }
+            return { ...state, driverStatusResData: action.payload }
 
             case CLEAR_DRIVER_STATUS_RESPONSE:
-            return { ...state, driverStatusResponseData:'' }
+            return { ...state, driverStatusResData:'' }
 
 
         default:

@@ -13,7 +13,8 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import {
 	driverStatusCall,
-	showDriverStatusLoading
+	showDriverStatusLoading,
+	clearDriverStatusRecord
 } from "../../actions/index";
 class DriverStatusScreen extends Component {
 	constructor(props) {
@@ -35,8 +36,15 @@ class DriverStatusScreen extends Component {
 
 	};
 
+	componentWillMount()
+	{
+		if (this.props.driverStatusResponseData != undefined && this.props.driverStatusResponseData != '') {
+			this.props.clearDriverStatusRecord();
+		}
+	}
 
 	componentDidMount() {
+		
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 	}
 
@@ -84,7 +92,7 @@ class DriverStatusScreen extends Component {
 
 				this.props.showDriverStatusLoading(false);
 
-				AsyncStorage.setItem("driverStatus", JSON.stringify(nextProps.driverStatusResponseData.data));
+				AsyncStorage.setItem("userData", JSON.stringify(nextProps.driverStatusResponseData.data));
 				Actions.pop();
 				Actions.Dashboard();
 
@@ -173,4 +181,4 @@ const mapStateToProps = ({ driverStatusReducer }) => {
 		isLoading: isLoading
 	}
 }
-export default connect(mapStateToProps, { driverStatusCall, showDriverStatusLoading })(DriverStatusScreen);
+export default connect(mapStateToProps, { driverStatusCall, showDriverStatusLoading,clearDriverStatusRecord })(DriverStatusScreen);

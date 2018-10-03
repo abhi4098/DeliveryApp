@@ -1,7 +1,8 @@
 import {
 
     DRIVER_STATUS,
-    SHOW_DRIVER_STATUS_LOADING
+    SHOW_DRIVER_STATUS_LOADING,
+    CLEAR_DRIVER_STATUS
                                 
  } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
@@ -63,3 +64,7 @@ export const showDriverStatusLoading =(value)=>{
     }
   
   };
+
+  export const clearDriverStatusRecord = () => ({
+    type:CLEAR_DRIVER_STATUS
+  });

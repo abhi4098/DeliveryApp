@@ -1,7 +1,8 @@
 import {
 
     DRIVER_STATUS,
-    SHOW_DRIVER_STATUS_LOADING
+    SHOW_DRIVER_STATUS_LOADING,
+    CLEAR_DRIVER_STATUS
                                 
  } from '../actions/actionTypes';
 
@@ -21,6 +22,10 @@ export default (state = INITIAL_STATE, action) => {
 
         case SHOW_DRIVER_STATUS_LOADING:
             return { ...state, isLoading: action.payload }
+
+            case CLEAR_DRIVER_STATUS:
+            return { ...state, driverStatusResponseData: '' }
+
 
         default:
             return state;

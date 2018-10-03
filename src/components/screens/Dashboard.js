@@ -25,6 +25,7 @@ import Order from "../../assets/order.png";
 import Time from "../../assets/time.png";
 import Location from "../../assets/location.png";
 import Tick from "../../assets/tick.png";
+import FlipToggle from 'react-native-flip-toggle-button';
 
 
 
@@ -44,24 +45,18 @@ class Dashboard extends Component {
 			loading: false,
 			dashboardData: '',
 			pressStatus: false,
-			usertype: ''
+			usertype: '',
+			isActive: true,
 		}
 	}
 
 
-	state = {
-		isOpen: false,
-		userType: 1,
-		selectedItem: 'MyAddress',
-		isActive: false,
-		showRedBulb: true
-
-	};
 
 	componentWillMount() {
-		if (this.props.driverStatusResponseData != undefined && this.props.driverStatusResponseData != '') {
+		console.log("componentwill mount...................................");
+		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
-		  }
+		}
 		this.getProfileData();
 
 
@@ -79,6 +74,7 @@ class Dashboard extends Component {
 
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+	
 	}
 
 	getProfileData() {
@@ -129,7 +125,6 @@ class Dashboard extends Component {
 			console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.dasboardResponseData);
 
 			if (nextProps.dasboardResponseData.status == 200) {
-
 				this.props.showDashBoardLoading(false);
 
 				this.setState({ data: nextProps.dasboardResponseData.data })
@@ -139,32 +134,53 @@ class Dashboard extends Component {
 			else {
 				this.props.showDashBoardLoading(false);
 				alert(nextProps.dasboardResponseData.message);
-				
-				
+
+
 			}
 
 
-			
+
 		}
 
-		if (nextProps.driverStatusResponseData != undefined && nextProps.driverStatusResponseData != '') {
-			console.log("nextProps.driverStatusResponseData'''''''''''''''''''''''---------------------", nextProps.driverStatusResponseData);
+		if (nextProps.driverStatusResData != undefined && nextProps.driverStatusResData != '') {
+			console.log("nextProps.driverStatusResData'''''''''''''''''''''''---------------------", nextProps.driverStatusResData);
 
-			if (nextProps.driverStatusResponseData.status == 200) {
+			if (nextProps.driverStatusResData.status == 200) {
+
 
 				this.props.showDashBoardLoading(false);
-				AsyncStorage.setItem("userData", '');
-				//AsyncStorage.setItem("driverStatus", JSON.stringify(nextProps.driverStatusResponseData.data));
-				console.log("driverStatus.......................................................");
-				Actions.pop();
-				BackHandler.exitApp();
+
+				AsyncStorage.getItem("isClicked").then((value) => {
+					if (value) {
+						console.log("value of is clicked..........",value);
+						if (value == 'logout') {
+							AsyncStorage.setItem("userData", '');
+							AsyncStorage.setItem("isClicked", '');
+							console.log("driverStatus is this.......................................................");
+							Actions.pop();
+							BackHandler.exitApp();
+						}
+						else {
+							AsyncStorage.setItem("isClicked", '');
+							Actions.pop();
+							Actions.DriverStatusScreen();
+						}
+					}
+					else {
+						AsyncStorage.setItem("isClicked", '');
+						Actions.pop();
+						Actions.DriverStatusScreen();
+					}
+
+				}).done();
+
 
 			}
 
 			else {
 				this.props.showDashBoardLoading(false);
-				alert(nextProps.driverStatusResponseData.message);
-				
+				alert(nextProps.driverStatusResData.message);
+
 			}
 
 		}
@@ -227,27 +243,9 @@ class Dashboard extends Component {
 		if (item == 'Logout') {
 			//Actions.MapScreen();
 			console.log("logout clicked..................................")
-			//AsyncStorage.setItem("userData", '');
-			//AsyncStorage.setItem("driverStatus", '');
-			AsyncStorage.getItem("userData").then((value) => {
-
-				if (value) {
-					userId = JSON.parse(value)._id;
-					this.props.showDashBoardLoading(true);
-				
-					if (JSON.parse(value).type == 'driver') {
-						var driverStatus = {
-							driverid: userId,
-							dutystatus: 'on'
-	
-						};
-					}
-					this.props.driverStatusCallFromDashboard(driverStatus);
-	
-	
-				}
-	
-			}).done();
+			AsyncStorage.setItem("isClicked", 'logout');
+			this.onLogoutOrToggleClicked();
+			this.setState({isActive:false});
 			// Actions.pop();
 			// BackHandler.exitApp();
 
@@ -256,7 +254,35 @@ class Dashboard extends Component {
 
 	}
 
+	onLogoutOrToggleClicked() {
+		AsyncStorage.getItem("userData").then((value) => {
 
+			if (value) {
+				console.log("is active................................",this.state.isActive);
+				userId = JSON.parse(value)._id;
+				this.props.showDashBoardLoading(true);
+
+				if (JSON.parse(value).type == 'driver'&& !this.state.isActive) {
+					var driverStatus = {
+						driverid: userId,
+						dutystatus: 'on'
+
+					};
+					this.props.driverStatusCallFromDashboard(driverStatus);
+				}
+				else if(JSON.parse(value).type == 'customer'){
+					AsyncStorage.setItem("userData", '');
+					 Actions.pop();
+			         BackHandler.exitApp();
+
+				}
+				
+
+
+			}
+
+		}).done();
+	}
 	onPlaceOrderPress() {
 		Alert.alert("Place Oreder Button Pressed");
 	}
@@ -423,7 +449,7 @@ class Dashboard extends Component {
 				<View
 					style={{
 						marginTop: 15,
-						marginStart:5,
+						marginStart: 5,
 						flex: 1,
 						flexDirection: 'row',
 						justifyContent: 'space-between'
@@ -516,9 +542,41 @@ class Dashboard extends Component {
 						style={{ alignItems: 'center', paddingBottom: 10 }}>
 						<Text>Welcome back </Text>
 					</View>
+
+
 					<View style={styles.mainContainer}>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'flex-end',
+								marginEnd: 40,
+								marginTop: 10
+							}}>
 
+							<Text
+								style={styles.onDutyText}
+							>On-Duty</Text>
+							<FlipToggle
+								value={this.state.isActive}
+								buttonWidth={40}
+								buttonHeight={12}
+								buttonRadius={50}
+								sliderWidth={10}
+								sliderHeight={10}
+								sliderRadius={50}
+								//onLabel={'ON DUTY'}
+								//offLabel={'OFF DUTY'}
+								sliderOnColor="black"
+								sliderOffColor="black"
+								buttonOnColor="green"
+								buttonOffColor="red"
+								labelStyle={{ fontSize: 16, color: 'white' }}
+								
+								onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
 
+							/>
+						</View>
 						<FlatList
 							data={this.state.data}
 							renderItem={this._renderItem}
@@ -539,10 +597,10 @@ class Dashboard extends Component {
 const styles = StyleSheet.create({
 
 	mainContainer: {
-		//alignItems: 'center',
+
 		flex: 1,
 		backgroundColor: '#f1f1fd',
-		//paddingTop: 30
+
 	},
 
 	parentContainer: {
@@ -707,18 +765,29 @@ const styles = StyleSheet.create({
 
 
 	}
+	, onDutyText: {
+		color: '#000000',
+		fontSize: 15,
+		alignItems: 'center',
+		marginEnd: 15,
+		paddingBottom: 2
+
+
+
+
+	}
 
 });
 
 const mapStateToProps = ({ dashboardReducer }) => {
-	const { dasboardResponseData, isLoading,driverStatusResponseData } = dashboardReducer;
+	const { dasboardResponseData, isLoading, driverStatusResData } = dashboardReducer;
 
 
 	return {
 		dasboardResponseData: dasboardResponseData,
-		driverStatusResponseData:driverStatusResponseData,
+		driverStatusResData: driverStatusResData,
 		isLoading: isLoading
 	}
 }
-	
-	export default connect(mapStateToProps, { dashboardData, showDashBoardLoading, clearDriverStatusResponseRecord,driverStatusCallFromDashboard})(Dashboard);
+
+export default connect(mapStateToProps, { dashboardData, showDashBoardLoading, clearDriverStatusResponseRecord, driverStatusCallFromDashboard })(Dashboard);
