@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.centaurwarchief.smslistener.SmsListenerPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -12,6 +13,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.kishanjvaghela.cardview.RNCardViewPackage;
 
 
 import java.util.Arrays;
@@ -30,10 +32,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
               new SmsListenerPackage(),
-            new LinearGradientPackage(),
-          new MapsPackage(),
-              new ImagePickerPackage()
+              new LinearGradientPackage(),
+              new MapsPackage(),
+              new ImagePickerPackage(),
+              new RNCardViewPackage()
 
       );
     }

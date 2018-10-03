@@ -77,6 +77,7 @@ const RouterComponent = () => {
 	                key="MapScreen"      
 	                component={MapScreen}  
 					title = "MapScreen"
+					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
 					
 	               
 					
@@ -86,6 +87,7 @@ const RouterComponent = () => {
 	                key="MyAddress"      
 	                component={MyAddress}  
 					title = "My Address"
+					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
 					
 					
 	                />
@@ -94,6 +96,7 @@ const RouterComponent = () => {
 	                key="GeoLocationExampleScreen"      
 	                component={GeoLocationExampleScreen}  
 					title = "GeoLocationExampleScreen"
+					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
 				  
 					
 					
@@ -104,8 +107,10 @@ const RouterComponent = () => {
 
  <Scene
 					key="DriverProfileScreen"   
-	                component={DriverProfileScreen}  
+					component={DriverProfileScreen}  
+					//navigationBarStyle={{backgroundColor: '#d2e0fc'}}
 					title = "Profile"
+					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}} 
 				
 					
 					
@@ -115,6 +120,7 @@ const RouterComponent = () => {
 	                key="AcceptedDeliveryRequestScreen"      
 	                component={AcceptedDeliveryRequestScreen}  
 					title = "Accepted Delivery Requests"
+					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
 					
 					
 	                />
@@ -123,6 +129,7 @@ const RouterComponent = () => {
 	                key="OrderDeliveredScreen"      
 	                component={OrderDeliveredScreen}  
 					title = "Order Delivered"
+					titleStyle={{textAlign: 'center' ,marginLeft:70, fontSize: 20}}
 					
 					
 	                />
@@ -131,6 +138,7 @@ const RouterComponent = () => {
 	                key="EditProfileScreen"      
 	                component={EditProfileScreen}  
 					title = "Edit Profile"
+					titleStyle={{textAlign: 'center' ,marginLeft:80, fontSize: 20}}
 				
 					
 	                />
@@ -139,6 +147,7 @@ const RouterComponent = () => {
 	                key="UpdatePasswordScreen"      
 	                component={UpdatePasswordScreen}  
 					title = "Update Password"
+					titleStyle={{textAlign: 'center' ,marginLeft:50, fontSize: 20}}
 				
 					
 	                />

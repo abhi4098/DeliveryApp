@@ -4506,11 +4506,26 @@ react-native-side-menu@^1.1.3:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-simple-card-view@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-simple-card-view/-/react-native-simple-card-view-0.3.0.tgz#4591d8f8ed9b6b37ab16d0fc281becd658697ba4"
+  dependencies:
+    prop-types "^15.6.0"
+    react-native-vector-icons "^4.5.0"
+
 "react-native-tab-view@github:react-navigation/react-native-tab-view":
   version "0.0.74"
   resolved "https://codeload.github.com/react-navigation/react-native-tab-view/tar.gz/36ebd834d78b841fc19778c966465d02fd1213bb"
   dependencies:
     prop-types "^15.6.0"
+
+react-native-vector-icons@^4.5.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.6.0.tgz#e4014311ffa6de397d914ffc31b7097a874cc8d5"
+  dependencies:
+    lodash "^4.0.0"
+    prop-types "^15.5.10"
+    yargs "^8.0.2"
 
 react-native-vector-icons@^5.0.0:
   version "5.0.0"

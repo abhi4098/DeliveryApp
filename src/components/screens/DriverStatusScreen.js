@@ -64,11 +64,11 @@ class DriverStatusScreen extends Component {
     }
     
     componentDidUpdate() {
-        setTimeout(()=>{
-			Actions.pop();
-            Actions.Dashboard();
-			},1000);
-       
+        // setTimeout(()=>{
+			
+		// 	},1000);
+		Actions.pop();
+		Actions.Dashboard();
     }
 
     render() {

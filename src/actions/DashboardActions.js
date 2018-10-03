@@ -16,11 +16,11 @@ export const showDashBoardLoading =(value)=>{
     }
   };
 
-  export const dashboardData = ({shipment_status,phone,type}) => {
+  export const dashboardData = ({shipment_status,userid,type}) => {
 
     
     console.log(APIURLCONSTANTS.DASHBOARD_URL);
-    console.log('Postdata JSON='+JSON.stringify({shipment_status,phone,type}));
+    console.log('Postdata JSON='+JSON.stringify({shipment_status,userid,type}));
    
   
     return (dispatch) => {
@@ -34,7 +34,7 @@ export const showDashBoardLoading =(value)=>{
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({shipment_status,phone,type})
+        body: JSON.stringify({shipment_status,userid,type})
       })
       .then( (response) => {
         console.log('Received response Login: ', response);

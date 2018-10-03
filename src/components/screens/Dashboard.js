@@ -10,14 +10,23 @@ import {
 	Keyboard,
 	Alert,
 	AsyncStorage,
-	FlatList
+	FlatList,
+
+
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
 import SideMenu from "react-native-side-menu";
 import Menu from "./Menu";
 import { connect } from "react-redux";
 import hamburger from "../../assets/hamburger.png";
-import { List, ListItem,Card } from "react-native-elements";
+import { Card } from 'react-native-elements';
+import UsernameIcon from "../../assets/name.png";
+import Order from "../../assets/order.png";
+import Time from "../../assets/time.png";
+import Location from "../../assets/location.png";
+import Tick from "../../assets/tick.png";
+
+
 
 import {
 	dashboardData,
@@ -31,7 +40,9 @@ class Dashboard extends Component {
 		super(props);
 		this.state = {
 			loading: false,
-			dashboardData: ''
+			dashboardData: '',
+			pressStatus: false,
+			usertype: ''
 		}
 	}
 
@@ -50,7 +61,12 @@ class Dashboard extends Component {
 
 
 	}
-
+	// _onHideUnderlay() {
+	// 	this.setState({ pressStatus: false });
+	//   }
+	//   _onShowUnderlay() {
+	// 	this.setState({ pressStatus: true });
+	//   }
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -66,17 +82,28 @@ class Dashboard extends Component {
 			if (value) {
 				usertype = JSON.parse(value).type;
 				phoneNumber = JSON.parse(value).phone;
+				userId = JSON.parse(value)._id;
 				// userId = JSON.parse(value)._id;
 				// this.setState({ name: JSON.parse(value).firstname + " " + JSON.parse(value).lastname })
 				// this.setState({ email: JSON.parse(value).email });
 				// this.setState({ phone: JSON.parse(value).phone });
 				this.props.showDashBoardLoading(true);
-				var dashboard = {
-					shipment_status: "Pending",
-					phone: phoneNumber,
-					type: usertype
+				if (JSON.parse(value).type == 'customer') {
+					var dashboard = {
+						shipment_status: "Pending",
+						userid: phoneNumber,
+						type: usertype
 
-				};
+					};
+				}
+				else {
+					var dashboard = {
+						shipment_status: "Pending",
+						userid: userId,
+						type: usertype
+
+					};
+				}
 
 				this.props.dashboardData(dashboard);
 
@@ -177,11 +204,229 @@ class Dashboard extends Component {
 	}
 
 
-	_renderItem({item}){
-		return <Card>
-		<Text >{item.packageno}</Text>
-		<Text >{item.sender_phone} </Text>
-		</Card>;
+	onPlaceOrderPress() {
+		Alert.alert("Place Oreder Button Pressed");
+	}
+
+	_renderItem({ item }) {
+
+		if (usertype == 'customer') {
+			return <Card>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Order}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listHeaderText} >
+							{item.packageno} </Text>
+					</View>
+
+
+				</View>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={UsernameIcon}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.recipient_name} </Text>
+					</View>
+
+
+				</View>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Tick}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.receivedfrom} </Text>
+					</View>
+
+
+				</View>
+
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Location}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.sender_address} </Text>
+					</View>
+
+
+				</View>
+				<View
+					style={{ marginTop: 20, alignItems: 'center' }}>
+					<TouchableHighlight
+						style={styles.buttonContainer}
+						underlayColor={'#14136d'}
+						onPress={() => Alert.alert("place order button pressed")}
+					// onHideUnderlay={() => this.setState({ pressStatus: false })}
+					// onShowUnderlay={() => this.setState({ pressStatus: false })}
+					>
+						<Text
+							style={
+								styles.buttonText
+								// this.state.pressStatus
+								//   ? styles.buttonTextOnPress
+								//   : styles.buttonText
+							}
+						>Deliver Now</Text>
+					</TouchableHighlight>
+				</View>
+
+			</Card>
+				;
+		}
+		else {
+			return <Card>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Order}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listHeaderText} >
+							{item.packageno} </Text>
+					</View>
+
+
+				</View>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={UsernameIcon}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.recipient_name} </Text>
+					</View>
+
+
+				</View>
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Tick}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.receivedfrom} </Text>
+					</View>
+
+
+				</View>
+
+				<View style={styles.inputContainer}>
+					<View style={styles.iconContainer}>
+						<Image
+							source={Location}
+							style={styles.inputIcon}
+
+						/>
+					</View>
+					<View>
+						<Text
+							style={styles.listText} >
+							{item.sender_address} </Text>
+					</View>
+
+
+				</View>
+				<View
+					style={{
+						marginTop: 15,
+						marginStart:5,
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'space-between'
+					}}>
+					<TouchableHighlight
+						style={styles.acceptButtonContainer}
+						underlayColor={'#27630a'}
+						onPress={() => Alert.alert("Accept button pressed")}
+
+					>
+						<Text
+							style={
+								styles.acceptButtonText
+								// this.state.pressStatus
+								//   ? styles.buttonTextOnPress
+								//   : styles.buttonText
+							}
+						>Accept</Text>
+					</TouchableHighlight>
+
+					<TouchableHighlight
+						style={styles.rejectButtonContainer}
+						underlayColor={'#A20518'}
+						onPress={() => Alert.alert("Reject button pressed")}
+
+					>
+						<Text
+							style={
+								styles.acceptButtonText
+								// this.state.pressStatus
+								//   ? styles.buttonTextOnPress
+								//   : styles.buttonText
+							}
+						>Reject</Text>
+					</TouchableHighlight>
+
+					<TouchableHighlight
+						style={styles.callButtonContainer}
+						underlayColor={'#0C0B42'}
+						onPress={() => Alert.alert("call button pressed")}
+
+					>
+						<Text
+							style={
+								styles.acceptButtonText
+								// this.state.pressStatus
+								//   ? styles.buttonTextOnPress
+								//   : styles.buttonText
+							}
+						>Call</Text>
+					</TouchableHighlight>
+				</View>
+
+			</Card>
+				;
+		}
 	}
 
 
@@ -206,11 +451,11 @@ class Dashboard extends Component {
 							<Image
 								source={hamburger}
 								style={{ marginLeft: 5 }}
-								resizeMode="contain">
+							>
 							</Image>
 						</TouchableHighlight>
 						<Text
-							style={{ fontSize: 20, fontWeight: 'bold' }}
+							style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}
 						>Dashboard</Text>
 
 					</View>
@@ -220,14 +465,14 @@ class Dashboard extends Component {
 					</View>
 					<View style={styles.mainContainer}>
 
-						
-							<FlatList
-								data={this.state.data}
-								renderItem={this._renderItem}
-								keyExtractor={this._keyExtractor}
-							
-							/>
-					
+
+						<FlatList
+							data={this.state.data}
+							renderItem={this._renderItem}
+							keyExtractor={this._keyExtractor}
+
+						/>
+
 
 
 					</View>
@@ -252,6 +497,17 @@ const styles = StyleSheet.create({
 		backgroundColor: '#d2e0fc',//#2e97db',
 
 	},
+	dashboardListStyle: {
+		marginRight: 10,
+		marginLeft: 10,
+		shadowColor: '#000000',
+		shadowOpacity: 0.5,
+		elevation: 5,
+		marginBottom: 15,
+		marginBottom: 15
+
+
+	},
 
 	hamBurgerContainer: {
 		alignItems: 'center',
@@ -268,6 +524,16 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 
+	inputContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+
+	},
+
+	iconContainer: {
+		justifyContent: 'center',
+		height: 35,
+	},
 	cardContainerRight: {
 		flexDirection: 'row',
 		alignContent: 'space-between',
@@ -288,31 +554,106 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		textAlign: 'center',
 	},
+	listHeaderText: {
+		fontSize: 15,
+		backgroundColor: 'transparent',
+		color: 'black',
+		marginLeft: 10,
+		marginRight: 10,
+		textAlign: 'center',
+		fontWeight: 'bold',
+	},
+	listText: {
+		fontSize: 14,
+		backgroundColor: 'transparent',
+		color: 'black',
+		marginLeft: 10,
+		marginRight: 10,
+		textAlign: 'center',
+	},
+
 
 	buttonContainer: {
 
-
-
-		padding: 5,
-		width: 130,
-		height: 40,
+		backgroundColor: '#53a602',
+		width: '30%',
+		height: 25,
 		alignItems: 'center',
 		borderRadius: 25,
-		padding: 5,
+		padding: 3,
 		borderColor: '#14136d',
 		borderWidth: 1,
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 3
-		},
-		shadowRadius: 10,
-		shadowOpacity: 0.25,
+	},
+	acceptButtonContainer: {
 
+		backgroundColor: '#53a602',
+		width: '30%',
+		height: 25,
+		alignItems: 'center',
+		borderRadius: 10,
+		padding: 1,
+		borderColor: '#53a602',
+		borderWidth: 1,
+	}
+	,
 
+	rejectButtonContainer: {
 
+		backgroundColor: '#d3071f',
+		width: '30%',
+		height: 25,
+		alignItems: 'center',
+		borderRadius: 10,
+		padding: 1,
+		borderColor: '#d3071f',
+		borderWidth: 1,
+	}
+	,
+	callButtonContainer: {
+
+		backgroundColor: '#14136d',
+		width: '30%',
+		height: 25,
+		alignItems: 'center',
+		borderRadius: 10,
+		padding: 1,
+		borderColor: '#14136d',
+		borderWidth: 1,
+	}
+	,
+	inputIcon: {
+		width: 25,
+		height: 25,
 
 	},
+	buttonTextOnPress: {
+		color: '#ffffff',
+		fontWeight: 'bold',
+		fontSize: 16,
+		textAlign: 'center',
+		width: 120,
+		height: 35,
+
+	},
+	buttonText: {
+		color: '#14136d',
+		fontWeight: 'bold',
+		fontSize: 14,
+		textAlign: 'center',
+		width: 120,
+		height: 30,
+
+	},
+	acceptButtonText: {
+		color: '#ffffff',
+
+		fontSize: 14,
+		textAlign: 'center',
+		width: 120,
+		height: 25,
+
+
+	}
 
 });
 
