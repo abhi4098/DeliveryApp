@@ -196,7 +196,7 @@ class OtpVerificationScreen extends Component {
             console.log("nextProps.verifyOtpResponseData'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData);
             console.log("nextProps.verifyOtpResponseData.status'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData.status);
 
-            if (nextProps.verifyOtpResponseData.message == "success") {
+            if (nextProps.verifyOtpResponseData.message == "UserExist") {
 
                 this.props.showVerifyOtpLoading(false);
 

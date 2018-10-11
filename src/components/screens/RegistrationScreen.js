@@ -106,7 +106,7 @@ class RegistrationScreen extends Component {
     else if (this.props.password == '') {
       Alert.alert("Please Enter Password");
     }
-    else if (this.props.phone == '' && !isCustomer) {
+    else if (this.props.phone == '' && this.state.phone == '' ) {
       Alert.alert("Please Enter Phone");
     }
     else if (this.props.email == '') {

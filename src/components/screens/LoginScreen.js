@@ -51,6 +51,7 @@ class LoginScreen extends Component {
 
 
   componentWillMount() {
+    //Actions.Dashboard();
     this.props.usernameChanged('');
     this.props.passwordChanged('');
 
@@ -93,8 +94,8 @@ class LoginScreen extends Component {
   }
 
   onLoginButtonPress() {
-    /* Actions.pop();
-    Actions.DriverStatusScreen(); */
+   //Actions.Dashboard();
+    
 
     Keyboard.dismiss();
 

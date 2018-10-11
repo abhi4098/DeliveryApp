@@ -57,10 +57,10 @@ class CustomerLoginScreen extends Component {
 
   onPhoneChanged(phone) {
     this.props.userPhoneChanged(phone);
-
+ 
   }
 
-  onLoginViaEmailNowPress(){
+  onLoginViaEmailNowPress() {
     Actions.pop();
     Actions.LoginScreen();
   }
@@ -79,7 +79,7 @@ class CustomerLoginScreen extends Component {
       this.props.showReceiveOtpLoading(true);
       //.OtpVerificationScreen();
       var optRequest = {
-         phoneNumber: phoneNumber
+        phoneNumber: phoneNumber
       };
       this.props.receiveOtp(optRequest);
     }
@@ -87,9 +87,7 @@ class CustomerLoginScreen extends Component {
   }
 
   componentDidMount() {
-
-
-
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     if (this.props.receiveOtpResponseData != undefined && this.props.receiveOtpResponseData != '') {
       this.props.clearReceiveOtpData();
     }
@@ -99,7 +97,21 @@ class CustomerLoginScreen extends Component {
   }
 
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
+}
+
+  onBackPress() {
+    if (Actions.state.index === 1) {
+      console.log("onBackPress1.................", Actions.state.index)
+      BackHandler.exitApp();
+      return false;
+    }
+    console.log("onBackPress2..............", Actions.state.index)
+    Actions.pop();
+    return true;
+  }
 
 
 
@@ -227,14 +239,14 @@ class CustomerLoginScreen extends Component {
             >SEND OTP</Text>
           </TouchableHighlight>
 
-<Text
-style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50,marginBottom:50,fontSize: 18}}>
-  -OR-
+          <Text
+            style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50, marginBottom: 50, fontSize: 18 }}>
+            -OR-
 </Text>
 
 
-   <View
-            style={{ alignItems: 'center', flexDirection: 'row'}}>
+          <View
+            style={{ alignItems: 'center', flexDirection: 'row' }}>
             <View>
               <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }} >If Already Registered?</Text>
             </View>

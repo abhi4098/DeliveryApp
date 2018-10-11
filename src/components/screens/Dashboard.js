@@ -11,7 +11,7 @@ import {
 	Alert,
 	AsyncStorage,
 	FlatList,
-
+	TouchableOpacity
 
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
@@ -22,10 +22,14 @@ import hamburger from "../../assets/hamburger.png";
 import { Card } from 'react-native-elements';
 import UsernameIcon from "../../assets/name.png";
 import Order from "../../assets/order.png";
-import Time from "../../assets/time.png";
-import Location from "../../assets/location.png";
-import Tick from "../../assets/tick.png";
-import FlipToggle from 'react-native-flip-toggle-button';
+import DummyOrder from "../../assets/dummyOrder.png";
+import Phone from "../../assets/phone.png";
+import HalfBottomIcon from "../../assets/halfBottom.png";
+import Moment from 'moment';
+import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
+
+
+
 
 
 
@@ -47,6 +51,7 @@ class Dashboard extends Component {
 			pressStatus: false,
 			usertype: '',
 			isActive: true,
+
 		}
 	}
 
@@ -61,12 +66,7 @@ class Dashboard extends Component {
 
 
 	}
-	// _onHideUnderlay() {
-	// 	this.setState({ pressStatus: false });
-	//   }
-	//   _onShowUnderlay() {
-	// 	this.setState({ pressStatus: true });
-	//   }
+
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -74,7 +74,7 @@ class Dashboard extends Component {
 
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-	
+
 	}
 
 	getProfileData() {
@@ -84,10 +84,7 @@ class Dashboard extends Component {
 				usertype = JSON.parse(value).type;
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
-				// userId = JSON.parse(value)._id;
-				// this.setState({ name: JSON.parse(value).firstname + " " + JSON.parse(value).lastname })
-				// this.setState({ email: JSON.parse(value).email });
-				// this.setState({ phone: JSON.parse(value).phone });
+
 				this.props.showDashBoardLoading(true);
 				if (JSON.parse(value).type == 'customer') {
 					var dashboard = {
@@ -152,7 +149,7 @@ class Dashboard extends Component {
 
 				AsyncStorage.getItem("isClicked").then((value) => {
 					if (value) {
-						console.log("value of is clicked..........",value);
+						console.log("value of is clicked..........", value);
 						if (value == 'logout') {
 							AsyncStorage.setItem("userData", '');
 							AsyncStorage.setItem("isClicked", '');
@@ -245,7 +242,7 @@ class Dashboard extends Component {
 			console.log("logout clicked..................................")
 			AsyncStorage.setItem("isClicked", 'logout');
 			this.onLogoutOrToggleClicked();
-			this.setState({isActive:false});
+			this.setState({ isActive: false });
 			// Actions.pop();
 			// BackHandler.exitApp();
 
@@ -258,11 +255,11 @@ class Dashboard extends Component {
 		AsyncStorage.getItem("userData").then((value) => {
 
 			if (value) {
-				console.log("is active................................",this.state.isActive);
+				console.log("is active................................", this.state.isActive);
 				userId = JSON.parse(value)._id;
 				this.props.showDashBoardLoading(true);
 
-				if (JSON.parse(value).type == 'driver'&& !this.state.isActive) {
+				if (JSON.parse(value).type == 'driver' && !this.state.isActive) {
 					var driverStatus = {
 						driverid: userId,
 						dutystatus: 'on'
@@ -270,13 +267,13 @@ class Dashboard extends Component {
 					};
 					this.props.driverStatusCallFromDashboard(driverStatus);
 				}
-				else if(JSON.parse(value).type == 'customer'){
+				else if (JSON.parse(value).type == 'customer') {
 					AsyncStorage.setItem("userData", '');
-					 Actions.pop();
-			         BackHandler.exitApp();
+					Actions.pop();
+					BackHandler.exitApp();
 
 				}
-				
+
 
 
 			}
@@ -287,225 +284,100 @@ class Dashboard extends Component {
 		Alert.alert("Place Oreder Button Pressed");
 	}
 
+	_onPress = (item) => {
+		// your code on item press
+		console.log("chak de fatte......................................................................");
+	};
+
 	_renderItem({ item }) {
+		Moment.locale('en');
+		var dt = item.receiveddate;
+		var orderStatus = item.shipment_status;
+		return <TouchableOpacity
+		//onPress={this._onPress(item)}
+		>
+		<Card
+			containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}
+		>
 
-		if (usertype == 'customer') {
-			return <Card>
-				<View style={styles.inputContainer}>
+			<View style={styles.inputContainer}>
+				<View
+					style={styles.statusIconContainer}>
+					<Text
+						style={
+							orderStatus == "Pending"
+								? styles.statusTextContainer1
+								: styles.statusTextContainer
+						}
+					>{item.shipment_status}</Text>
 					<View style={styles.iconContainer}>
+
+
 						<Image
-							source={Order}
+							source={DummyOrder}
 							style={styles.inputIcon}
 
 						/>
+
 					</View>
-					<View>
-						<Text
-							style={styles.listHeaderText} >
-							{item.packageno} </Text>
-					</View>
-
-
-				</View>
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={UsernameIcon}
-							style={styles.inputIcon}
-
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.recipient_name} </Text>
-					</View>
-
-
-				</View>
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={Tick}
-							style={styles.inputIcon}
-
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.receivedfrom} </Text>
-					</View>
-
-
-				</View>
-
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={Location}
-							style={styles.inputIcon}
-
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.sender_address} </Text>
-					</View>
-
-
 				</View>
 				<View
-					style={{ marginTop: 20, alignItems: 'center' }}>
-					<TouchableHighlight
-						style={styles.buttonContainer}
-						underlayColor={'#14136d'}
-						onPress={() => Alert.alert("place order button pressed")}
-					// onHideUnderlay={() => this.setState({ pressStatus: false })}
-					// onShowUnderlay={() => this.setState({ pressStatus: false })}
-					>
-						<Text
-							style={
-								styles.buttonText
-								// this.state.pressStatus
-								//   ? styles.buttonTextOnPress
-								//   : styles.buttonText
-							}
-						>Deliver Now</Text>
-					</TouchableHighlight>
-				</View>
+					style={styles.informationContainer}>
+					<TouchableOpacity
+						//onPress={this._onPress(item)}
+						>
+						<View style={styles.phoneIconContainer}
+						>
 
-			</Card>
-				;
-		}
-		else {
-			return <Card>
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
+							<Image
+								source={Phone}
+								style={styles.phoneIcon}
+
+							/>
+
+						</View>
+					</TouchableOpacity>
+					<View
+						style={{ flexDirection: 'row' }}>
+						<Text
+							style={{ fontSize: 14, color: '#333333' }}
+						>ORDER ID  :  </Text>
+						<Text
+							style={{ fontSize: 14, color: '#5e5e5e' }}
+						>{item.packageno}</Text>
+
+					</View>
+
+					<View
+						style={{ flexDirection: 'row', marginBottom: 30 }}>
+
 						<Image
-							source={Order}
-							style={styles.inputIcon}
+							source={HalfBottomIcon}
+							style={styles.halfBottomIcon}
 
 						/>
-					</View>
-					<View>
 						<Text
-							style={styles.listHeaderText} >
-							{item.packageno} </Text>
+							style={{ fontSize: 11, color: '#333333', marginTop: 11, marginStart: 3, }}
+						>WAREHOUSE : </Text>
+						<Text
+							numberOfLines={4}
+
+							style={{ fontSize: 11, color: '#53a602', marginTop: 11, paddingEnd: 20, flexWrap: 'wrap', flex: 1 }}
+						>{item.sender_address}</Text>
+
 					</View>
 
+					<Text
+						style={styles.shippingDateContainer}
+					>Shipped on {Moment(dt).format('DD/MM/YYYY')}</Text>
 
 				</View>
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={UsernameIcon}
-							style={styles.inputIcon}
-
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.recipient_name} </Text>
-					</View>
+			</View>
+		</Card>
+		</TouchableOpacity>;
 
 
-				</View>
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={Tick}
-							style={styles.inputIcon}
 
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.receivedfrom} </Text>
-					</View>
-
-
-				</View>
-
-				<View style={styles.inputContainer}>
-					<View style={styles.iconContainer}>
-						<Image
-							source={Location}
-							style={styles.inputIcon}
-
-						/>
-					</View>
-					<View>
-						<Text
-							style={styles.listText} >
-							{item.sender_address} </Text>
-					</View>
-
-
-				</View>
-				<View
-					style={{
-						marginTop: 15,
-						marginStart: 5,
-						flex: 1,
-						flexDirection: 'row',
-						justifyContent: 'space-between'
-					}}>
-					<TouchableHighlight
-						style={styles.acceptButtonContainer}
-						underlayColor={'#27630a'}
-						onPress={() => Alert.alert("Accept button pressed")}
-
-					>
-						<Text
-							style={
-								styles.acceptButtonText
-								// this.state.pressStatus
-								//   ? styles.buttonTextOnPress
-								//   : styles.buttonText
-							}
-						>Accept</Text>
-					</TouchableHighlight>
-
-					<TouchableHighlight
-						style={styles.rejectButtonContainer}
-						underlayColor={'#A20518'}
-						onPress={() => Alert.alert("Reject button pressed")}
-
-					>
-						<Text
-							style={
-								styles.acceptButtonText
-								// this.state.pressStatus
-								//   ? styles.buttonTextOnPress
-								//   : styles.buttonText
-							}
-						>Reject</Text>
-					</TouchableHighlight>
-
-					<TouchableHighlight
-						style={styles.callButtonContainer}
-						underlayColor={'#0C0B42'}
-						onPress={() => Alert.alert("call button pressed")}
-
-					>
-						<Text
-							style={
-								styles.acceptButtonText
-								// this.state.pressStatus
-								//   ? styles.buttonTextOnPress
-								//   : styles.buttonText
-							}
-						>Call</Text>
-					</TouchableHighlight>
-				</View>
-
-			</Card>
-				;
-		}
 	}
 
 
@@ -529,7 +401,7 @@ class Dashboard extends Component {
 						<TouchableHighlight underlayColor="transparent" style={styles.hamBurgerContainer} onPress={() => this.toggle()}>
 							<Image
 								source={hamburger}
-								style={{ marginLeft: 5 }}
+								style={{ width: 40, height: 40 }}
 							>
 							</Image>
 						</TouchableHighlight>
@@ -538,14 +410,11 @@ class Dashboard extends Component {
 						>Dashboard</Text>
 
 					</View>
-					<View
-						style={{ alignItems: 'center', paddingBottom: 10 }}>
-						<Text>Welcome back </Text>
-					</View>
+
 
 
 					<View style={styles.mainContainer}>
-						<View
+						{/* <View
 							style={{
 								flexDirection: 'row',
 								alignItems: 'center',
@@ -576,13 +445,14 @@ class Dashboard extends Component {
 								onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
 
 							/>
-						</View>
+						</View> */}
 						<FlatList
 							data={this.state.data}
 							renderItem={this._renderItem}
 							keyExtractor={this._keyExtractor}
 
 						/>
+
 
 
 
@@ -608,17 +478,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#d2e0fc',//#2e97db',
 
 	},
-	dashboardListStyle: {
-		marginRight: 10,
-		marginLeft: 10,
-		shadowColor: '#000000',
-		shadowOpacity: 0.5,
-		elevation: 5,
-		marginBottom: 15,
-		marginBottom: 15
 
-
-	},
 
 	hamBurgerContainer: {
 		alignItems: 'center',
@@ -626,25 +486,94 @@ const styles = StyleSheet.create({
 		left: 0,
 		width: 70,
 	},
-
+	cardContainer: {
+		borderWidth: 1,
+		borderRadius: 2,
+		borderColor: '#ddd',
+		borderBottomWidth: 0,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.8,
+		shadowRadius: 2,
+		elevation: 1,
+		marginLeft: 5,
+		marginRight: 5,
+		marginTop: 10,
+	},
 	logoContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 20,
-		marginBottom: 10
+		marginTop: 18,
+		marginBottom: 18
 	},
 
 	inputContainer: {
 		flexDirection: 'row',
-		alignItems: 'center',
+		position: "relative"
+		//alignItems: 'center',
+
+	},
+	statusIconContainer: {
+		marginLeft: 10,
+		flexDirection: 'column'
+
+
+	},
+	statusTextContainer: {
+		backgroundColor: '#53a602',
+		fontSize: 10,
+		padding: 2,
+		textAlign: 'center',
+		color: '#ffffff'
+
+	},
+	statusTextContainer1: {
+		backgroundColor: '#e60722',
+		fontSize: 10,
+		padding: 2,
+		textAlign: 'center',
+		color: '#ffffff'
+
+	},
+	shippingDateContainer: {
+
+		alignSelf: 'flex-end',
+		backgroundColor: '#d2e0fc',
+		fontSize: 10,
+		paddingTop: 3,
+		paddingBottom: 3,
+		paddingStart: 5,
+		paddingEnd: 5,
+		textAlign: 'center',
+		color: '#5e5e5e',
+
+		position: "absolute",
+		bottom: 0,
+		right: 0
+
 
 	},
 
 	iconContainer: {
-		justifyContent: 'center',
-		height: 35,
+		backgroundColor: '#d2e0fc',
+		alignItems: "center",
+		padding: 10,
+		marginTop: 15,
+		marginBottom: 15,
+
 	},
+	informationContainer: {
+		marginStart: 10,
+		flex: 1,
+		flexDirection: "column"
+
+	},
+	phoneIconContainer: {
+		alignSelf: 'flex-end',
+
+	},
+
 	cardContainerRight: {
 		flexDirection: 'row',
 		alignContent: 'space-between',
@@ -657,14 +586,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 
-	headerText: {
-		fontSize: 13,
-		backgroundColor: 'transparent',
-		color: 'black',
-		marginLeft: 20,
-		marginRight: 20,
-		textAlign: 'center',
-	},
+
 	listHeaderText: {
 		fontSize: 15,
 		backgroundColor: 'transparent',
@@ -733,8 +655,21 @@ const styles = StyleSheet.create({
 	}
 	,
 	inputIcon: {
-		width: 25,
+		width: 50,
+		height: 50,
+
+	},
+	phoneIcon: {
+		width: 40,
+		height: 40,
+
+
+	},
+
+	halfBottomIcon: {
+		width: 12,
 		height: 25,
+
 
 	},
 	buttonTextOnPress: {
@@ -765,17 +700,17 @@ const styles = StyleSheet.create({
 
 
 	}
-	, onDutyText: {
-		color: '#000000',
-		fontSize: 15,
-		alignItems: 'center',
-		marginEnd: 15,
-		paddingBottom: 2
+	// , onDutyText: {
+	// 	color: '#000000',
+	// 	fontSize: 15,
+	// 	alignItems: 'center',
+	// 	marginEnd: 15,
+	// 	paddingBottom: 2
 
 
 
 
-	}
+	// }
 
 });
 
