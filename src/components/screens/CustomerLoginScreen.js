@@ -66,7 +66,9 @@ class CustomerLoginScreen extends Component {
   }
 
   onSubmitButtonPress() {
+    AsyncStorage.getItem("nboxitUserType").then((value) => {
 
+      if (value) {
     Keyboard.dismiss();
     if (this.props.phone == '') {
       Alert.alert("Please Enter Phone Number");
@@ -79,11 +81,14 @@ class CustomerLoginScreen extends Component {
       this.props.showReceiveOtpLoading(true);
       //.OtpVerificationScreen();
       var optRequest = {
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
+        type:value
       };
       this.props.receiveOtp(optRequest);
     }
+  }
 
+}).done();
   }
 
   componentDidMount() {

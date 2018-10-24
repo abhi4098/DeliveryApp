@@ -24,11 +24,11 @@ export const showReceiveOtpLoading =(value)=>{
   }
 };
 
-export const receiveOtp = ({phoneNumber}) => {
+export const receiveOtp = ({phoneNumber,type}) => {
 
     
     console.log(APIURLCONSTANTS.OTP_RECEIVE);
-    console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber}));
+    console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,type}));
    
   
     return (dispatch) => {
@@ -42,7 +42,7 @@ export const receiveOtp = ({phoneNumber}) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phoneNumber})
+        body: JSON.stringify({phoneNumber,type})
       })
       .then( (response) => {
         console.log('Received response receive otp--------------------: ', response);

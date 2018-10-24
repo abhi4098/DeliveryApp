@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import  {
+import {
   Dimensions,
   StyleSheet,
   ScrollView,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     height: window.height,
     backgroundColor: 'white',
     padding: 0,
-    
+
   },
 
   avatarContainer: {
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     marginTop: 30,
-    marginBottom:20,
-    alignItems:'center',
+    marginBottom: 20,
+    alignItems: 'center',
     justifyContent: 'center',
   },
 
@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
 
   welcomeText: {
     color: '#014292',
-    marginTop:30,
+    marginTop: 30,
     fontSize: 18,
-    color:'white',
-    alignItems:'center'
+    color: 'white',
+    alignItems: 'center'
   },
 
   userNameText: {
@@ -148,38 +148,70 @@ const styles = StyleSheet.create({
 });
 
 export default class Menu extends Component {
-            constructor() {
-              super();
-              this.state = {
-                selectedMenuColor: 'transparent',
-                userName: '',
-                userEmail:'',
-                userPhone:''
+  constructor() {
+    super();
+    this.state = {
+      selectedMenuColor: 'transparent',
+      userName: '',
+      userEmail: '',
+      userPhone: ''
 
-              };
-            }
- 
-            componentWillUpdate() {
-              this.updateUserProfile();
-            }
-          
-            updateUserProfile() {
-              /********************** Call getUsersInfo from ASYNC Storage **********************/
-              AsyncStorage.getItem("userData").then((value) => {
-                if (value) {
-                    userId = JSON.parse(value)._id;
-                    userName = JSON.parse(value).firstname + " " + JSON.parse(value).lastname;
-                    userEmail = JSON.parse(value).email;
-                    userPhone = JSON.parse(value).phone;
-                    
-    
-                }
-    
-            }).done();
-              /*********************************************************************************/
-            }
-          
-          
+    };
+  }
+
+  componentWillUpdate() {
+    this.updateUserProfile();
+  }
+
+  updateUserProfile() {
+    /********************** Call getUsersInfo from ASYNC Storage **********************/
+    AsyncStorage.getItem("userData").then((value) => {
+      if (value) {
+        userId = JSON.parse(value)._id;
+        userName = JSON.parse(value).firstname + " " + JSON.parse(value).lastname;
+        userEmail = JSON.parse(value).email;
+        userPhone = JSON.parse(value).phone;
+
+
+      }
+
+    }).done();
+    /*********************************************************************************/
+  }
+
+
+  renderMyAddress() {
+    AsyncStorage.getItem("userData").then((value) => {
+      if (value) {
+        usertype = JSON.parse(value).type;
+        if (usertype == 'customer') {
+          return <View style={{
+            height: 40, paddingLeft: 10,
+            marginTop: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            // backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#014292' : 'transparent'
+          }}>
+            <Image style={styles.itemImage} source={AcceptedReq}>
+            </Image>
+            <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('MyAddress')}>
+              <Text
+                style={styles.item}>
+                My Address
+                        </Text>
+            </TouchableHighlight>
+          </View>;
+        }
+        else {
+          return;
+        }
+
+
+      }
+
+    }).done();
+  }
+
   render() {
 
     console.log("selectedMenu>>> " + this.props.selectedMenu);
@@ -188,31 +220,31 @@ export default class Menu extends Component {
     return (
       <View style={styles.container}>
 
-      <View style={styles.userInfoContainer}>
-      <Image
-                  source={AppLogo}
-                  style={styles.inputIcon}
-                  resizeMode="contain"
-                />
-        <Text style={styles.welcomeText}>{userName}</Text>
-        <Text style={{fontSize:13,color:'white',alignItems:'center',marginTop:5}}>{userEmail}</Text>
-        <Text style={{fontSize:13,color:'white',alignItems:'center',marginTop:5}}>{userPhone}</Text>
-       
-      </View>
-      <View style={styles.lineView}></View>
+        <View style={styles.userInfoContainer}>
+          <Image
+            source={AppLogo}
+            style={styles.inputIcon}
+            resizeMode="contain"
+          />
+          <Text style={styles.welcomeText}>{userName}</Text>
+          <Text style={{ fontSize: 13, color: 'white', alignItems: 'center', marginTop: 5 }}>{userEmail}</Text>
+          <Text style={{ fontSize: 13, color: 'white', alignItems: 'center', marginTop: 5 }}>{userPhone}</Text>
 
-      <View style={styles.menuItemContainer}>
+        </View>
+        <View style={styles.lineView}></View>
 
-        <ScrollView scrollsToTop={false} style={styles.menu}>
+        <View style={styles.menuItemContainer}>
 
-         <View style={{
+          <ScrollView scrollsToTop={false} style={styles.menu}>
+
+            <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'Dashboard') ? '#014292' : 'transparent'
             }}>
-          <Image style={styles.itemImage} source={Dashboard}>
+              <Image style={styles.itemImage} source={Dashboard}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('Dashboard')}>
                 <Text
@@ -222,15 +254,15 @@ export default class Menu extends Component {
               </TouchableHighlight>
             </View>
 
-
- <View style={{
+            {this.renderMyAddress}
+            <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'DriverProfileScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={Profile}>
+              <Image style={styles.itemImage} source={Profile}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('DriverProfileScreen')}>
                 <Text
@@ -241,32 +273,32 @@ export default class Menu extends Component {
             </View>
 
 
- <View style={{
+            <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={AcceptedReq}>
+              <Image style={styles.itemImage} source={AcceptedReq}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('AcceptedDeliveryRequestScreen')}>
                 <Text
                   style={styles.item}>
-                 Pending Orders
+                  Pending Orders
                 </Text>
               </TouchableHighlight>
             </View>
 
-                              
-          <View style={{
+
+            <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
               backgroundColor: (this.props.selectedMenu == 'OrderDeliveredScreen') ? '#014292' : 'transparent'
             }}>
- <Image style={styles.itemImage} source={OrderDelivered}>
+              <Image style={styles.itemImage} source={OrderDelivered}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('OrderDeliveredScreen')}>
                 <Text
@@ -277,7 +309,7 @@ export default class Menu extends Component {
             </View>
 
 
- <View style={{
+            <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
@@ -295,9 +327,9 @@ export default class Menu extends Component {
               </TouchableHighlight>
             </View>
 
-   </ScrollView>
-</View>
-</View>
+          </ScrollView>
+        </View>
+      </View>
 
 
     );

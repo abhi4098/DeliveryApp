@@ -79,7 +79,7 @@ class AppSelectionScreen extends Component {
                     <View style={{ marginTop: 30 }}>
                         <Text
                             style={styles.loginText}>
-                            Select Your Prefrence
+                            Select Your Preference
             </Text>
                     </View>
 

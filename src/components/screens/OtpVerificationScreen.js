@@ -160,7 +160,7 @@ class OtpVerificationScreen extends Component {
                 { cancelable: false }
             );
 
-            this.refs.codeInputRef1.clear();
+            //this.refs.codeInputRef1.clear();
         }
     }
 
@@ -249,13 +249,19 @@ class OtpVerificationScreen extends Component {
     }
 
     onResendOTPPressed() {
-        this.refs.codeInputRef1.clear();
+        AsyncStorage.getItem("nboxitUserType").then((value) => {
+
+            if (value) {
         this.props.showVerifyOtpLoading(true);
         var resendOptRequest = {
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
+            type:value
         };
         this.props.resendOtp(resendOptRequest);
         this.setState({ isTimerVisible: true })
+    }
+
+}).done();
     }
 
    

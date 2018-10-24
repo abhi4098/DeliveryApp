@@ -75,7 +75,7 @@ class DriverProfileScreen extends Component {
 
             else {
                 this.props.showProfileLoading(false);
-                alert(nextProps.loginResponseData.message);
+                alert(nextProps.profileResponseData.message);
                 //this.props.clearLoginRecord();
             }
         }

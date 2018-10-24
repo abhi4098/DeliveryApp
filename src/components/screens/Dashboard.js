@@ -19,7 +19,7 @@ import SideMenu from "react-native-side-menu";
 import Menu from "./Menu";
 import { connect } from "react-redux";
 import hamburger from "../../assets/hamburger.png";
-import { Card } from 'react-native-elements';
+import { Card,List } from 'react-native-elements';
 import UsernameIcon from "../../assets/name.png";
 import Order from "../../assets/order.png";
 import DummyOrder from "../../assets/dummyOrder.png";
@@ -27,6 +27,7 @@ import Phone from "../../assets/phone.png";
 import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
+import { PermissionsAndroid } from 'react-native';
 
 
 
@@ -66,6 +67,25 @@ class Dashboard extends Component {
 
 
 	}
+	async requestMakeCallPermission(number) {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CALL_PHONE, {
+                    title: 'Make Call',
+                    message: 'need access to call from phone'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+				console.log("CALL_PHONE permissions granted")
+				RNImmediatePhoneCall.immediatePhoneCall(number);
+            } else {
+                console.log("CALL_PHONE permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+
+    }
 
 
 	componentDidMount() {
@@ -153,9 +173,8 @@ class Dashboard extends Component {
 						if (value == 'logout') {
 							AsyncStorage.setItem("userData", '');
 							AsyncStorage.setItem("isClicked", '');
-							console.log("driverStatus is this.......................................................");
 							Actions.pop();
-							BackHandler.exitApp();
+							Actions.AppSelectionScreen();
 						}
 						else {
 							AsyncStorage.setItem("isClicked", '');
@@ -229,6 +248,10 @@ class Dashboard extends Component {
 			Actions.DriverProfileScreen();
 		}
 
+		if (item == 'MyAddress') {
+			Actions.MyAddress();
+		}
+
 		if (item == 'AcceptedDeliveryRequestScreen') {
 			Actions.AcceptedDeliveryRequestScreen();
 		}
@@ -282,22 +305,32 @@ class Dashboard extends Component {
 	}
 	onPlaceOrderPress() {
 		Alert.alert("Place Oreder Button Pressed");
+		
 	}
 
-	_onPress = (item) => {
+	_onPress(item) {
 		// your code on item press
-		console.log("chak de fatte......................................................................");
+		console.log("item number................................" +item);
+		Actions.MapScreen();
+		
 	};
 
-	_renderItem({ item }) {
+	_onPhoneIconPress(item){
+		console.log("item number................................" +item);
+		this.requestMakeCallPermission(item.sender_phone);
+		
+	}
+
+	_renderItem({ item,index }) {
 		Moment.locale('en');
 		var dt = item.receiveddate;
 		var orderStatus = item.shipment_status;
-		return <TouchableOpacity
-		//onPress={this._onPress(item)}
+		return	<TouchableOpacity
+		onPress={() =>this._onPress(item)}
 		>
 		<Card
 			containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}
+		//	onPress={this._onPress}
 		>
 
 			<View style={styles.inputContainer}>
@@ -324,7 +357,7 @@ class Dashboard extends Component {
 				<View
 					style={styles.informationContainer}>
 					<TouchableOpacity
-						//onPress={this._onPress(item)}
+						onPress={() => this._onPhoneIconPress(item)}
 						>
 						<View style={styles.phoneIconContainer}
 						>
@@ -374,7 +407,7 @@ class Dashboard extends Component {
 				</View>
 			</View>
 		</Card>
-		</TouchableOpacity>;
+					</TouchableOpacity>;
 
 
 
@@ -448,7 +481,7 @@ class Dashboard extends Component {
 						</View> */}
 						<FlatList
 							data={this.state.data}
-							renderItem={this._renderItem}
+							renderItem={this._renderItem.bind(this)}
 							keyExtractor={this._keyExtractor}
 
 						/>

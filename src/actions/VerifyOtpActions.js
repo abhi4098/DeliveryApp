@@ -66,11 +66,11 @@ import {
     
     };
 
-    export const resendOtp = ({phoneNumber}) => {
+    export const resendOtp = ({phoneNumber,type}) => {
 
     
       console.log(APIURLCONSTANTS.OTP_RECEIVE);
-      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber}));
+      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,type}));
      
     
       return (dispatch) => {
@@ -84,7 +84,7 @@ import {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({phoneNumber})
+          body: JSON.stringify({phoneNumber,type})
         })
         .then( (response) => {
           console.log('Received response receive otp--------------------: ', response);

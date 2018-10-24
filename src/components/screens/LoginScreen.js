@@ -96,26 +96,35 @@ class LoginScreen extends Component {
   onLoginButtonPress() {
    //Actions.Dashboard();
     
+   AsyncStorage.getItem("nboxitUserType").then((value) => {
 
-    Keyboard.dismiss();
+    if (value) {
+      
+      Keyboard.dismiss();
 
-    if (this.props.username == '') {
-      Alert.alert("Please Enter Username");
+      if (this.props.username == '') {
+        Alert.alert("Please Enter Username");
+      }
+      else if (this.props.password == '') {
+        Alert.alert("Please Enter Password");
+      }
+      else {
+        this.props.showLoading(true);
+        var user = {
+          phone: this.props.username,
+          password: this.props.password,
+          type: value,
+          accountstatus: 'active'
+  
+        };
+  
+        this.props.loginUser(user);
+      }
+
     }
-    else if (this.props.password == '') {
-      Alert.alert("Please Enter Password");
-    }
-    else {
-      this.props.showLoading(true);
-      var user = {
-        phone: this.props.username,
-        password: this.props.password,
-        accountstatus: 'active'
 
-      };
-
-      this.props.loginUser(user);
-    }
+  }).done();
+    
 
 
   }

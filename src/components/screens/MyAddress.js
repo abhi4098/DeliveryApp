@@ -10,24 +10,71 @@ import { Actions  } from "react-native-router-flux";
 import { Card } from "../common/index";
 import { connect } from "react-redux";
 
-import {addPlace,deletePlace,selectPlace,deselectPlace} from '../../actions';
+import {addressList,ShowAddressLoading} from '../../actions';
 
 class MyAddress extends Component {
 
    
-
-    placeNameChangedHandler = placeName => {
-    this.props.onAddPlace(placeName);
-    }
-
-    placeSubmitHandler = () => {
-        
-     if(this.props.places.name === "")
-     {
-         return;
+     componentWillMount()
+     { 
+        this.getProfileData();
      }
-    return this.props.places.name;
-    };
+ 
+     getProfileData() {
+
+		AsyncStorage.getItem("userData").then((value) => {
+			if (value) {
+				usertype = JSON.parse(value).type;
+				phoneNumber = JSON.parse(value).phone;
+				userId = JSON.parse(value)._id;
+
+				this.props.ShowAddressLoading(true);
+				
+					var address = {
+						
+						userid: userId,
+						type: usertype
+
+					};
+				
+
+				this.props.addressList(address);
+
+
+			}
+
+		}).done();
+
+	}
+
+
+    componentWillReceiveProps(nextProps) {
+
+if (nextProps.addressListResponse != undefined && nextProps.addressListResponse != '') {
+			console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.addressListResponse);
+
+			if (nextProps.addressListResponse.status == 200) {
+				this.props.showDashBoardLoading(false);
+
+				this.setState({ data: nextProps.addressListResponse.data })
+
+			}
+  
+			else {
+				this.props.showDashBoardLoading(false);
+				alert(nextProps.addressListResponse.message);
+
+
+			}
+
+
+
+		}
+
+	
+
+
+	}
 
  
     render(){
@@ -43,11 +90,7 @@ class MyAddress extends Component {
             <View>
 
                <View>
-                 <TextInput
-                 placeholder = "Add Place"
-                 value ={this.props.places.name}
-                  onChangeText = {this.placeNameChangedHandler}
-                 />
+               
                 
                 <Button
                  title = "Add"
@@ -64,24 +107,14 @@ class MyAddress extends Component {
     }
 }
 
-const mapStateToProps = state =>{
-  console.log("abhi....................." ,state.places.places);
+const mapStateToProps = ({address}) =>{
+  const {addressListResponse} = address;
     return{
     
-        places: state.places.places,
-        selectedPlace:state.places.selectedPlace
+        addressListResponse: addressListResponse,
+       
     };
 };
 
-const mapDispatchToProps = dispatch => {
 
-    return{
-        onAddPlace: (name) =>dispatch(addPlace(name)),
-        onDeletePlace: () => dispatch(deletePlace()),
-        onSelectPlace:(key) => dispatch(selectPlace(key)),
-        onDeselectPlace: () => dispatch(deselectPlace())
-    };
-
-}; 
-
-export default connect(mapStateToProps,mapDispatchToProps)(MyAddress);
+export default connect(mapStateToProps, {addressList,ShowAddressLoading})(MyAddress);

@@ -12,7 +12,7 @@ import DriverStatusReducer from './DriverStatusReducer';
 
 
 export default combineReducers({
-  places: MyAddressReducer,
+  address: MyAddressReducer,
   login: LoginReducer,
   forgot: ForgotPasswordReducer,
   register: RegistrationReducer,

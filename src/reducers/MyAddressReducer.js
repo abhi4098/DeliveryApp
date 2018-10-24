@@ -1,46 +1,18 @@
-import { ADD_PLACE,DELETE_PLACE,DESELECT_PLACE, SELECT_PLACE } from "../actions/actionTypes";
+import {ADDRESS_LIST} from "../actions/actionTypes";
 
-const initialState = {
-    places: [],
-    selectedPlace: null
+const INITIAL_STATE = {
+   addressListResponse: ''
     
 };
 
-const reducer = (state = initialState ,action) => {
+export default (state = INITIAL_STATE ,action) => {
 
     switch (action.type) {
 
-             case ADD_PLACE:
+             case ADDRESS_LIST:
              return {
                  ...state,
-                 places: state.places.concat({
-                     key:Math.random,
-                     name:action.placeName,
-                    
-                 })
-             };
-
-             case DELETE_PLACE:
-             return {
-                 ...state,
-                 places: state.places.filter( place =>{
-                     return place.key !== state.selectedPlace.key;
-
-                 })
-             };
-
-             case SELECT_PLACE:
-             return {
-                 ...state,
-                 selectedPlace: state.places.find(place => {
-                     return place.key  === action.placeKey;
-                 })
-             };
-
-             case DESELECT_PLACE:
-             return {
-                 ...state,
-                 selectedPlace: null
+                 addressListResponse: action.payload
              };
 
 
@@ -48,4 +20,3 @@ const reducer = (state = initialState ,action) => {
              return state;
     }
 };
-export default reducer; 

@@ -36,11 +36,11 @@ export const showLoading =(value)=>{
     }
   };
 
-  export const loginUser = ({phone,password}) => {
+  export const loginUser = ({phone,password,type}) => {
 
     
     console.log(APIURLCONSTANTS.LOGIN);
-    console.log('Postdata JSON='+JSON.stringify({phone,password}));
+    console.log('Postdata JSON='+JSON.stringify({phone,password,type}));
    
   
     return (dispatch) => {
@@ -54,7 +54,7 @@ export const showLoading =(value)=>{
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({phone,password})
+        body: JSON.stringify({phone,password,type})
       })
       .then( (response) => {
         console.log('Received response Login: ', response);
