@@ -89,6 +89,7 @@ class CustomerLoginScreen extends Component {
   }
 
 }).done();
+
   }
 
   componentDidMount() {

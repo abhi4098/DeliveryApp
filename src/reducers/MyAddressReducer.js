@@ -1,7 +1,8 @@
-import {ADDRESS_LIST} from "../actions/actionTypes";
+import {ADDRESS_LIST,SHOW_ADDRESS_LOADING} from "../actions/actionTypes";
 
 const INITIAL_STATE = {
-   addressListResponse: ''
+   addressListResponse: '',
+   isLoading:false,
     
 };
 
@@ -13,6 +14,12 @@ export default (state = INITIAL_STATE ,action) => {
              return {
                  ...state,
                  addressListResponse: action.payload
+             };
+
+             case SHOW_ADDRESS_LOADING:
+             return {
+                 ...state,
+                 isLoading: action.payload
              };
 
 

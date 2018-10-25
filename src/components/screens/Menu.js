@@ -27,6 +27,7 @@ import AcceptedReq from "../../assets/current_orders.png";
 var userName = '';
 var userEmail = '';
 var userPhone = '';
+var userType = '';
 
 const styles = StyleSheet.create({
   menu: {
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#014292',
+    backgroundColor: '#d2e0fc',
     justifyContent: 'center',
     borderColor: 'white',
     borderWidth: 1,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: null,
     height: null,
-    backgroundColor: '#2e97db',
+    backgroundColor: '#14136d',
   },
 
   welcomeText: {
@@ -154,7 +155,8 @@ export default class Menu extends Component {
       selectedMenuColor: 'transparent',
       userName: '',
       userEmail: '',
-      userPhone: ''
+      userPhone: '',
+      userType: ''
 
     };
   }
@@ -171,6 +173,7 @@ export default class Menu extends Component {
         userName = JSON.parse(value).firstname + " " + JSON.parse(value).lastname;
         userEmail = JSON.parse(value).email;
         userPhone = JSON.parse(value).phone;
+        userType = JSON.parse(value).type;
 
 
       }
@@ -181,35 +184,31 @@ export default class Menu extends Component {
 
 
   renderMyAddress() {
-    AsyncStorage.getItem("userData").then((value) => {
-      if (value) {
-        usertype = JSON.parse(value).type;
-        if (usertype == 'customer') {
-          return <View style={{
-            height: 40, paddingLeft: 10,
-            marginTop: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            // backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#014292' : 'transparent'
-          }}>
-            <Image style={styles.itemImage} source={AcceptedReq}>
-            </Image>
-            <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('MyAddress')}>
-              <Text
-                style={styles.item}>
-                My Address
+
+    if (usertype == 'customer') {
+      return <View style={{
+        height: 40, paddingLeft: 10,
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: (this.props.selectedMenu == 'MyAddress') ? '#d2e0fc' : 'transparent'
+      }}>
+        <Image style={styles.itemImage} source={AcceptedReq}>
+        </Image>
+        <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('MyAddress')}>
+          <Text
+            style={styles.item}>
+            Address List
                         </Text>
-            </TouchableHighlight>
-          </View>;
-        }
-        else {
-          return;
-        }
+        </TouchableHighlight>
+      </View>;
+    }
+    else {
+      return ;
+    }
 
 
-      }
 
-    }).done();
   }
 
   render() {
@@ -242,7 +241,7 @@ export default class Menu extends Component {
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: (this.props.selectedMenu == 'Dashboard') ? '#014292' : 'transparent'
+              backgroundColor: (this.props.selectedMenu == 'Dashboard') ? '#d2e0fc' : 'transparent'
             }}>
               <Image style={styles.itemImage} source={Dashboard}>
               </Image>
@@ -254,13 +253,14 @@ export default class Menu extends Component {
               </TouchableHighlight>
             </View>
 
-            {this.renderMyAddress}
+            {this.renderMyAddress()}
+
             <View style={{
               height: 40, paddingLeft: 10,
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: (this.props.selectedMenu == 'DriverProfileScreen') ? '#014292' : 'transparent'
+              backgroundColor: (this.props.selectedMenu == 'DriverProfileScreen') ? '#d2e0fc' : 'transparent'
             }}>
               <Image style={styles.itemImage} source={Profile}>
               </Image>
@@ -278,7 +278,7 @@ export default class Menu extends Component {
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#014292' : 'transparent'
+              backgroundColor: (this.props.selectedMenu == 'AcceptedDeliveryRequestScreen') ? '#d2e0fc' : 'transparent'
             }}>
               <Image style={styles.itemImage} source={AcceptedReq}>
               </Image>
@@ -296,7 +296,7 @@ export default class Menu extends Component {
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: (this.props.selectedMenu == 'OrderDeliveredScreen') ? '#014292' : 'transparent'
+              backgroundColor: (this.props.selectedMenu == 'OrderDeliveredScreen') ? '#d2e0fc' : 'transparent'
             }}>
               <Image style={styles.itemImage} source={OrderDelivered}>
               </Image>
@@ -314,7 +314,7 @@ export default class Menu extends Component {
               marginTop: 10,
               flexDirection: 'row',
               alignItems: 'center',
-              backgroundColor: (this.props.selectedMenu == 'Logout') ? '#014292' : 'transparent'
+              backgroundColor: (this.props.selectedMenu == 'Logout') ? '#d2e0fc' : 'transparent'
             }}>
               <Image style={styles.itemImage} source={Logout}>
               </Image>

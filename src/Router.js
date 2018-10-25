@@ -87,8 +87,8 @@ const RouterComponent = () => {
 	    <Scene
 	                key="MyAddress"      
 	                component={MyAddress}  
-					title = "My Address"
-					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
+					title = "Address List"
+					titleStyle={{textAlign: 'center' ,marginLeft:65, fontSize: 20}}
 					
 					
 	                />

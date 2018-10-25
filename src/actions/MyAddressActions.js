@@ -1,10 +1,18 @@
 import {
-    
+  SHOW_ADDRESS_LOADING,
    ADDRESS_LIST                              
   } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
+export const ShowAddressLoading =(value)=>{
 
+  return (dispatch) => {
+    dispatch({
+      type: SHOW_ADDRESS_LOADING,
+      payload: value
+    });
+  }
+};
 
 
 // export const clearLoginRecord = () => ({
@@ -21,11 +29,11 @@ import APIURLCONSTANTS from "../ApiUrlList";
 //   }
 // };
 
-export const addressList = ({type,userid}) => {
+export const addressList = ({userid}) => {
 
   
-  console.log(APIURLCONSTANTS.ADDRESS_LIST_URL);
-  console.log('Postdata JSON='+JSON.stringify({type,userid}));
+  console.log(APIURLCONSTANTS.ADDRESS_LIST_URL +"/"+ "5ba8a27e2607e618d80eb9fa");
+  //console.log('Postdata JSON='+JSON.stringify({userid}));
  
 
   return (dispatch) => {
@@ -33,13 +41,13 @@ export const addressList = ({type,userid}) => {
     //call the API and use the promise to check the response
     // in response callBack .then() call the dispatcher.
 
-    fetch(APIURLCONSTANTS.ADDRESS_LIST_URL, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({type,userid})
+    fetch(APIURLCONSTANTS.ADDRESS_LIST_URL +"/"+ "5ba8a27e2607e618d80eb9fa", {
+      method: 'GET',
+      // headers: {
+      //   'Accept': 'application/json',
+      //   'Content-Type': 'application/json',
+      // },
+      // body: JSON.stringify({userid})
     })
     .then( (response) => {
       console.log('Received response Login: ', response);
@@ -59,7 +67,7 @@ export const addressList = ({type,userid}) => {
       console.log('Error==='+e);
       alert('Server not responding');
       dispatch({
-        type: SHOW_LOADING,
+        type: SHOW_ADDRESS_LOADING,
         payload: false
       });
 
