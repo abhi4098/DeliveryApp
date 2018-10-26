@@ -13,5 +13,6 @@ const APIURLCONSTANTS = {
     DASHBOARD_URL                            : BASE_URL+ 'shipments/ShipmentsList/',
     DRIVER_STATUS_URL                            : BASE_URL+ 'users/changedriverStatus',
     ADDRESS_LIST_URL                            : BASE_URL+ 'users/getAddressList',
+    ADDRESS_DELETE_URL                            : BASE_URL+ 'users/deleteAddress',
 }
 export default APIURLCONSTANTS;

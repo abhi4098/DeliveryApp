@@ -8,16 +8,18 @@ import {
     FlatList,
     StyleSheet,
     TouchableOpacity,
-    Image
+    Image,
+    Alert
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import AddressIcon from "../../assets/addressIcon.png";
+import AddressIcon from "../../assets/location.png";
 import Delete from "../../assets/delete.png";
+import Loader from '../common/Loader';
 
 import { Card, List } from 'react-native-elements';
 
-import { addressList, ShowAddressLoading } from '../../actions';
+import { addressList, showAddressLoading,clearAddressRecord ,deleteAddress} from '../../actions/MyAddressActions';
 
 class MyAddress extends Component {
     constructor(props) {
@@ -25,6 +27,7 @@ class MyAddress extends Component {
         super(props);
         this.state = {
             loading: false,
+            selectedItem: 'test'
 
 
         }
@@ -42,7 +45,7 @@ class MyAddress extends Component {
                 phoneNumber = JSON.parse(value).phone;
                 userId = JSON.parse(value)._id;
 
-                this.props.ShowAddressLoading(true);
+                this.props.showAddressLoading(true);
 
                 var address = {
 
@@ -61,6 +64,30 @@ class MyAddress extends Component {
 
     }
 
+    _onDeleteIconPress(item) {
+        this.props.showAddressLoading(true);
+        this.props.clearAddressRecord();
+       // selectedItem = item;
+        AsyncStorage.getItem("userData").then((value) => {
+            if (value) {
+                userId = JSON.parse(value)._id;
+        console.log("item id..........................................", item._id);
+                var delAdd = {
+
+                    addressid : item._id,
+                    _id: userId
+
+                };
+
+
+                this.props.deleteAddress(delAdd);
+                
+            }
+
+        }).done();
+
+
+    }
 
     componentWillReceiveProps(nextProps) {
 
@@ -68,15 +95,37 @@ class MyAddress extends Component {
             console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.addressListResponse);
 
             if (nextProps.addressListResponse.status == 200) {
-                this.props.ShowAddressLoading(false);
+                this.props.showAddressLoading(false);
 
                 this.setState({ data: nextProps.addressListResponse.data })
 
             }
 
             else {
-                this.props.ShowAddressLoading(false);
+                this.props.showAddressLoading(false);
                 alert(nextProps.addressListResponse.message);
+
+
+            }
+
+
+
+        }
+
+        if (nextProps.deleteAddressResponse != undefined && nextProps.deleteAddressResponse != '') {
+            console.log("nextProps.deleteAddressResponse'''''''''''''''''''''''---------------------", nextProps.deleteAddressResponse);
+
+            if (nextProps.deleteAddressResponse.status == 200) {
+                this.props.showAddressLoading(false);
+
+                this.setState({ data: nextProps.deleteAddressResponse.data })
+                //this.deleteAddressItem(selectedItem);
+
+            }
+
+            else {
+                this.props.showAddressLoading(false);
+                alert(nextProps.deleteAddressResponse.message);
 
 
             }
@@ -89,11 +138,20 @@ class MyAddress extends Component {
 
 
     }
+    // deleteAddressItem(selectedItem) {
+    //     var data = [...this.state.data]
+    //     let index = data.indexOf(selectedItem);
+    //     data.splice(index, 1);
+    //     this.setState({ data });
+    //     selectedItem = '';
+    // }
 
     _renderItem({ item, index }) {
-
+        console.log("addr status..............................................." +item.addr_status);
+           if(item.addr_status == true )
+           {
         return  <Card
-                containerStyle={{ padding: 5, marginTop: 15, marginEnd: 6, marginStart: 6 }}
+                containerStyle={{ padding: 2, marginTop: 15, marginEnd: 6, marginStart: 6 }}
             >
 
                 <View style={styles.inputContainer}>
@@ -117,7 +175,7 @@ class MyAddress extends Component {
 						>
 
                         <TouchableOpacity
-						//onPress={() => this._onPhoneIconPress(item)}
+						onPress={() => this._onDeleteIconPress(item)}
 						>
                     <Image
                         source={Delete}
@@ -132,6 +190,8 @@ class MyAddress extends Component {
 
                 </View>
             </Card>;
+           }
+           
 
 
 
@@ -143,13 +203,17 @@ class MyAddress extends Component {
 
             <View
                 style={styles.parentContainer}>
-
+<Loader
+                    loading={this.props.isLoading} />
+                    <View
+                style={styles.parentContainer}>
                 <FlatList
                     data={this.state.data}
                     renderItem={this._renderItem.bind(this)}
                     keyExtractor={this._keyExtractor}
 
                 />
+            </View>
             </View>
         );
     }
@@ -160,23 +224,31 @@ const styles = StyleSheet.create({
 
     parentContainer: {
         flex: 1,
+        
  },
     inputContainer: {
+
         flexDirection: 'row',
         position: "relative",
-       alignItems: 'center',
+        alignItems: 'center',
+        paddingTop:5,
+        paddingBottom:5
+      
       
 
     },
    
     inputIconAdd: {
-		width: 60,
-		height: 60,
+		width: 50,
+        height: 50,
+        marginStart:-5
+       
 
     },
     inputIconDelete: {
-		width: 38,
-        height: 38,
+		width: 25,
+        height: 25,
+    
         
         },
         
@@ -187,13 +259,15 @@ const styles = StyleSheet.create({
         }
 });
 const mapStateToProps = ({ address }) => {
-    const { addressListResponse } = address;
+    const { addressListResponse ,deleteAddressResponse,isLoading} = address;
     return {
 
         addressListResponse: addressListResponse,
+        deleteAddressResponse: deleteAddressResponse,
+        isLoading: isLoading
 
     };
 };
 
 
-export default connect(mapStateToProps, { addressList, ShowAddressLoading })(MyAddress);
+export default connect(mapStateToProps, { addressList, showAddressLoading,clearAddressRecord,deleteAddress })(MyAddress);
