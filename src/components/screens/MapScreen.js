@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-   
+
     StyleSheet,
     Dimensions,
     View,
@@ -9,24 +9,28 @@ import {
     Platform,
     AsyncStorage,
     Button,
-    Text
+    Text,
+    Alert,
+    TouchableOpacity
 } from "react-native";
 import MapView from 'react-native-maps';
 import { Actions } from "react-native-router-flux";
 import Location from "../../assets/location.png";
 const { width, height } = Dimensions.get("window")
+import { connect } from "react-redux";
 
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.0030
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+import { saveAdd, showSaveAddLoading,clearSaveAddressRecord} from '../../actions/MapScreenActions';
+import Loader from '../common/Loader';
+
 
 
 class MapScreen extends Component {
-    state = {
 
-    }
 
 
     constructor(props) {
@@ -34,22 +38,75 @@ class MapScreen extends Component {
 
         this.state = {
             focusedLocation: {
-                latitude: 37.7900352,
-                longitude: -122.4013726,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
+                latitude: 0,  
+                longitude: 0,
+                latitudeDelta: 0,
+                longitudeDelta:0
             },
             locationChosen: false,
-            marginBottom: 1
+            marginBottom: 1,
+            saveLocationname: '',
+            loading: false,
 
         }
     }
 
+componentWillUnmount()
+{
+    this.props.clearSaveAddressRecord();
+}
+
+componentDidMount() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        var lat = parseFloat(position.coords.latitude)
+        var long = parseFloat(position.coords.longitude)
+
+        var initialRegion = {
+            latitude: lat,
+            longitude: long,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta:LONGITUDE_DELTA
+        }
+
+        this.setState({focusedLocation: initialRegion})
+        //this.setState({markerPosition: initialRegion})
+
+    },
+    (error) =>alert(JSON.stringify(error)),
+    {enableHighAccuracy: true, timeout:20000})
+}
+
+
+    onConfirmButtonPress() {
+        AsyncStorage.getItem("userData").then((value) => {
+            if (value) {
+               
+                userId = JSON.parse(value)._id;
+                console.log("saved location name............................",this.state.focusedLocation.latitude,this.state.focusedLocation.longitude );
+                this.props.showSaveAddLoading(true);
+
+                var location = {
+                    _id : userId,
+                    latitude : this.state.focusedLocation.latitude,
+                    longitude :this.state.focusedLocation.longitude,
+                    street : this.state.saveLocationname
+
+                };
+
+
+                this.props.saveAdd(location);
+               
+
+
+            }
+
+        }).done();
+    }
 
     _onMapReady = () => this.setState({ marginBottom: 0 })
-    onTestButtonPress() {
-        Actions.GeoLocationExampleScreen();
-    }
+    // onTestButtonPress() {
+    //     Actions.GeoLocationExampleScreen();
+    // }
 
     pickLocationHandler = event => {
         const pickedCoordinates = event.nativeEvent.coordinate;
@@ -92,6 +149,40 @@ class MapScreen extends Component {
             })
     }
 
+    _onSaveAddressPress(){
+        Actions.MyAddress();
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.saveAddResponse != undefined && nextProps.saveAddResponse != '') {
+            console.log("nextProps.saveAddResponse'''''''''''''''''''''''---------------------", nextProps.saveAddResponse);
+
+            if (nextProps.saveAddResponse.status == 200) {
+                this.props.showSaveAddLoading(false);
+
+                //this.setState({ data: nextProps.saveAddResponse.data })
+
+            }
+
+            else {
+                this.props.showSaveAddLoading(false);
+                alert(nextProps.saveAddResponse.message);
+
+
+            }
+
+
+
+        }
+
+       
+
+
+
+
+    }
+
 
     render() {
         let marker = null;
@@ -101,17 +192,22 @@ class MapScreen extends Component {
         }
         return (
             <View
-            style={styles.controlsContainer}>
+                style={styles.controlsContainer}>
+                <Loader
+                    loading={this.props.isLoading} />
+                   
                 <MapView
                     initialRegion={this.state.focusedLocation}
-                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop:0 }}
+                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop: 0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}
+                    showsMyLocationButton={true}
                     onPress={this.pickLocationHandler}
                     ref={ref => this.map = ref}
                 >
                     {marker}
                 </MapView>
+                
                 <View style={styles.inputContainer}>
                     <View style={styles.iconContainer}>
                         <Image
@@ -127,27 +223,32 @@ class MapScreen extends Component {
                             returnKeyType='next'
                             placeholder="Location name (ex Home,office)"
                             placeholderTextColor="#696969"
-                            //onChangeText={this.onEmailChange.bind(this)}
-                            value={this.props.username}
+                            onChangeText={(saveLocationname) => this.setState({saveLocationname})}
+                            value={this.state.saveLocationname}
                             returnKeyType='next'
-                            onSubmitEditing={(event) => { this.refs.passwordField.focus() }}
+                           
                         />
                     </View>
                 </View>
 
 
                 <Button
-						//	onPress={this.onTestButtonPress.bind(this)}
-							title="Confirm Order"
-							color="#14136d"
+                    onPress={this.onConfirmButtonPress.bind(this)}
+                    title="Confirm Order"
+                    color="#14136d"
 
-						/>
-<Text
-style={{ marginTop:15 }}>-OR-</Text>
+                />
+             
+                <Text
+                    style={{ marginTop: 15 }}>-OR-</Text>
 
-<Text
-style={{marginTop:15  }}>Select from Saved Address</Text>
-                        
+                <TouchableOpacity
+                    onPress={() => this._onSaveAddressPress()}
+                >
+                    <Text
+                        style={{ marginTop: 15, color: "#14136d" }}>Select from Saved Address</Text>
+                </TouchableOpacity>
+
                 {/* <View>
                     <Button
                     title = "Current Location"
@@ -166,13 +267,13 @@ style={{marginTop:15  }}>Select from Saved Address</Text>
     }
 }
 const styles = StyleSheet.create({
-    controlsContainer:{
+    controlsContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-      marginBottom: 80,
+        marginBottom: 80,
     },
-   
+
 
     inputContainer: {
         flexDirection: 'row',
@@ -181,7 +282,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         alignItems: 'center',
         borderRadius: 3,
-    
+
         borderColor: 'gray',
         borderWidth: 1,
         shadowColor: '#000000',
@@ -206,11 +307,23 @@ const styles = StyleSheet.create({
     inputIcon: {
         width: 30,
         height: 30,
-       
+
     },
 
-  
+
 
 });
 
-export default MapScreen;
+
+const mapStateToProps = ({ mapScreenReducer }) => {
+    const { saveAddResponse ,isLoading} = mapScreenReducer;
+    return {
+
+        saveAddResponse: saveAddResponse,
+        isLoading: isLoading
+
+    };
+};
+
+
+export default connect(mapStateToProps, { saveAdd, showSaveAddLoading,clearSaveAddressRecord })(MapScreen);

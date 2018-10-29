@@ -2,7 +2,8 @@ import {
     ADDRESS_LIST,
     SHOW_ADDRESS_LOADING,
     CLEAR_ADDRESS_RECORD,
-    DELETE_ADDRESS_RECORD
+    DELETE_ADDRESS_RECORD,
+    
 } from "../actions/actionTypes";
 
 const INITIAL_STATE = {

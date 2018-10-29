@@ -1,4 +1,4 @@
-const BASE_URL='http://brandly.in:5000/';
+const BASE_URL='https://nboxitdb.azurewebsites.net/';
 const LOCAL_URL = 'http://localhost:5000/';
 
 const APIURLCONSTANTS = {
@@ -14,5 +14,7 @@ const APIURLCONSTANTS = {
     DRIVER_STATUS_URL                            : BASE_URL+ 'users/changedriverStatus',
     ADDRESS_LIST_URL                            : BASE_URL+ 'users/getAddressList',
     ADDRESS_DELETE_URL                            : BASE_URL+ 'users/deleteAddress',
+    PIN_MAP_URL                            : BASE_URL+ 'users/addAddress',
 }
+
 export default APIURLCONSTANTS;

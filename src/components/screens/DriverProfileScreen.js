@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
 
 
 
-    imageContainer: {
+     imageContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',

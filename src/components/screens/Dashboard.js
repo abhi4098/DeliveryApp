@@ -356,10 +356,12 @@ class Dashboard extends Component {
 				</View>
 				<View
 					style={styles.informationContainer}>
-					<TouchableOpacity
-						onPress={() => this._onPhoneIconPress(item)}
-						>
+					
 						<View style={styles.phoneIconContainer}
+						>
+
+						<TouchableOpacity
+						onPress={() => this._onPhoneIconPress(item)}
 						>
 
 							<Image
@@ -367,9 +369,9 @@ class Dashboard extends Component {
 								style={styles.phoneIcon}
 
 							/>
-
+                           </TouchableOpacity>
 						</View>
-					</TouchableOpacity>
+					
 					<View
 						style={{ flexDirection: 'row' }}>
 						<Text
@@ -599,11 +601,14 @@ const styles = StyleSheet.create({
 	informationContainer: {
 		marginStart: 10,
 		flex: 1,
-		flexDirection: "column"
+		flexDirection: "column",
+		
 
 	},
 	phoneIconContainer: {
-		alignSelf: 'flex-end',
+	  alignSelf: 'flex-end',
+		// position:"absolute",
+		// right: 0
 
 	},
 
@@ -695,6 +700,7 @@ const styles = StyleSheet.create({
 	phoneIcon: {
 		width: 40,
 		height: 40,
+		
 
 
 	},

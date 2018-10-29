@@ -9,6 +9,7 @@ import OtpReceiveReducer from './OtpReceiveReducer';
 import VerifyOtpReducer from './VerifyOtpReducer';
 import DashboardReducer from './DashboardReducer';
 import DriverStatusReducer from './DriverStatusReducer';
+import MapScreenReducer from './MapScreenReducer';
 
 
 export default combineReducers({
@@ -20,6 +21,7 @@ export default combineReducers({
   otpReceive: OtpReceiveReducer,
   verifyReceivedOtp:VerifyOtpReducer,
   dashboardReducer: DashboardReducer,
-  driverStatusReducer:DriverStatusReducer
+  driverStatusReducer:DriverStatusReducer,
+  mapScreenReducer:MapScreenReducer
 
 });
