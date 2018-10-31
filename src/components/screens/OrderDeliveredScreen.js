@@ -132,11 +132,11 @@ class OrderDeliveredScreen extends Component {
         
         onBackPress() {
             if (Actions.state.index === 1) {
-                console.log("onBackPress.............", Actions.state.index)
+                console.log("onBackPress.............", Actions.state.index);
                 BackHandler.exitApp();
                 return false;
             }
-            console.log("onBackPress..............", Actions.state.index)
+            console.log("onBackPress..............", Actions.state.index);
             //this.props.clearListData();
             Actions.pop();
             return true;

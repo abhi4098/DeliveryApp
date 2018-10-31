@@ -121,8 +121,8 @@ const RouterComponent = () => {
 					 <Scene
 	                key="AcceptedDeliveryRequestScreen"      
 	                component={AcceptedDeliveryRequestScreen}  
-					title = "Accepted Delivery Requests"
-					titleStyle={{textAlign: 'center' ,marginLeft:90, fontSize: 20}}
+					title = "Current Orders"
+					titleStyle={{textAlign: 'center' ,marginLeft:55, fontSize: 20}}
 					
 					
 	                />
