@@ -2,7 +2,8 @@ import {
   SHOW_ADDRESS_LOADING,
    ADDRESS_LIST ,
    CLEAR_ADDRESS_RECORD,
-   DELETE_ADDRESS_RECORD
+   DELETE_ADDRESS_RECORD,
+   CLEAR_DELETE_ADDRESS_RECORD
   } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
@@ -20,6 +21,11 @@ export const showAddressLoading =(value)=>{
 export const clearAddressRecord = () => ({
 type:CLEAR_ADDRESS_RECORD
 });
+
+export const clearDeleteAddress = () => ({
+  type:CLEAR_DELETE_ADDRESS_RECORD
+  });
+  
 
 
 

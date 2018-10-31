@@ -4,7 +4,8 @@ import {
      SHOW_DASHBOARD_LOADING,
      DRIVER_STATUS,
      CLEAR_DRIVER_STATUS_RESPONSE,
-     CLEAR_FORGOT_RESPONSE_RECORD
+     CLEAR_FORGOT_RESPONSE_RECORD,
+     
                                  
   } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
@@ -117,4 +118,6 @@ export const showDashBoardLoading =(value)=>{
   export const clearDriverStatusResponseRecord = () => ({
     type:CLEAR_DRIVER_STATUS_RESPONSE
   });
+
+  
   

@@ -19,7 +19,7 @@ import Loader from '../common/Loader';
 
 import { Card, List } from 'react-native-elements';
 
-import { addressList, showAddressLoading,clearAddressRecord ,deleteAddress} from '../../actions/MyAddressActions';
+import { addressList, showAddressLoading,clearAddressRecord ,deleteAddress,clearDeleteAddress} from '../../actions/MyAddressActions';
 
 class MyAddress extends Component {
     constructor(props) {
@@ -34,6 +34,7 @@ class MyAddress extends Component {
     }
 
     componentWillMount() {
+        console.log(" from......................................................",this.props.from)
         this.getProfileData();
     }
 
@@ -64,6 +65,26 @@ class MyAddress extends Component {
 
     }
 
+
+    _onPress(item) {
+        if(this.props.from != "Dashboard")
+        {  
+            console.log("item longitude................................Dashboard",this.props.shipId);
+            Actions.pop();
+            Actions.MapScreen({ lat:item.lat,
+                                lng:item.lng, 
+                                isFrom:'MyAddress',
+                                addName: item.street,
+                                addId:item._id,
+                                shipmentId:this.props.shipId});
+        }
+        else{
+            console.log("item number................................Dashboard");
+        }
+		
+		
+    };
+    
     _onDeleteIconPress(item) {
         this.props.showAddressLoading(true);
         this.props.clearAddressRecord();
@@ -138,6 +159,11 @@ class MyAddress extends Component {
 
 
     }
+    componentWillUnmount()
+    {
+        console.log("componentWillUnmount...........................................................");
+        this.props.clearDeleteAddress();
+    }
     // deleteAddressItem(selectedItem) {
     //     var data = [...this.state.data]
     //     let index = data.indexOf(selectedItem);
@@ -147,10 +173,13 @@ class MyAddress extends Component {
     // }
 
     _renderItem({ item, index }) {
-        console.log("addr status..............................................." +item.addr_status);
-           if(item.addr_status == true )
-           {
-        return  <Card
+        //console.log("addr status..............................................." +item.addr_status);
+           //if(item.addr_status == true )
+           //{
+        return 	<TouchableOpacity
+		onPress={() =>this._onPress(item)}
+		>
+        <Card
                 containerStyle={{ padding: 2, marginTop: 15, marginEnd: 6, marginStart: 6 }}
             >
 
@@ -189,8 +218,9 @@ class MyAddress extends Component {
 
 
                 </View>
-            </Card>;
-           }
+            </Card>
+            </TouchableOpacity>;
+           //}
            
 
 
@@ -207,6 +237,8 @@ class MyAddress extends Component {
                     loading={this.props.isLoading} />
                     <View
                 style={styles.parentContainer}>
+
+
                 <FlatList
                     data={this.state.data}
                     renderItem={this._renderItem.bind(this)}
@@ -270,4 +302,4 @@ const mapStateToProps = ({ address }) => {
 };
 
 
-export default connect(mapStateToProps, { addressList, showAddressLoading,clearAddressRecord,deleteAddress })(MyAddress);
+export default connect(mapStateToProps, { addressList, showAddressLoading,clearAddressRecord,deleteAddress,clearDeleteAddress })(MyAddress);

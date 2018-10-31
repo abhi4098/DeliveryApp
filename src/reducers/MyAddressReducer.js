@@ -3,6 +3,7 @@ import {
     SHOW_ADDRESS_LOADING,
     CLEAR_ADDRESS_RECORD,
     DELETE_ADDRESS_RECORD,
+    CLEAR_DELETE_ADDRESS_RECORD
     
 } from "../actions/actionTypes";
 
@@ -41,6 +42,12 @@ export default (state = INITIAL_STATE ,action) => {
              };
 
 
+             case CLEAR_DELETE_ADDRESS_RECORD:
+             return {
+                 ...state,
+                 deleteAddressResponse: ''
+             };
+             
         default:
              return state;
     }

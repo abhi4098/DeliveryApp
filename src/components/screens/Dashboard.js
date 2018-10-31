@@ -93,6 +93,7 @@ class Dashboard extends Component {
 	}
 
 	componentWillUnmount() {
+		console.log("componentWillUnmount dashboard.................................");
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -249,7 +250,7 @@ class Dashboard extends Component {
 		}
 
 		if (item == 'MyAddress') {
-			Actions.MyAddress();
+			Actions.MyAddress({from: 'Dashboard'});
 		}
 
 		if (item == 'AcceptedDeliveryRequestScreen') {
@@ -311,7 +312,7 @@ class Dashboard extends Component {
 	_onPress(item) {
 		// your code on item press
 		console.log("item number................................" +item);
-		Actions.MapScreen();
+		Actions.MapScreen({shipmentId:item._id});
 		
 	};
 

@@ -13,7 +13,7 @@ import {
     Alert,
     TouchableOpacity
 } from "react-native";
-import MapView from 'react-native-maps';
+import MapView,{ AnimatedRegion, Marker } from 'react-native-maps';
 import { Actions } from "react-native-router-flux";
 import Location from "../../assets/location.png";
 const { width, height } = Dimensions.get("window")
@@ -43,7 +43,11 @@ class MapScreen extends Component {
                 latitudeDelta: 0,
                 longitudeDelta:0
             },
-            locationChosen: false,
+            markerPosition: new AnimatedRegion({
+                latitude: 0,
+                longitude: 0
+            }),
+            locationChosen: true,
             marginBottom: 1,
             saveLocationname: '',
             loading: false,
@@ -53,14 +57,30 @@ class MapScreen extends Component {
 
 componentWillUnmount()
 {
+    console.log("componentWillUnmount.........................................","mapscreen")
     this.props.clearSaveAddressRecord();
 }
 
 componentDidMount() {
-    navigator.geolocation.getCurrentPosition((position) => {
-        var lat = parseFloat(position.coords.latitude)
-        var long = parseFloat(position.coords.longitude)
+    console.log("lat..............................................",this.props.lat);
+    console.log("long..............................................",this.props.lng);
+    console.log("isFrom..............................................",this.props.isFrom);
 
+
+    navigator.geolocation.getCurrentPosition((position) => {
+
+        if(this.props.isFrom == "MyAddress")
+        {
+            var lat =parseFloat(this.props.lat)
+            var long = parseFloat(this.props.lng)
+            this.setState({saveLocationname:this.props.addName})
+            
+        }
+        else{ 
+            var lat = parseFloat(position.coords.latitude)
+            var long = parseFloat(position.coords.longitude)
+    }
+       
         var initialRegion = {
             latitude: lat,
             longitude: long,
@@ -69,7 +89,7 @@ componentDidMount() {
         }
 
         this.setState({focusedLocation: initialRegion})
-        //this.setState({markerPosition: initialRegion})
+        this.setState({markerPosition: initialRegion})
 
     },
     (error) =>alert(JSON.stringify(error)),
@@ -84,17 +104,22 @@ componentDidMount() {
                 userId = JSON.parse(value)._id;
                 console.log("saved location name............................",this.state.focusedLocation.latitude,this.state.focusedLocation.longitude );
                 this.props.showSaveAddLoading(true);
+                console.log("saved location name............................",this.props.shipmentId);
 
                 var location = {
                     _id : userId,
                     latitude : this.state.focusedLocation.latitude,
                     longitude :this.state.focusedLocation.longitude,
-                    street : this.state.saveLocationname
+                    street : this.state.saveLocationname,
+                    addressid: this.props.addId,
+                    shipment_id:this.props.shipmentId,
+                    mode:'mobile'
 
                 };
 
 
                 this.props.saveAdd(location);
+            
                
 
 
@@ -150,7 +175,9 @@ componentDidMount() {
     }
 
     _onSaveAddressPress(){
-        Actions.MyAddress();
+        console.log("shipment id..................................................",this.props.shipmentId)
+        Actions.pop();
+        Actions.MyAddress({from: 'Mapscreen',shipId:this.props.shipmentId});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -160,7 +187,8 @@ componentDidMount() {
 
             if (nextProps.saveAddResponse.status == 200) {
                 this.props.showSaveAddLoading(false);
-
+                Actions.pop();
+                Actions.ConfirmOrderScreen();
                 //this.setState({ data: nextProps.saveAddResponse.data })
 
             }
@@ -198,12 +226,13 @@ componentDidMount() {
                    
                 <MapView
                     initialRegion={this.state.focusedLocation}
-                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop: 0 }}
+                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop:0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}
-                    showsMyLocationButton={true}
+                    showsMyLocationButton={false}
                     onPress={this.pickLocationHandler}
                     ref={ref => this.map = ref}
+                   
                 >
                     {marker}
                 </MapView>

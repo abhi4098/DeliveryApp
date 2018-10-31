@@ -2,7 +2,8 @@ import {
     DASHBOARD_API,
     SHOW_DASHBOARD_LOADING,
     DRIVER_STATUS,
-    CLEAR_DRIVER_STATUS_RESPONSE
+    CLEAR_DRIVER_STATUS_RESPONSE,
+    
 } from "../actions/actionTypes";
 
 const INITIAL_STATE = {
@@ -28,6 +29,8 @@ export default (state = INITIAL_STATE, action) => {
 
             case CLEAR_DRIVER_STATUS_RESPONSE:
             return { ...state, driverStatusResData:'' }
+
+            
 
 
         default:

@@ -24,11 +24,11 @@ import {
   
   
   
-  export const saveAdd = ({_id,latitude,longitude,street}) => {
+  export const saveAdd = ({_id,latitude,longitude,street,addressid,shipment_id,mode}) => {
   
     
     console.log(APIURLCONSTANTS.PIN_MAP_URL );
-    console.log('Postdata JSON='+JSON.stringify({_id,latitude,longitude,street}));
+    console.log('Postdata JSON='+JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode}));
    
   
     return (dispatch) => {
@@ -42,7 +42,7 @@ import {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({_id,latitude,longitude,street})
+        body: JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode})
       })
       .then( (response) => {
         console.log('Received response Login: ', response);

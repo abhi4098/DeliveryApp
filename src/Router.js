@@ -22,6 +22,7 @@ import UpdatePasswordScreen from './components/screens/UpdatePasswordScreen';
 import AppSelectionScreen from './components/screens/AppSelectionScreen';
 import CustomerLoginScreen from './components/screens/CustomerLoginScreen';
 import OtpVerificationScreen from './components/screens/OtpVerificationScreen';
+import ConfirmOrderScreen from './components/screens/ConfirmOrderScreen';
 
 
 
@@ -130,7 +131,7 @@ const RouterComponent = () => {
 	                key="OrderDeliveredScreen"      
 	                component={OrderDeliveredScreen}  
 					title = "Order Delivered"
-					titleStyle={{textAlign: 'center' ,marginLeft:70, fontSize: 20}}
+					titleStyle={{textAlign: 'center' ,marginLeft:50, fontSize: 20}}
 					
 					
 	                />
@@ -171,6 +172,16 @@ const RouterComponent = () => {
 						 <Scene
 	                key="OtpVerificationScreen"      
 	                component={OtpVerificationScreen}  
+		 			hideNavBar={true}
+					
+					
+				
+					
+	                />
+
+					 <Scene
+	                key="ConfirmOrderScreen"      
+	                component={ConfirmOrderScreen}  
 		 			hideNavBar={true}
 					
 					
