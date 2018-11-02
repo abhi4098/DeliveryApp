@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
     Text,
     View,
-    Button,
     TextInput,
     Image,
     ScrollView,
@@ -20,6 +19,7 @@ import { PermissionsAndroid } from 'react-native';
 import Loader from '../common/Loader';
 import { connect } from "react-redux";
 import CountDown from 'react-native-countdown-component';
+import Button  from '../common/Button';
 //import OtpInput from 'react-otp-input';
 
 import {
@@ -269,7 +269,7 @@ class OtpVerificationScreen extends Component {
     displayTimer() {
         if (this.state.isTimerVisible) {
             return <CountDown
-                style={{ marginTop: 20, borderColor: "#14136d" }}
+                style={{ marginTop: 20, borderColor: "#14136d",marginBottom:20 }}
                 until={60}
                 onFinish={() => this.onTimerFinish()}
                 // onPress={() => alert('hello')}
@@ -346,22 +346,12 @@ class OtpVerificationScreen extends Component {
                         /> */}
                         {this.displayTimer()}
 
-
-                        <TouchableHighlight
-                            style={styles.buttonContainer}
-                            underlayColor={'#14136d'}
-                            onPress={this.onVerifyOtpButtonPress.bind(this)}
-                            onHideUnderlay={this._onHideUnderlay.bind(this)}
-                            onShowUnderlay={this._onShowUnderlay.bind(this)}
-                        >
-                            <Text
-                                style={
-                                    this.state.pressStatus
-                                        ? styles.buttonTextOnPress
-                                        : styles.buttonText
-                                }
-                            >SUBMIT</Text>
-                        </TouchableHighlight>
+<Button
+                  
+                  onPress={() =>this.onVerifyOtpButtonPress()}
+                             
+       > SUBMIT</Button>
+                       
                     </View>
 
 
@@ -435,7 +425,8 @@ const styles = StyleSheet.create({
     textStyle3: {
         color: '#c70c1a',
         fontSize: 16,
-        marginTop: 20
+        marginTop: 20,
+        marginBottom:20
     },
 
     buttonTextOnPress: {

@@ -21,6 +21,8 @@ import EmailIcon from "../../assets/message.png";
 import AppLogo from "../../assets/app_logo.png";
 import UsernameIcon from "../../assets/username.png";
 import PasswordIcon from "../../assets/password.png";
+import Button  from '../common/Button';
+
 import {
   nameChanged,
   passChanged,
@@ -422,26 +424,17 @@ class RegistrationScreen extends Component {
               style={{
                 borderBottomColor: 'grey',
                 borderBottomWidth: 1,
+                marginBottom:20
               }}
             />
           </View>
-
-          <View
-            style={styles.buttonContainer}
-
-          >
-            <Text
-              onPress={this.onSubmitButtonPress.bind(this)}
-              style={{
-                color: '#14136d',
-                fontWeight: 'bold',
-                fontSize: 16,
-                textAlign: 'center',
-                width: 150,
-                height: 35,
-              }}
-            >SUBMIT</Text>
-          </View>
+          <Button
+                  
+                  onPress={() =>this.onSubmitButtonPress()}
+                             
+       > SUBMIT</Button>
+         
+          
 
 
 

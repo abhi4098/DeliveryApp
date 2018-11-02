@@ -185,7 +185,7 @@ export default class Menu extends Component {
 
   renderMyAddress() {
 
-    if (usertype == 'customer') {
+    if (userType == 'customer') {
       return <View style={{
         height: 40, paddingLeft: 10,
         marginTop: 10,

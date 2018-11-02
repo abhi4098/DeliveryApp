@@ -6,13 +6,15 @@ import {
     Text,
     BackHandler,
     TouchableHighlight,
-    AsyncStorage
+    AsyncStorage,
+    TouchableOpacity
 
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import AppLogo from "../../assets/app_logo.png";
 import DriverIcon from "../../assets/driver_icon.png";
 import UserIcon from "../../assets/user_icon.png";
+import Button  from '../common/Button';
 
 
 
@@ -110,43 +112,20 @@ class AppSelectionScreen extends Component {
                     </View>
 
                     <View
-                        style={{ flexDirection: 'row', marginTop: 20, marginStart: 10, marginEnd: 10 }}>
+                        style={{flexDirection: 'row', marginTop: 30, marginStart: 10, marginEnd: 10,   }}>
 
 
-                        <TouchableHighlight
+                      <TouchableOpacity onPress={() =>this.onDriverButtonPress()} style= {styles.buttonStyle}>
+		<Text style = {styles.textStyle}>
+        DRIVER
+			</Text>
+            </TouchableOpacity>
 
-                            style={styles.buttonContainer1}
-                            underlayColor={'#14136d'}
-                            onPress={this.onDriverButtonPress.bind(this)}
-                            onHideUnderlay={this._onHideUnderlay.bind(this)}
-                            onShowUnderlay={this._onShowUnderlay.bind(this)}
-                        >
-                            <Text
-                                style={
-                                    this.state.pressStatus && this.state.selectedButton == "driver"
-                                        ? styles.buttonTextOnPress
-                                        : styles.buttonText
-                                }
-
-                            >DRIVER</Text>
-                        </TouchableHighlight>
-
-                        <TouchableHighlight
-                            style={styles.buttonContainer2}
-                            underlayColor={'#14136d'}
-                            onPress={this.onClientButtonPress.bind(this)}
-                            onHideUnderlay={this._onHideUnderlay.bind(this)}
-                            onShowUnderlay={this._onShowUnderlay.bind(this)}
-                        >
-                            <Text
-
-                                style={
-                                    this.state.pressStatus && this.state.selectedButton == "client"
-                                        ? styles.buttonTextOnPress
-                                        : styles.buttonText
-                                }
-                            >CLIENT</Text>
-                        </TouchableHighlight>
+             <TouchableOpacity  onPress={() =>this.onClientButtonPress()} style= {styles.buttonStyle1}>
+		<Text style = {styles.textStyle}>
+        CLIENT
+			</Text>
+            </TouchableOpacity>
                     </View>
 
                 </View>
@@ -356,8 +335,45 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: 120,
         height: 35,
-    }
+    },
+    textStyle: {
+        
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop:6,
+        color:'#fff'
+        
+    },
 
+	buttonStyle: {
+        marginStart:20,
+        width:100,
+	    alignItems:'center',
+		borderRadius: 3,
+		backgroundColor: '#14136d',
+        height:35,
+        shadowOpacity:0.3,
+        shadowRadius:3,
+        shadowColor:'#000',
+        shadowOffset:5,
+        elevation: 3,
+        marginEnd:20
+
+    },
+    buttonStyle1: {
+        width:170,
+        marginStart:20,
+	    alignItems:'center',
+		borderRadius: 3,
+		backgroundColor: '#14136d',
+        height:35,
+        shadowOpacity:0.3,
+        shadowRadius:3,
+        shadowColor:'#000',
+        shadowOffset:5,
+        elevation: 3
+
+	}
 
 
 });

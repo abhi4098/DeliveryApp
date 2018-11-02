@@ -4,7 +4,7 @@ import {
     View,
     Image,
     TextInput,
-    TouchableHighlight,
+    TouchableOpacity,
     Text,
     BackHandler,
     Keyboard,
@@ -23,6 +23,7 @@ import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions";
+import Button  from '../common/Button';
 class EditProfileScreen extends Component {
 
     constructor(props) {
@@ -128,7 +129,7 @@ class EditProfileScreen extends Component {
         return (
 
             <View
-                style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-end' }}>
+                style={{ flex: 1, backgroundColor: '#fff'}}>
                 <Loader
                     loading={this.props.isLoading} />
                 <View
@@ -227,58 +228,24 @@ class EditProfileScreen extends Component {
 
 
                 </View>
-                <View
-                    style={{
-                        flex: 1, backgroundColor: '#fff',
-                        alignItems: 'center',
-                    }}>
-                   
-
-                        <TouchableHighlight
-
-                            style={styles.buttonContainer1}
-                            underlayColor={'#14136d'}
-                            onPress={this.onUpdateButtonPress.bind(this)}
-                            onHideUnderlay={this._onHideUnderlay.bind(this)}
-                            onShowUnderlay={this._onShowUnderlay.bind(this)}
-                        >
-                            <Text
-                                style={
-                                    this.state.pressStatus && this.state.selectedButton == "update"
-                                        ? styles.buttonTextOnPress
-                                        : styles.buttonText
-                                }
-
-                            >UPDATE</Text>
-                        </TouchableHighlight>
               
-                </View>
 
-                <View
-                    style={{
-                        flex: 1, backgroundColor: '#fff',
-                        alignItems: 'center',
-                    }}>
-                   
-                        <TouchableHighlight
+                 <View
+                        style={{flexDirection: 'row', marginTop: 70, marginStart: 10, marginEnd: 10,alignItems:"center" }}>
 
-                            style={styles.buttonContainer2}
-                            underlayColor={'#14136d'}
-                            onPress={this.onChangePasswordButtonPress.bind(this)}
-                            onHideUnderlay={this._onHideUnderlay.bind(this)}
-                            onShowUnderlay={this._onShowUnderlay.bind(this)}
-                        >
-                            <Text
-                                style={
-                                    this.state.pressStatus && this.state.selectedButton == "changePassword"
-                                        ? styles.buttonTextOnPress
-                                        : styles.buttonText
-                                }
 
-                            >CHANGE PASSWORD</Text>
-                        </TouchableHighlight>
-                       
-                </View>
+                      <TouchableOpacity onPress={() =>this.onUpdateButtonPress()} style= {styles.buttonStyle}>
+		<Text style = {styles.textStyle}>
+        UPDATE
+			</Text>
+            </TouchableOpacity>
+
+             <TouchableOpacity  onPress={() =>this.onChangePasswordButtonPress()} style= {styles.buttonStyle1}>
+		<Text style = {styles.textStyle}>
+        CHANGE PASSWORD
+			</Text>
+            </TouchableOpacity>
+                    </View>
             </View>
         );
     }
@@ -369,7 +336,46 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: 250,
         height: 35,
-    }
+    },
+    textStyle: {
+        
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop:6,
+        color:'#fff'
+        
+    },
+
+	buttonStyle: {
+        marginStart:20,
+        width:120,
+	    alignItems:'center',
+		borderRadius: 3,
+		backgroundColor: '#14136d',
+        height:35,
+        shadowOpacity:0.3,
+        shadowRadius:3,
+        shadowColor:'#000',
+        shadowOffset:5,
+        elevation: 3,
+        marginEnd:20
+
+    },
+    buttonStyle1: {
+        width:170,
+        marginStart:20,
+	    alignItems:'center',
+		borderRadius: 3,
+		backgroundColor: '#14136d',
+        height:35,
+        shadowOpacity:0.3,
+        shadowRadius:3,
+        shadowColor:'#000',
+        shadowOffset:5,
+        elevation: 3
+
+	}
+
 
 
 });

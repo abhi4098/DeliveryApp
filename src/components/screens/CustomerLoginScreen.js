@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import PhoneInput from "react-native-phone-input";
 import CountryPicker from 'react-native-country-picker-modal';
 import Loader from '../common/Loader';
+import Button  from '../common/Button';
 
 
 import {
@@ -227,23 +228,13 @@ class CustomerLoginScreen extends Component {
 
 
           </View>
+          <Button
+                  
+                  onPress={() =>this.onSubmitButtonPress()}
+                             
+       > SEND OTP</Button>
 
-
-          <TouchableHighlight
-            style={styles.buttonContainer}
-            underlayColor={'#14136d'}
-            onPress={this.onSubmitButtonPress.bind(this)}
-            onHideUnderlay={this._onHideUnderlay.bind(this)}
-            onShowUnderlay={this._onShowUnderlay.bind(this)}
-          >
-            <Text
-              style={
-                this.state.pressStatus
-                  ? styles.buttonTextOnPress
-                  : styles.buttonText
-              }
-            >SEND OTP</Text>
-          </TouchableHighlight>
+          
 
           <Text
             style={{ alignItems: 'center', flexDirection: 'row', marginTop: 50, marginBottom: 50, fontSize: 18 }}>
@@ -310,7 +301,8 @@ const styles = StyleSheet.create({
 
   inputsContainer: {
     alignContent: 'space-between',
-    marginTop: 100
+    marginTop: 100,
+    marginBottom:30
   },
 
   inputContainer: {

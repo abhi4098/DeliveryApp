@@ -4,7 +4,7 @@ import {
     View,
     Image,
     TextInput,
-    TouchableHighlight,
+    TouchableOpacity,
     Text,
     BackHandler,
     Keyboard,
@@ -22,6 +22,7 @@ import Loader from '../common/Loader';
 import { connect } from "react-redux";
 import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
+import Button from '../common/Button';
 class DriverProfileScreen extends Component {
 
     constructor(props) {
@@ -194,21 +195,14 @@ class DriverProfileScreen extends Component {
                         flex: 1, backgroundColor: '#fff', justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <TouchableHighlight
-                        style={styles.buttonContainer}
-                        underlayColor={'#14136d'}
-                        onPress={this.onEditButtonPress.bind(this)}
-                        onHideUnderlay={this._onHideUnderlay.bind(this)}
-                        onShowUnderlay={this._onShowUnderlay.bind(this)}
-                    >
-                        <Text
-                            style={
-                                this.state.pressStatus
-                                    ? styles.buttonTextOnPress
-                                    : styles.buttonText
-                            }
-                        >EDIT PROFILE</Text>
-                    </TouchableHighlight>
+
+                    <TouchableOpacity onPress={() => this.onEditButtonPress()} style={styles.buttonStyle}>
+                        <Text style={styles.textStyle}>
+                            EDIT PROFILE
+			</Text>
+                    </TouchableOpacity>
+
+
                 </View>
 
             </View>
@@ -220,7 +214,7 @@ const styles = StyleSheet.create({
 
 
 
-     imageContainer: {
+    imageContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
@@ -238,7 +232,7 @@ const styles = StyleSheet.create({
     }
     , buttonContainer: {
 
-      
+
         marginTop: 30,
         padding: 5,
         width: 150,
@@ -277,8 +271,29 @@ const styles = StyleSheet.create({
         width: 120,
         height: 35,
 
-    }
+    },
+    textStyle: {
 
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop: 6,
+        color: '#fff'
+
+    },
+
+    buttonStyle: {
+        width: 170,
+        alignItems: 'center',
+        borderRadius: 3,
+        backgroundColor: '#14136d',
+        height: 35,
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        shadowColor: '#000',
+        shadowOffset: 5,
+        elevation: 3
+
+    }
 
 
 });

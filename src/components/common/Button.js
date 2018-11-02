@@ -16,27 +16,28 @@ const Button =  ({onPress,children}) => {
 const styles = {
 
     textStyle: {
-        alignSelf: 'center',
-        color:'#007aff',
+        
         fontSize: 16,
         fontWeight: '600',
-        paddingTop: 10,
-        paddingBottom:10 
+        marginTop:6,
+        color:'#fff'
         
     },
 
 	buttonStyle: {
-	
-		borderColor: '#007aff',
-		borderWidth: 1,
-		borderRadius: 5,
-		backgroundColor: '#fff',
-        alignSelf: 'stretch',
-        flex: 1,
-        marginLeft: 5,
-        marginRight: 5
+        width:100,
+	    alignItems:'center',
+		borderRadius: 3,
+		backgroundColor: '#14136d',
+        height:35,
+        shadowOpacity:0.3,
+        shadowRadius:3,
+        shadowColor:'#000',
+        shadowOffset:5,
+        elevation: 3
 
 	}
+
 }
 
-export {Button};
+export default Button;

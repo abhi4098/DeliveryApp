@@ -50,7 +50,6 @@ class Dashboard extends Component {
 			loading: false,
 			dashboardData: '',
 			pressStatus: false,
-			usertype: '',
 			isActive: true,
 
 		}
@@ -102,7 +101,7 @@ class Dashboard extends Component {
 
 		AsyncStorage.getItem("userData").then((value) => {
 			if (value) {
-				usertype = JSON.parse(value).type;
+				
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
 
@@ -111,7 +110,7 @@ class Dashboard extends Component {
 					var dashboard = {
 						shipment_status: "Pending",
 						userid: phoneNumber,
-						type: usertype
+						type: JSON.parse(value).type
 
 					};
 				}
@@ -119,7 +118,7 @@ class Dashboard extends Component {
 					var dashboard = {
 						shipment_status: "Pending",
 						userid: userId,
-						type: usertype
+						type: JSON.parse(value).type
 
 					};
 				}

@@ -19,6 +19,7 @@ import {
     
   } from "../../actions/ProfileActions";
   import Loader from '../common/Loader';
+  import Button  from '../common/Button';
 import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
@@ -139,23 +140,14 @@ class UpdatePasswordScreen extends Component {
               
                 <View
                 style={{ flex: 1, backgroundColor: '#fff', 
-                alignItems: 'center', }}>
-                 <View
-            style={styles.buttonContainer}
-
-          >
-            <Text
-             onPress={this.onchangeButtonPress.bind(this)}
-              style={{
-                color: '#14136d',
-                fontWeight: 'bold',
-                fontSize: 16,
-                textAlign: 'center',
-                width: 150,
-                height: 35,
-              }}
-            >UPDATE</Text>
-          </View>
+                alignItems: 'center',
+                marginBottom:20 }}>
+                <Button
+                  
+                  onPress={() =>this.onchangeButtonPress()}
+                             
+       > UPDATE</Button>
+             
           </View>
 
           

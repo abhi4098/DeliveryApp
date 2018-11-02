@@ -21,6 +21,7 @@ import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
 import { Actions } from "react-native-router-flux";
 import UsernameIcon from "../../assets/username.png";
 import PasswordIcon from "../../assets/password.png";
+import Button  from '../common/Button';
 
 
 
@@ -45,7 +46,9 @@ class LoginScreen extends Component {
       loginUser: '',
       password: '',
       username: '',
-      isCustomer: false
+      isCustomer: false,
+      userType:''
+
     }
   }
 
@@ -345,24 +348,15 @@ class LoginScreen extends Component {
               </View>
             </TouchableHighlight>
           </View>
+          
+          
+          <Button
+                  
+                  onPress={() =>this.onLoginButtonPress()}
+                             
+       > LOGIN</Button> 
 
-
-          <View
-            style={styles.buttonContainer}
-
-          >
-            <Text
-              onPress={this.onLoginButtonPress.bind(this)}
-              style={{
-                color: '#14136d',
-                fontWeight: 'bold',
-                fontSize: 16,
-                textAlign: 'center',
-                width: 150,
-                height: 35,
-              }}
-            >LOGIN</Text>
-          </View>
+         
           {this.renderRegisrationText()}
          
 
@@ -465,6 +459,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 3,
     shadowColor: '#000000',
+    marginBottom:40,
     shadowOffset: {
       width: 0,
       height: 3

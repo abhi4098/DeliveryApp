@@ -8,12 +8,13 @@ import {
     TextInput,
     Platform,
     AsyncStorage,
-    Button,
     Text,
     Alert,
-    TouchableOpacity
+    TouchableOpacity,
+    TouchableNativeFeedback
+
 } from "react-native";
-import MapView,{ AnimatedRegion, Marker } from 'react-native-maps';
+import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import { Actions } from "react-native-router-flux";
 import Location from "../../assets/location.png";
 const { width, height } = Dimensions.get("window")
@@ -24,8 +25,9 @@ const SCREEN_WIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.0030
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-import { saveAdd, showSaveAddLoading,clearSaveAddressRecord} from '../../actions/MapScreenActions';
+import { saveAdd, showSaveAddLoading, clearSaveAddressRecord } from '../../actions/MapScreenActions';
 import Loader from '../common/Loader';
+import Button  from '../common/Button';
 
 
 
@@ -38,10 +40,10 @@ class MapScreen extends Component {
 
         this.state = {
             focusedLocation: {
-                latitude: 0,  
+                latitude: 0,
                 longitude: 0,
                 latitudeDelta: 0,
-                longitudeDelta:0
+                longitudeDelta: 0
             },
             markerPosition: new AnimatedRegion({
                 latitude: 0,
@@ -51,76 +53,76 @@ class MapScreen extends Component {
             marginBottom: 1,
             saveLocationname: '',
             loading: false,
+            onPress:'',
+            children:''
 
         }
     }
 
-componentWillUnmount()
-{
-    console.log("componentWillUnmount.........................................","mapscreen")
-    this.props.clearSaveAddressRecord();
-}
-
-componentDidMount() {
-    console.log("lat..............................................",this.props.lat);
-    console.log("long..............................................",this.props.lng);
-    console.log("isFrom..............................................",this.props.isFrom);
-
-
-    navigator.geolocation.getCurrentPosition((position) => {
-
-        if(this.props.isFrom == "MyAddress")
-        {
-            var lat =parseFloat(this.props.lat)
-            var long = parseFloat(this.props.lng)
-            this.setState({saveLocationname:this.props.addName})
-            
-        }
-        else{ 
-            var lat = parseFloat(position.coords.latitude)
-            var long = parseFloat(position.coords.longitude)
+    componentWillUnmount() {
+        console.log("componentWillUnmount.........................................", "mapscreen")
+        this.props.clearSaveAddressRecord();
     }
-       
-        var initialRegion = {
-            latitude: lat,
-            longitude: long,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta:LONGITUDE_DELTA
-        }
 
-        this.setState({focusedLocation: initialRegion})
-        this.setState({markerPosition: initialRegion})
+    componentDidMount() {
+        console.log("lat..............................................", this.props.lat);
+        console.log("long..............................................", this.props.lng);
+        console.log("isFrom..............................................", this.props.isFrom);
 
-    },
-    (error) =>alert(JSON.stringify(error)),
-    {enableHighAccuracy: true, timeout:20000})
-}
+
+        navigator.geolocation.getCurrentPosition((position) => {
+
+            if (this.props.isFrom == "MyAddress") {
+                var lat = parseFloat(this.props.lat)
+                var long = parseFloat(this.props.lng)
+                this.setState({ saveLocationname: this.props.addName })
+
+            }
+            else {
+                var lat = parseFloat(position.coords.latitude)
+                var long = parseFloat(position.coords.longitude)
+            }
+
+            var initialRegion = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            }
+
+            this.setState({ focusedLocation: initialRegion })
+            this.setState({ markerPosition: initialRegion })
+
+        },
+            (error) => alert(JSON.stringify(error)),
+            { enableHighAccuracy: true, timeout: 20000 })
+    }
 
 
     onConfirmButtonPress() {
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
-               
+
                 userId = JSON.parse(value)._id;
-                console.log("saved location name............................",this.state.focusedLocation.latitude,this.state.focusedLocation.longitude );
+                console.log("saved location name............................", this.state.focusedLocation.latitude, this.state.focusedLocation.longitude);
                 this.props.showSaveAddLoading(true);
-                console.log("saved location name............................",this.props.shipmentId);
+                console.log("saved location name............................", this.props.shipmentId);
 
                 var location = {
-                    _id : userId,
-                    latitude : this.state.focusedLocation.latitude,
-                    longitude :this.state.focusedLocation.longitude,
-                    street : this.state.saveLocationname,
+                    _id: userId,
+                    latitude: this.state.focusedLocation.latitude,
+                    longitude: this.state.focusedLocation.longitude,
+                    street: this.state.saveLocationname,
                     addressid: this.props.addId,
-                    shipment_id:this.props.shipmentId,
-                    mode:'mobile'
+                    shipment_id: this.props.shipmentId,
+                    mode: 'mobile'
 
                 };
 
 
                 this.props.saveAdd(location);
-            
-               
+
+
 
 
             }
@@ -174,10 +176,10 @@ componentDidMount() {
             })
     }
 
-    _onSaveAddressPress(){
-        console.log("shipment id..................................................",this.props.shipmentId)
+    _onSaveAddressPress() {
+        console.log("shipment id..................................................", this.props.shipmentId)
         Actions.pop();
-        Actions.MyAddress({from: 'Mapscreen',shipId:this.props.shipmentId});
+        Actions.MyAddress({ from: 'Mapscreen', shipId: this.props.shipmentId });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -204,7 +206,7 @@ componentDidMount() {
 
         }
 
-       
+
 
 
 
@@ -223,20 +225,20 @@ componentDidMount() {
                 style={styles.controlsContainer}>
                 <Loader
                     loading={this.props.isLoading} />
-                   
+
                 <MapView
                     initialRegion={this.state.focusedLocation}
-                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop:0 }}
+                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop: 0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}
                     showsMyLocationButton={false}
                     onPress={this.pickLocationHandler}
                     ref={ref => this.map = ref}
-                   
+
                 >
                     {marker}
                 </MapView>
-                
+
                 <View style={styles.inputContainer}>
                     <View style={styles.iconContainer}>
                         <Image
@@ -252,22 +254,21 @@ componentDidMount() {
                             returnKeyType='next'
                             placeholder="Location name (ex Home,office)"
                             placeholderTextColor="#696969"
-                            onChangeText={(saveLocationname) => this.setState({saveLocationname})}
+                            onChangeText={(saveLocationname) => this.setState({ saveLocationname })}
                             value={this.state.saveLocationname}
                             returnKeyType='next'
-                           
+
                         />
                     </View>
                 </View>
 
+         <Button
+                  
+            onPress={() =>this.onConfirmButtonPress()}
+                       
+ > NEXT</Button> 
+               
 
-                <Button
-                    onPress={this.onConfirmButtonPress.bind(this)}
-                    title="Confirm Order"
-                    color="#14136d"
-
-                />
-             
                 <Text
                     style={{ marginTop: 15 }}>-OR-</Text>
 
@@ -278,19 +279,7 @@ componentDidMount() {
                         style={{ marginTop: 15, color: "#14136d" }}>Select from Saved Address</Text>
                 </TouchableOpacity>
 
-                {/* <View>
-                    <Button
-                    title = "Current Location"
-                    onPress ={this.getLocationHandler}
-                       />
-                    </View>
-
-                    	<Button
-							onPress={this.onTestButtonPress.bind(this)}
-							title="Geolocation Screen"
-							color="#000000"
-
-						/>  */}
+             
             </View>
         );
     }
@@ -321,7 +310,7 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 10,
         shadowOpacity: 0.25,
-        marginTop: 20,
+        marginTop: 10,
         marginBottom: 25
     },
 
@@ -340,12 +329,11 @@ const styles = StyleSheet.create({
     },
 
 
-
 });
 
 
 const mapStateToProps = ({ mapScreenReducer }) => {
-    const { saveAddResponse ,isLoading} = mapScreenReducer;
+    const { saveAddResponse, isLoading } = mapScreenReducer;
     return {
 
         saveAddResponse: saveAddResponse,
@@ -355,4 +343,4 @@ const mapStateToProps = ({ mapScreenReducer }) => {
 };
 
 
-export default connect(mapStateToProps, { saveAdd, showSaveAddLoading,clearSaveAddressRecord })(MapScreen);
+export default connect(mapStateToProps, { saveAdd, showSaveAddLoading, clearSaveAddressRecord })(MapScreen);

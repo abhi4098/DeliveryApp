@@ -5,7 +5,7 @@ import {
 	View,
 	Image,
 	TextInput,
-	TouchableHighlight,
+	TouchableOpacity,
   Text,
   BackHandler,
   Keyboard,
@@ -15,6 +15,7 @@ import {
 
 import { connect } from "react-redux";
 import Loader from '../common/Loader';
+import Button  from '../common/Button';
 
 
 import { Actions } from "react-native-router-flux";
@@ -174,40 +175,18 @@ class ForgotPasswordScreen extends Component {
                   
                  <View
                  style ={{flexDirection:'row', marginTop:50, marginStart:20,marginEnd:20}}>
-                        <View
-                         style={styles.buttonContainer} 
-                      
-                       >
-                             <Text
-                              onPress = {this.onResetButtonPress.bind(this)}
-                             style={{
-                                      color:'#14136d',
-                                      fontWeight:'bold',
-                                      fontSize:16,
-                                      textAlign:'center',
-                                      width:130,
-                                      height:35,
-                                     
-                                       }}
-                             >RESET</Text>
-						</View>
+                  <TouchableOpacity onPress={() =>this.onResetButtonPress()} style= {styles.buttonStyle}>
+		<Text style = {styles.textStyle}>
+    RESET
+			</Text>
+            </TouchableOpacity>
 
-             <View
-                         style={styles.buttonContainer} 
-                      
-                       >
-                             <Text
-                              onPress = {this.onCancelButtonPress.bind(this)}
-                             style={{
-                                      color:'#14136d',
-                                      fontWeight:'bold',
-                                      fontSize:16,
-                                      textAlign:'center',
-                                      width:130,
-                                      height:35,
-                                       }}
-                             >CANCEL</Text>
-						</View>
+             <TouchableOpacity  onPress={() =>this.onCancelButtonPress()} style= {styles.buttonStyle1}>
+		<Text style = {styles.textStyle}>
+    CANCEL
+			</Text>
+            </TouchableOpacity>
+                     
             </View>
            
                      
@@ -344,6 +323,44 @@ const styles = StyleSheet.create({
     progress: {
       margin: 10,
     },
+    textStyle: {
+        
+      fontSize: 16,
+      fontWeight: '600',
+      marginTop:6,
+      color:'#fff'
+      
+  },
+
+buttonStyle: {
+      width:100,
+    alignItems:'center',
+  borderRadius: 3,
+  backgroundColor: '#14136d',
+      height:35,
+      shadowOpacity:0.3,
+      shadowRadius:3,
+      shadowColor:'#000',
+      shadowOffset:5,
+      elevation: 3,
+      marginEnd:20
+
+  },
+  buttonStyle1: {
+      width:100,
+      marginStart:20,
+    alignItems:'center',
+  borderRadius: 3,
+  backgroundColor: '#14136d',
+      height:35,
+      shadowOpacity:0.3,
+      shadowRadius:3,
+      shadowColor:'#000',
+      shadowOffset:5,
+      elevation: 3
+
+}
+
   
   });
 
