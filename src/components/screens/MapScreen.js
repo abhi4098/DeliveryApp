@@ -95,7 +95,9 @@ class MapScreen extends Component {
 
         },
             (error) => alert(JSON.stringify(error)),
-            { enableHighAccuracy: true, timeout: 20000 })
+            {  enableHighAccuracy: false,
+                timeout: 5000,
+                maximumAge: 10000 })
     }
 
 
