@@ -54,6 +54,7 @@ export const addressList = ({userid}) => {
       return response.json();
     })
     .then( (responseJSON) => {
+      console.log("response-------------------------------------",responseJSON);
       
 
       dispatch({

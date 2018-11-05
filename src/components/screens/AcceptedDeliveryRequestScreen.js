@@ -150,7 +150,7 @@ class AcceptedDeliveryRequestScreen extends Component {
             var dt = item.receiveddate;
             var orderStatus = item.shipment_status;
             return	<TouchableOpacity
-            onPress={() =>this._onPress(item)}
+            //onPress={() =>this._onPress(item)}
             >
             <Card
                 containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}

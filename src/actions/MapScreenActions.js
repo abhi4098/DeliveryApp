@@ -24,7 +24,7 @@ import {
   
   
   
-  export const saveAdd = ({_id,latitude,longitude,street,addressid,shipment_id,mode}) => {
+  export const saveAdd = ({_id,latitude,longitude,street,addressid,shipment_id,mode,saveaddress}) => {
   
     
     
@@ -35,14 +35,15 @@ import {
   
       //call the API and use the promise to check the response
       // in response callBack .then() call the dispatcher.
-  
+      console.log('body: ',  JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode,saveaddress}));
       fetch(APIURLCONSTANTS.PIN_MAP_URL, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode})
+        body: JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode,saveaddress})
+       
       })
       .then( (response) => {
         
@@ -50,7 +51,7 @@ import {
       })
       .then( (responseJSON) => {
         
-  
+       console.log("response-------------------------------------",responseJSON);
         dispatch({
           type:SAVE_ADDRESS,
           payload: responseJSON

@@ -19,6 +19,7 @@ import { Actions } from "react-native-router-flux";
 import Location from "../../assets/location.png";
 const { width, height } = Dimensions.get("window")
 import { connect } from "react-redux";
+import { CheckBox } from 'react-native-elements';
 
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
@@ -52,9 +53,11 @@ class MapScreen extends Component {
             locationChosen: true,
             marginBottom: 1,
             saveLocationname: '',
+            isAddressSaved:'',
             loading: false,
             onPress:'',
-            children:''
+            children:'',
+            //checked:false
 
         }
     }
@@ -68,7 +71,7 @@ class MapScreen extends Component {
         
         
         
-
+           console.log( "componendidmpount.................................................mapscreen");
 
         navigator.geolocation.getCurrentPosition((position) => {
 
@@ -76,7 +79,7 @@ class MapScreen extends Component {
                 var lat = parseFloat(this.props.lat)
                 var long = parseFloat(this.props.lng)
                 this.setState({ saveLocationname: this.props.addName })
-                console.log('saveLocationname:..................................... ', saveLocationname);
+              //  console.log('saveLocationname:..................................... ', saveLocationname);
 
             }
             else {
@@ -109,8 +112,19 @@ class MapScreen extends Component {
                 userId = JSON.parse(value)._id;
                 
                 this.props.showSaveAddLoading(true);
-                
+                console.log('this.state.checked...............................', this.state.checked);
+                if(this.state.checked ==true)
+                {
+                    isAddressSaved = 1
+                    console.log('isAddressSaved: true...............................', isAddressSaved);
+                    
+                }
+                else{
+                    isAddressSaved = 0
+                    console.log('isAddressSaved: false...............................', isAddressSaved);
 
+                }
+                
                 var location = {
                     _id: userId,
                     latitude: this.state.focusedLocation.latitude,
@@ -119,12 +133,13 @@ class MapScreen extends Component {
                     addressid: this.props.addId,
                     shipment_id: this.props.shipmentId,
                     mode: 'mobile',
+                    saveaddress:isAddressSaved
                     
 
                 };
 
 
-                this.props.saveAdd(location);
+               this.props.saveAdd(location);
 
 
 
@@ -216,7 +231,18 @@ class MapScreen extends Component {
 
 
     }
-
+    _onCheckboxPress(){
+        if(this.state.checked == 'undefined')
+        {
+            this.setState({checked: true});
+            console.log("checked...dfsdgfdsfdf..................................." ,this.state.checked);
+        }
+        else{
+            this.setState({checked: !this.state.checked});
+        }
+        
+       
+    }
 
     render() {
         let marker = null;
@@ -232,7 +258,7 @@ class MapScreen extends Component {
 
                 <MapView
                     initialRegion={this.state.focusedLocation}
-                    style={{ width: "100%", height: 370, marginBottom: this.state.marginBottom, marginTop: 0 }}
+                    style={{ width: "100%", height: 300, marginBottom: this.state.marginBottom, marginTop: 0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}
                     showsMyLocationButton={false}
@@ -266,11 +292,20 @@ class MapScreen extends Component {
                     </View>
                 </View>
 
+<CheckBox
+  center
+  title='Save Address'
+  checked={this.state.checked}
+  onPress={() => this._onCheckboxPress()}
+  containerStyle={{backgroundColor: '#f1f1fd',marginTop:-20,borderColor:'#f1f1fd'}}
+
+/>
+
          <Button
-                  
+                 
             onPress={() =>this.onConfirmButtonPress()}
                        
- > NEXT</Button> 
+ > CONFIRM</Button> 
                
 
                 <Text
@@ -291,9 +326,9 @@ class MapScreen extends Component {
 const styles = StyleSheet.create({
     controlsContainer: {
         flex: 1,
-        justifyContent: 'center',
+     //   justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 80,
+        backgroundColor: '#f1f1fd'
     },
 
 

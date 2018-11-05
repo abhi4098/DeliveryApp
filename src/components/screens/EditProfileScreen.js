@@ -360,12 +360,13 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: 5,
         elevation: 3,
-        marginEnd: 20
+        marginEnd: 10
 
     },
     buttonStyle1: {
         width: 170,
-        marginStart: 20,
+        marginStart: 10,
+        marginEnd:20,
         alignItems: 'center',
         borderRadius: 3,
         backgroundColor: '#14136d',
