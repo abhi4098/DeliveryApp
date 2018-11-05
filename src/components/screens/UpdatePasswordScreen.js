@@ -50,7 +50,7 @@ class UpdatePasswordScreen extends Component {
         AsyncStorage.getItem("userData").then((value) => {
             if(value) {
                 userId = JSON.parse(value)._id;
-                console.log("name with state..........................", this.state.newPassword)
+                
                 
               
 

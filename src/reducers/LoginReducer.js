@@ -27,11 +27,11 @@ export default (state = INITIAL_STATE, action) => {
             return {...state,loginResponseData: '', isLoading:false}
             
         case LOGIN_USER:
-            console.log('LOGIN_USER action.payload == ' + action.payload);
+            
             return { ...state, loginResponseData: action.payload }
 
         case SHOW_LOADING:
-            console.log('in loading Login' + action.payload)
+            
             return { ...state, isLoading: action.payload }
 
         default:

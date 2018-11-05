@@ -50,7 +50,7 @@ class AcceptedDeliveryRequestScreen extends Component {
     }
     
     componentWillMount() {
-		console.log("componentwill mount...................................");
+		
 	
 		this.getProfileData();
 
@@ -62,14 +62,17 @@ class AcceptedDeliveryRequestScreen extends Component {
 	}
 
 	componentWillUnmount() {
-        console.log("componentWillUnmount order delivered.................................");
-		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+
+        
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+        
 
 	}
 
 	getProfileData() {
 
 		AsyncStorage.getItem("userData").then((value) => {
+            
 			if (value) {
 				usertype = JSON.parse(value).type;
 				phoneNumber = JSON.parse(value).phone;
@@ -108,7 +111,7 @@ class AcceptedDeliveryRequestScreen extends Component {
 
 
 		if (nextProps.orderDeliveredResponseData != undefined && nextProps.orderDeliveredResponseData != '') {
-			console.log("nextProps.orderDeliveredResponseData'''''''''''''''''''''''---------------------", nextProps.orderDeliveredResponseData);
+			
 
 			if (nextProps.orderDeliveredResponseData.status == 200) {
 				this.props.showOrderDeliveredLoading(false);
@@ -132,11 +135,11 @@ class AcceptedDeliveryRequestScreen extends Component {
         
         onBackPress() {
             if (Actions.state.index === 1) {
-                console.log("onBackPress.............", Actions.state.index);
+                
                 BackHandler.exitApp();
                 return false;
             }
-            console.log("onBackPress..............", Actions.state.index);
+            
             //this.props.clearListData();
             Actions.pop();
             return true;

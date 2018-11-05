@@ -44,7 +44,7 @@ type:CLEAR_REGISTRATION_RECORD
 });
 
 export const showRegistrationLoading =(value)=>{
-  //console.log('in loading login='+ value);
+  //
   return (dispatch) => {
     dispatch({
       type: SHOW_LOADING_REGISTRATION,
@@ -56,8 +56,8 @@ export const showRegistrationLoading =(value)=>{
 export const registerUser = ({name,password,phone,email,type}) => {
 
   
-  console.log(APIURLCONSTANTS.REGISTER_USER_URL);
-  console.log('Postdata JSON='+JSON.stringify({name,password,phone,email,type}));
+  
+  
  
 
   return (dispatch) => {
@@ -74,11 +74,11 @@ export const registerUser = ({name,password,phone,email,type}) => {
       body: JSON.stringify({name,password,phone,email,type})
     })
     .then( (response) => {
-      console.log('Received response Login: ', response);
+      
       return response.json();
     })
     .then( (responseJSON) => {
-      console.log('JSON response from Login API: ', responseJSON);
+      
 
       dispatch({
         type:REGISTER_USER,
@@ -89,7 +89,7 @@ export const registerUser = ({name,password,phone,email,type}) => {
       //loaderHandler.hideLoader();
     })
     .catch(e => {
-      console.log('Error==='+e);
+      
       alert('Server not responding');
       dispatch({
         type: SHOW_LOADING_REGISTRATION,

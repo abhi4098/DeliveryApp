@@ -8,7 +8,7 @@ import {
 import APIURLCONSTANTS from "../ApiUrlList";
 
 export const showOrderDeliveredLoading =(value)=>{
-   //console.log('in loading login='+ value);
+   //
    return (dispatch) => {
      dispatch({
        type: SHOW_ORDER_DELIVER_LOADING,
@@ -20,8 +20,8 @@ export const showOrderDeliveredLoading =(value)=>{
  export const orderDeliveredData = ({shipment_status,userid,type}) => {
 
    
-   console.log(APIURLCONSTANTS.DASHBOARD_URL);
-   console.log('Postdata JSON='+JSON.stringify({shipment_status,userid,type}));
+   
+   
   
  
    return (dispatch) => {
@@ -42,7 +42,7 @@ export const showOrderDeliveredLoading =(value)=>{
        return response.json();
      })
      .then( (responseJSON) => {
-       console.log('JSON response from Login API: ', responseJSON);
+       
  
        dispatch({
          type:ORDER_DELIVERED_API,
@@ -53,7 +53,7 @@ export const showOrderDeliveredLoading =(value)=>{
        //loaderHandler.hideLoader();
      })
      .catch(e => {
-       console.log('Error==='+e);
+       
        alert('Server not responding');
        dispatch({
          type: SHOW_ORDER_DELIVER_LOADING,

@@ -148,8 +148,8 @@ class RegistrationScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    console.log("nextProps.registerResponseData..................---------------------", nextProps.registerResponseData);
-    console.log("registration status..........", nextProps.registerResponseData.status)
+    
+    
 
 
 
@@ -233,11 +233,11 @@ class RegistrationScreen extends Component {
 
   onBackPress() {
     if (Actions.state.index === 1) {
-      console.log("onBackPress1", Actions.state.index)
+      
       BackHandler.exitApp();
       return false;
     }
-    console.log("onBackPress2", Actions.state.index)
+    
     Actions.pop();
     return true;
   }

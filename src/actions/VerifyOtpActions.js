@@ -9,7 +9,7 @@ import {
   
   
   export const showVerifyOtpLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_VERIFY_OTP_LOADING,
@@ -21,8 +21,8 @@ import {
   export const verifyOtp = ({phoneNumber,code,mode}) => {
   
       
-      console.log(APIURLCONSTANTS.VERIFY_RECEIVED_OTP);
-      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,code,mode}));
+      
+      
      
     
       return (dispatch) => {
@@ -39,11 +39,11 @@ import {
           body: JSON.stringify({phoneNumber,code,mode})
         })
         .then( (response) => {
-          console.log('Received response verify otp--------------------: ', response);
+          
           return response.json();
         })
         .then( (responseJSON) => {
-          console.log('JSON response from verify otp API------------------- ', responseJSON);
+          
     
           dispatch({
             type:VERIFY_OTP,
@@ -54,7 +54,7 @@ import {
           //loaderHandler.hideLoader();
         })
         .catch(e => {
-          console.log('Error==='+e);
+          
           alert('Server not responding');
           dispatch({
             type: SHOW_VERIFY_OTP_LOADING,
@@ -69,8 +69,8 @@ import {
     export const resendOtp = ({phoneNumber,type}) => {
 
     
-      console.log(APIURLCONSTANTS.OTP_RECEIVE);
-      console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,type}));
+      
+      
      
     
       return (dispatch) => {
@@ -87,11 +87,11 @@ import {
           body: JSON.stringify({phoneNumber,type})
         })
         .then( (response) => {
-          console.log('Received response receive otp--------------------: ', response);
+          
           return response.json();
         })
         .then( (responseJSON) => {
-          console.log('JSON response from receive otp API------------------- ', responseJSON);
+          
     
           dispatch({
             type:RESEND_OTP,
@@ -102,7 +102,7 @@ import {
           //loaderHandler.hideLoader();
         })
         .catch(e => {
-          console.log('Error==='+e);
+          
           alert('Server not responding');
           dispatch({
             type: SHOW_VERIFY_OTP_LOADING,

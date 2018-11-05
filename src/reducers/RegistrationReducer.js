@@ -37,11 +37,11 @@ export default (state = INITIAL_STATE, action) => {
             return {...state,registerResponseData: '', isRegisterLoading:false}
             
         case REGISTER_USER:
-            console.log('LOGIN_USER action.payload == ' + action.payload);
+            
             return { ...state, registerResponseData: action.payload }
 
         case SHOW_LOADING_REGISTRATION:
-            console.log('in loading Login' + action.payload)
+            
             return { ...state, isRegisterLoading: action.payload }
 
         default:

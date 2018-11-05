@@ -60,11 +60,12 @@ class AppSelectionScreen extends Component {
 
     onBackPress() {
         if (Actions.state.index === 1) {
-            console.log("onBackPress1.................", Actions.state.index)
+            
             BackHandler.exitApp();
             return false;
+
         }
-        console.log("onBackPress2..............", Actions.state.index)
+        
         Actions.pop();
         return true;
     }
@@ -346,7 +347,6 @@ const styles = StyleSheet.create({
     },
 
 	buttonStyle: {
-        marginStart:20,
         width:100,
 	    alignItems:'center',
 		borderRadius: 3,
@@ -357,12 +357,12 @@ const styles = StyleSheet.create({
         shadowColor:'#000',
         shadowOffset:5,
         elevation: 3,
-        marginEnd:20
+        marginEnd:30
 
     },
     buttonStyle1: {
-        width:170,
-        marginStart:20,
+        width:100,
+        marginStart:30,
 	    alignItems:'center',
 		borderRadius: 3,
 		backgroundColor: '#14136d',

@@ -10,7 +10,7 @@ import {
 import APIURLCONSTANTS from "../ApiUrlList";
 
 export const showUpdateProfileLoading =(value)=>{
-  //console.log('in loading login='+ value);
+  //
   return (dispatch) => {
     dispatch({
       type: SHOW_UPDATE_PROFILE_LOADING,
@@ -20,7 +20,7 @@ export const showUpdateProfileLoading =(value)=>{
 };
 
 export const showProfileLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_PROFILE_LOADING,
@@ -30,7 +30,7 @@ export const showProfileLoading =(value)=>{
   };
 
   export const showUpdatePasswordLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_UPDATE_PASSWORD_LOADING,
@@ -44,8 +44,8 @@ export const showProfileLoading =(value)=>{
 export const userProfile = ({userId}) => {
 
     
-    console.log(APIURLCONSTANTS.USER_PROFILE);
-    console.log('Postdata JSON='+JSON.stringify({userId}));
+    
+    
    
   
     return (dispatch) => {
@@ -62,11 +62,11 @@ export const userProfile = ({userId}) => {
         body: JSON.stringify({userId})
       })
       .then( (response) => {
-        console.log('Received response user profile: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from  user profile: ', responseJSON);
+        
   
         dispatch({
           type:USER_PROFILE,
@@ -77,7 +77,7 @@ export const userProfile = ({userId}) => {
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_PROFILE_LOADING,
@@ -93,8 +93,8 @@ export const userProfile = ({userId}) => {
   export const userProfileUpdate = ({name,email,phone,userId,type,mode}) => {
 
     
-    console.log(APIURLCONSTANTS.USER_UPDATE_PROFILE);
-    console.log('Postdata JSON='+JSON.stringify({name,email,phone,userId,type,mode}));
+    
+    
    
   
     return (dispatch) => {
@@ -111,11 +111,11 @@ export const userProfile = ({userId}) => {
         body: JSON.stringify({name,email,phone,userId,type,mode})
       })
       .then( (response) => {
-        console.log('Received response profile update: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from profile update API: ', responseJSON);
+        
   
         dispatch({
           type:UPDATE_PROFILE,
@@ -126,7 +126,7 @@ export const userProfile = ({userId}) => {
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_UPDATE_PROFILE_LOADING,
@@ -141,8 +141,8 @@ export const userProfile = ({userId}) => {
   export const userPasswordUpdate = ({userId,password}) => {
 
     
-    console.log(APIURLCONSTANTS.USER_UPDATE_PASSWORD);
-    console.log('Postdata JSON='+JSON.stringify({userId,password}));
+    
+    
    
   
     return (dispatch) => {
@@ -159,11 +159,11 @@ export const userProfile = ({userId}) => {
         body: JSON.stringify({userId,password})
       })
       .then( (response) => {
-        console.log('Received response password update: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from password update API: ', responseJSON);
+        
   
         dispatch({
           type:UPDATE_PASSWORD,
@@ -174,7 +174,7 @@ export const userProfile = ({userId}) => {
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_UPDATE_PASSWORD_LOADING,

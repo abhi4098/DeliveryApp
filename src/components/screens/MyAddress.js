@@ -34,7 +34,7 @@ class MyAddress extends Component {
     }
 
     componentWillMount() {
-        console.log(" from......................................................",this.props.from)
+        
         this.getProfileData();
     }
 
@@ -69,7 +69,7 @@ class MyAddress extends Component {
     _onPress(item) {
         if(this.props.from != "Dashboard")
         {  
-            console.log("item longitude................................Dashboard",this.props.shipId);
+            console.log("addId......................................", item.street);
             Actions.pop();
             Actions.MapScreen({ lat:item.lat,
                                 lng:item.lng, 
@@ -79,7 +79,7 @@ class MyAddress extends Component {
                                 shipmentId:this.props.shipId});
         }
         else{
-            console.log("item number................................Dashboard");
+            
         }
 		
 		
@@ -92,7 +92,7 @@ class MyAddress extends Component {
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
                 userId = JSON.parse(value)._id;
-        console.log("item id..........................................", item._id);
+        
                 var delAdd = {
 
                     addressid : item._id,
@@ -113,7 +113,7 @@ class MyAddress extends Component {
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.addressListResponse != undefined && nextProps.addressListResponse != '') {
-            console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.addressListResponse);
+            
 
             if (nextProps.addressListResponse.status == 200) {
                 this.props.showAddressLoading(false);
@@ -134,7 +134,7 @@ class MyAddress extends Component {
         }
 
         if (nextProps.deleteAddressResponse != undefined && nextProps.deleteAddressResponse != '') {
-            console.log("nextProps.deleteAddressResponse'''''''''''''''''''''''---------------------", nextProps.deleteAddressResponse);
+            
 
             if (nextProps.deleteAddressResponse.status == 200) {
                 this.props.showAddressLoading(false);
@@ -161,7 +161,7 @@ class MyAddress extends Component {
     }
     componentWillUnmount()
     {
-        console.log("componentWillUnmount...........................................................");
+        
         this.props.clearDeleteAddress();
     }
     // deleteAddressItem(selectedItem) {
@@ -173,7 +173,7 @@ class MyAddress extends Component {
     // }
 
     _renderItem({ item, index }) {
-        //console.log("addr status..............................................." +item.addr_status);
+        //
            //if(item.addr_status == true )
            //{
         return 	<TouchableOpacity

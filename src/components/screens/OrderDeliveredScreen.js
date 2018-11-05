@@ -50,7 +50,7 @@ class OrderDeliveredScreen extends Component {
     }
     
     componentWillMount() {
-		console.log("componentwill mount...................................");
+		
 	
 		this.getProfileData();
 
@@ -62,7 +62,7 @@ class OrderDeliveredScreen extends Component {
 	}
 
 	componentWillUnmount() {
-        console.log("componentWillUnmount order delivered.................................");
+        
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -108,7 +108,7 @@ class OrderDeliveredScreen extends Component {
 
 
 		if (nextProps.orderDeliveredResponseData != undefined && nextProps.orderDeliveredResponseData != '') {
-			console.log("nextProps.orderDeliveredResponseData'''''''''''''''''''''''---------------------", nextProps.orderDeliveredResponseData);
+			
 
 			if (nextProps.orderDeliveredResponseData.status == 200) {
 				this.props.showOrderDeliveredLoading(false);
@@ -132,11 +132,11 @@ class OrderDeliveredScreen extends Component {
         
         onBackPress() {
             if (Actions.state.index === 1) {
-                console.log("onBackPress.............", Actions.state.index);
+                
                 BackHandler.exitApp();
                 return false;
             }
-            console.log("onBackPress..............", Actions.state.index);
+            
             //this.props.clearListData();
             Actions.pop();
             return true;

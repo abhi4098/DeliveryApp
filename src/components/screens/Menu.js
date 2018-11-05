@@ -213,7 +213,7 @@ export default class Menu extends Component {
 
   render() {
 
-    console.log("selectedMenu>>> " + this.props.selectedMenu);
+    
 
 
     return (

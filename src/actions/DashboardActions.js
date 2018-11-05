@@ -11,7 +11,7 @@ import {
 import APIURLCONSTANTS from "../ApiUrlList";
 
 export const showDashBoardLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_DASHBOARD_LOADING,
@@ -23,8 +23,8 @@ export const showDashBoardLoading =(value)=>{
   export const dashboardData = ({shipment_status,userid,type}) => {
 
     
-    console.log(APIURLCONSTANTS.DASHBOARD_URL);
-    console.log('Postdata JSON='+JSON.stringify({shipment_status,userid,type}));
+    
+    
    
   
     return (dispatch) => {
@@ -41,11 +41,11 @@ export const showDashBoardLoading =(value)=>{
         body: JSON.stringify({shipment_status,userid,type})
       })
       .then( (response) => {
-        console.log('Received response Login: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from Login API: ', responseJSON);
+        
   
         dispatch({
           type:DASHBOARD_API,
@@ -56,7 +56,7 @@ export const showDashBoardLoading =(value)=>{
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_DASHBOARD_LOADING,
@@ -71,8 +71,8 @@ export const showDashBoardLoading =(value)=>{
   export const driverStatusCallFromDashboard = ({driverid,dutystatus}) => {
 
     
-    console.log(APIURLCONSTANTS.DRIVER_STATUS_URL);
-    console.log('Postdata JSON='+JSON.stringify({driverid,dutystatus}));
+    
+    
    
   
     return (dispatch) => {
@@ -89,11 +89,11 @@ export const showDashBoardLoading =(value)=>{
         body: JSON.stringify({driverid,dutystatus})
       })
       .then( (response) => {
-        console.log('Received response Login: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from Login API: ', responseJSON);
+        
   
         dispatch({
           type:DRIVER_STATUS,
@@ -104,7 +104,7 @@ export const showDashBoardLoading =(value)=>{
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_DASHBOARD_LOADING,

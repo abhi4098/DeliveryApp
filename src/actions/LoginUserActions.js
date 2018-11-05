@@ -27,7 +27,7 @@ export const clearLoginRecord = () => ({
 });
 
 export const showLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_LOADING,
@@ -39,8 +39,8 @@ export const showLoading =(value)=>{
   export const loginUser = ({phone,password,type}) => {
 
     
-    console.log(APIURLCONSTANTS.LOGIN);
-    console.log('Postdata JSON='+JSON.stringify({phone,password,type}));
+    
+    
    
   
     return (dispatch) => {
@@ -57,11 +57,11 @@ export const showLoading =(value)=>{
         body: JSON.stringify({phone,password,type})
       })
       .then( (response) => {
-        console.log('Received response Login: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from Login API: ', responseJSON);
+        
   
         dispatch({
           type:LOGIN_USER,
@@ -72,7 +72,7 @@ export const showLoading =(value)=>{
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_LOADING,

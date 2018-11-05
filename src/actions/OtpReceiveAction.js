@@ -15,7 +15,7 @@ export const userPhoneChanged = (phone) => {
 };
 
 export const showReceiveOtpLoading =(value)=>{
-  //console.log('in loading login='+ value);
+  //
   return (dispatch) => {
     dispatch({
       type: SHOW_OTP_LOADING,
@@ -27,8 +27,8 @@ export const showReceiveOtpLoading =(value)=>{
 export const receiveOtp = ({phoneNumber,type}) => {
 
     
-    console.log(APIURLCONSTANTS.OTP_RECEIVE);
-    console.log('Postdata JSON otp recieve---------------------------'+JSON.stringify({phoneNumber,type}));
+    
+    
    
   
     return (dispatch) => {
@@ -45,11 +45,11 @@ export const receiveOtp = ({phoneNumber,type}) => {
         body: JSON.stringify({phoneNumber,type})
       })
       .then( (response) => {
-        console.log('Received response receive otp--------------------: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from receive otp API------------------- ', responseJSON);
+        
   
         dispatch({
           type:RECEIVE_OTP,
@@ -60,7 +60,7 @@ export const receiveOtp = ({phoneNumber,type}) => {
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_OTP_LOADING,

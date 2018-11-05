@@ -16,7 +16,7 @@ export const emailChanged = (email) => {
 };
 
 export const showForgotPasswordLoading =(value)=>{
-    console.log('in loading Forgot Password= '+ value);
+    
     return (dispatch) => {
       dispatch({
         type: SHOW_LOADING_FORGOT_PASSWORD,
@@ -30,8 +30,8 @@ export const showForgotPasswordLoading =(value)=>{
   });
 
 export const forgotPassword = ({email }) => {
-    console.log("forgot password url---------------", "TO BE IMPLEMENTED")
-    console.log('Postdata JSON=' + JSON.stringify({ email }));
+    
+    
     return (dispatch) => {
 
         fetch(APIURLCONSTANTS.FORGOT_PASSWORD_URL, {
@@ -43,10 +43,10 @@ export const forgotPassword = ({email }) => {
             },
             body: JSON.stringify({ email })
         }).then((response) => {
-            console.log('recieved forgot passward response', response)
+            
             return response.json();
         }).then((responseJSON) => {
-           console.log("JSON response of forgot password api ", responseJSON)
+           
 
             dispatch({
                 type: FORGOT_PASSWORD,
@@ -54,7 +54,7 @@ export const forgotPassword = ({email }) => {
             });
         }).catch(error => {
 
-            console.log('Error==='+error);
+            
             alert('Server not responding');
             
 

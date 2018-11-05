@@ -63,12 +63,12 @@ class OtpVerificationScreen extends Component {
                 }
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("RECEIVE_SMS permissions granted")
+                
             } else {
-                console.log("RECEIVE_SMS permission denied")
+                
             }
         } catch (err) {
-            console.warn(err)
+            
         }
 
     }
@@ -80,19 +80,19 @@ class OtpVerificationScreen extends Component {
 
     // componentWillMount() {
 
-    //     console.log("componentWillMount....................................................",code);
+    //     
     //    // this.setState({ code: code });
     // }
 
     componentDidMount() {
-        console.log("otpverificationscree----------------------------------")
+        
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         this.requestReadSmsPermission();
         let subscription = SmsListener.addListener(message => {
-            console.log("sms listerner response........................", message.body);
+            
             var codeFromSMS = message.body;
             smsCode = codeFromSMS.substring(11, 17);
-            console.log("smscode.......................................",smsCode)
+            
             this.setState({ code: smsCode });
             //this.componentWillMount();
 
@@ -137,8 +137,8 @@ class OtpVerificationScreen extends Component {
     onVerifyOtpButtonPress() {
         code = this.state.code;
         // Actions.RegistrationScreen();
-        console.log("code----------------------------------------", code);
-        console.log("smsOTP----------------------------------------", smsOTP);
+        
+        
         if (code == null)
             alert("Please enter OTP");
 
@@ -167,7 +167,7 @@ class OtpVerificationScreen extends Component {
 
 
     _onFulfill(code) {
-        console.log("inside on fullfill method---------------------------------", code);
+        
         this.setState({ code: code });
 
     }
@@ -175,7 +175,7 @@ class OtpVerificationScreen extends Component {
 
     onBackPress() {
         if (Actions.state.index === 1) {
-            console.log("onBackPress1.................", Actions.state.index)
+            
             BackHandler.exitApp();
             return false;
         }
@@ -184,7 +184,7 @@ class OtpVerificationScreen extends Component {
         Actions.pop('CustomerLoginScreen');
         setTimeout(() => {
             Actions.refresh({ name: 'CustomerLoginScreen' });
-            console.log("CustomerLoginScreen");
+            
         }, 10);
         return true;
     }
@@ -193,8 +193,8 @@ class OtpVerificationScreen extends Component {
 
 
         if (nextProps.verifyOtpResponseData != undefined && nextProps.verifyOtpResponseData != '') {
-            console.log("nextProps.verifyOtpResponseData'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData);
-            console.log("nextProps.verifyOtpResponseData.status'''''''''''''''''''''''---------------------", nextProps.verifyOtpResponseData.status);
+            
+            
 
             if (nextProps.verifyOtpResponseData.message == "UserExist") {
 
@@ -226,8 +226,8 @@ class OtpVerificationScreen extends Component {
         }
 
         if (nextProps.resendOTPResponseData != undefined && nextProps.resendOTPResponseData != '') {
-            console.log("nextProps.resendOTPResponseData'''''''''''''''''''''''---------------------", nextProps.resendOTPResponseData);
-            console.log("nextProps.resendOTPResponseData.status'''''''''''''''''''''''---------------------", nextProps.resendOTPResponseData.status);
+            
+            
 
             if (nextProps.resendOTPResponseData.status == 200) {
 

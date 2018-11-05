@@ -27,8 +27,8 @@ import {
   export const saveAdd = ({_id,latitude,longitude,street,addressid,shipment_id,mode}) => {
   
     
-    console.log(APIURLCONSTANTS.PIN_MAP_URL );
-    console.log('Postdata JSON='+JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode}));
+    
+    
    
   
     return (dispatch) => {
@@ -45,11 +45,11 @@ import {
         body: JSON.stringify({_id,latitude,longitude,street,addressid,shipment_id,mode})
       })
       .then( (response) => {
-        console.log('Received response Login: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from Login API: ', responseJSON);
+        
   
         dispatch({
           type:SAVE_ADDRESS,
@@ -59,7 +59,7 @@ import {
      
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_SAVE_ADDRESS_LOADING,

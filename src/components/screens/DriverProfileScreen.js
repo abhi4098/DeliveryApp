@@ -44,16 +44,16 @@ class DriverProfileScreen extends Component {
         this.setState({ pressStatus: true });
     }
     componentWillMount() {
-        console.log("componentWillMount.........................")
+        
     }
     componentDidMount() {
-        console.log("componentDidMount.........................")
+        
 
         this.getProfileData();
     }
 
     componentWillUpdate() {
-        console.log("componentWillUpdate.........................")
+        
 
     }
 
@@ -84,11 +84,11 @@ class DriverProfileScreen extends Component {
 
     getProfileData() {
         this.props.showProfileLoading(true);
-        console.log("getprofile data.....................")
+        
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
                 userId = JSON.parse(value)._id;
-                console.log("userId..........................", userId)
+                
 
 
                 var profile = {

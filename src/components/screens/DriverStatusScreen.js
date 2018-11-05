@@ -54,11 +54,11 @@ class DriverStatusScreen extends Component {
 
 	onBackPress() {
 		if (Actions.state.index === 1) {
-			console.log("onBackPress1", Actions.state.index)
+			
 			BackHandler.exitApp();
 			return false;
 		}
-		console.log("onBackPress2", Actions.state.index)
+		
 		Actions.pop();
 		return true;
 	}
@@ -86,7 +86,7 @@ class DriverStatusScreen extends Component {
 
 
 		if (nextProps.driverStatusResponseData != undefined && nextProps.driverStatusResponseData != '') {
-			console.log("nextProps.driverStatusResponseData'''''''''''''''''''''''---------------------", nextProps.driverStatusResponseData);
+			
 
 			if (nextProps.driverStatusResponseData.status == 200) {
 
@@ -112,7 +112,7 @@ class DriverStatusScreen extends Component {
 	}
 
 	onToggleButtonClicked() {
-		console.log(" onToggleButtonClicked...........................................");
+		
 		AsyncStorage.getItem("userData").then((value) => {
 
 			if (value) {

@@ -58,7 +58,7 @@ class Dashboard extends Component {
 
 
 	componentWillMount() {
-		console.log("componentwill mount...................................");
+		
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
 		}
@@ -75,13 +75,13 @@ class Dashboard extends Component {
                 }
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-				console.log("CALL_PHONE permissions granted")
+				
 				RNImmediatePhoneCall.immediatePhoneCall(number);
             } else {
-                console.log("CALL_PHONE permission denied")
+                
             }
         } catch (err) {
-            console.warn(err)
+            
         }
 
     }
@@ -92,7 +92,7 @@ class Dashboard extends Component {
 	}
 
 	componentWillUnmount() {
-		console.log("componentWillUnmount dashboard.................................");
+		
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -139,7 +139,7 @@ class Dashboard extends Component {
 
 
 		if (nextProps.dasboardResponseData != undefined && nextProps.dasboardResponseData != '') {
-			console.log("nextProps.dasboardResponseData'''''''''''''''''''''''---------------------", nextProps.dasboardResponseData);
+			
 
 			if (nextProps.dasboardResponseData.status == 200) {
 				this.props.showDashBoardLoading(false);
@@ -160,7 +160,7 @@ class Dashboard extends Component {
 		}
 
 		if (nextProps.driverStatusResData != undefined && nextProps.driverStatusResData != '') {
-			console.log("nextProps.driverStatusResData'''''''''''''''''''''''---------------------", nextProps.driverStatusResData);
+			
 
 			if (nextProps.driverStatusResData.status == 200) {
 
@@ -169,7 +169,7 @@ class Dashboard extends Component {
 
 				AsyncStorage.getItem("isClicked").then((value) => {
 					if (value) {
-						console.log("value of is clicked..........", value);
+						
 						if (value == 'logout') {
 							AsyncStorage.setItem("userData", '');
 							AsyncStorage.setItem("isClicked", '');
@@ -211,11 +211,11 @@ class Dashboard extends Component {
 
 	onBackPress() {
 		if (Actions.state.index === 1) {
-			console.log("onBackPress.............", Actions.state.index)
+			
 			BackHandler.exitApp();
 			return false;
 		}
-		console.log("onBackPress..............", Actions.state.index)
+		
 		Actions.pop();
 		return true;
 	}
@@ -262,7 +262,7 @@ class Dashboard extends Component {
 
 		if (item == 'Logout') {
 			//Actions.MapScreen();
-			console.log("logout clicked..................................")
+			
 			AsyncStorage.setItem("isClicked", 'logout');
 			this.onLogoutOrToggleClicked();
 			this.setState({ isActive: false });
@@ -278,7 +278,7 @@ class Dashboard extends Component {
 		AsyncStorage.getItem("userData").then((value) => {
 
 			if (value) {
-				console.log("is active................................", this.state.isActive);
+				
 				userId = JSON.parse(value)._id;
 				this.props.showDashBoardLoading(true);
 
@@ -310,13 +310,13 @@ class Dashboard extends Component {
 
 	_onPress(item) {
 		// your code on item press
-		console.log("item number................................" +item);
+		
 		Actions.MapScreen({shipmentId:item._id});
 		
 	};
 
 	_onPhoneIconPress(item){
-		console.log("item number................................" +item);
+		
 		this.requestMakeCallPermission(item.sender_phone);
 		
 	}

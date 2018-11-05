@@ -111,11 +111,11 @@ class CustomerLoginScreen extends Component {
 
   onBackPress() {
     if (Actions.state.index === 1) {
-      console.log("onBackPress1.................", Actions.state.index)
+      
       BackHandler.exitApp();
       return false;
     }
-    console.log("onBackPress2..............", Actions.state.index)
+    
     Actions.pop();
     return true;
   }
@@ -133,8 +133,8 @@ class CustomerLoginScreen extends Component {
 
 
     if (nextProps.receiveOtpResponseData != undefined && nextProps.receiveOtpResponseData != '') {
-      console.log("nextProps.receiveOtpResponseData'''''''''''''''''''''''---------------------", nextProps.receiveOtpResponseData);
-      console.log("nextProps.receiveOtpResponseData.status'''''''''''''''''''''''---------------------", nextProps.receiveOtpResponseData.status);
+      
+      
 
       if (nextProps.receiveOtpResponseData.status == 200) {
 

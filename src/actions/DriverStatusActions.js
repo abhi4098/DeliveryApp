@@ -8,7 +8,7 @@ import {
 import APIURLCONSTANTS from "../ApiUrlList";
 
 export const showDriverStatusLoading =(value)=>{
-    //console.log('in loading login='+ value);
+    //
     return (dispatch) => {
       dispatch({
         type: SHOW_DRIVER_STATUS_LOADING,
@@ -20,8 +20,8 @@ export const showDriverStatusLoading =(value)=>{
   export const driverStatusCall = ({driverid,dutystatus}) => {
 
     
-    console.log(APIURLCONSTANTS.DRIVER_STATUS_URL);
-    console.log('Postdata JSON='+JSON.stringify({driverid,dutystatus}));
+    
+    
    
   
     return (dispatch) => {
@@ -38,11 +38,11 @@ export const showDriverStatusLoading =(value)=>{
         body: JSON.stringify({driverid,dutystatus})
       })
       .then( (response) => {
-        console.log('Received response Login: ', response);
+        
         return response.json();
       })
       .then( (responseJSON) => {
-        console.log('JSON response from Login API: ', responseJSON);
+        
   
         dispatch({
           type:DRIVER_STATUS,
@@ -53,7 +53,7 @@ export const showDriverStatusLoading =(value)=>{
         //loaderHandler.hideLoader();
       })
       .catch(e => {
-        console.log('Error==='+e);
+        
         alert('Server not responding');
         dispatch({
           type: SHOW_DRIVER_STATUS_LOADING,

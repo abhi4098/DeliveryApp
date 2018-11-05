@@ -60,14 +60,14 @@ class MapScreen extends Component {
     }
 
     componentWillUnmount() {
-        console.log("componentWillUnmount.........................................", "mapscreen")
+        
         this.props.clearSaveAddressRecord();
     }
 
     componentDidMount() {
-        console.log("lat..............................................", this.props.lat);
-        console.log("long..............................................", this.props.lng);
-        console.log("isFrom..............................................", this.props.isFrom);
+        
+        
+        
 
 
         navigator.geolocation.getCurrentPosition((position) => {
@@ -76,6 +76,7 @@ class MapScreen extends Component {
                 var lat = parseFloat(this.props.lat)
                 var long = parseFloat(this.props.lng)
                 this.setState({ saveLocationname: this.props.addName })
+                console.log('saveLocationname:..................................... ', saveLocationname);
 
             }
             else {
@@ -106,9 +107,9 @@ class MapScreen extends Component {
             if (value) {
 
                 userId = JSON.parse(value)._id;
-                console.log("saved location name............................", this.state.focusedLocation.latitude, this.state.focusedLocation.longitude);
+                
                 this.props.showSaveAddLoading(true);
-                console.log("saved location name............................", this.props.shipmentId);
+                
 
                 var location = {
                     _id: userId,
@@ -117,7 +118,8 @@ class MapScreen extends Component {
                     street: this.state.saveLocationname,
                     addressid: this.props.addId,
                     shipment_id: this.props.shipmentId,
-                    mode: 'mobile'
+                    mode: 'mobile',
+                    
 
                 };
 
@@ -172,14 +174,14 @@ class MapScreen extends Component {
             this.pickLocationHandler(coordinateEvents);
         },
             err => {
-                console.log(err);
+                
                 alert("Location not fetched,please select manually!!");
 
             })
     }
 
     _onSaveAddressPress() {
-        console.log("shipment id..................................................", this.props.shipmentId)
+        
         Actions.pop();
         Actions.MyAddress({ from: 'Mapscreen', shipId: this.props.shipmentId });
     }
@@ -187,7 +189,7 @@ class MapScreen extends Component {
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.saveAddResponse != undefined && nextProps.saveAddResponse != '') {
-            console.log("nextProps.saveAddResponse'''''''''''''''''''''''---------------------", nextProps.saveAddResponse);
+            
 
             if (nextProps.saveAddResponse.status == 200) {
                 this.props.showSaveAddLoading(false);

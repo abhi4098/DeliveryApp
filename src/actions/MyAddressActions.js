@@ -32,8 +32,8 @@ export const clearDeleteAddress = () => ({
 export const addressList = ({userid}) => {
 
   
-  console.log(APIURLCONSTANTS.ADDRESS_LIST_URL +"/"+ userid);
-  //console.log('Postdata JSON='+JSON.stringify({userid}));
+  
+  //
  
 
   return (dispatch) => {
@@ -50,11 +50,11 @@ export const addressList = ({userid}) => {
       // body: JSON.stringify({userid})
     })
     .then( (response) => {
-      console.log('Received response Login: ', response);
+      
       return response.json();
     })
     .then( (responseJSON) => {
-      console.log('JSON response from Login API: ', responseJSON);
+      
 
       dispatch({
         type:ADDRESS_LIST,
@@ -64,7 +64,7 @@ export const addressList = ({userid}) => {
    
     })
     .catch(e => {
-      console.log('Error==='+e);
+      
       alert('Server not responding');
       dispatch({
         type: SHOW_ADDRESS_LOADING,
@@ -80,8 +80,8 @@ export const addressList = ({userid}) => {
 export const deleteAddress = ({addressid,_id}) => {
 
   
-  console.log(APIURLCONSTANTS.ADDRESS_DELETE_URL);
-  console.log('Postdata JSON='+JSON.stringify({addressid,_id}));
+  
+  
  
 
   return (dispatch) => {
@@ -98,11 +98,11 @@ export const deleteAddress = ({addressid,_id}) => {
       body: JSON.stringify({addressid,_id})
     })
     .then( (response) => {
-      console.log('Received response Login: ', response);
+      
       return response.json();
     })
     .then( (responseJSON) => {
-      console.log('JSON response from Login API: ', responseJSON);
+      
 
       dispatch({
    
@@ -113,7 +113,7 @@ export const deleteAddress = ({addressid,_id}) => {
    
     })
     .catch(e => {
-      console.log('Error==='+e);
+      
       alert('Server not responding');
       dispatch({
         type: SHOW_ADDRESS_LOADING,

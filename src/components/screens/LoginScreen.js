@@ -141,7 +141,7 @@ class LoginScreen extends Component {
 
 
     if (nextProps.loginResponseData != undefined && nextProps.loginResponseData != '') {
-      console.log("nextProps.loginResponseData'''''''''''''''''''''''---------------------", nextProps.loginResponseData);
+      
 
       if (nextProps.loginResponseData.status == 200) {
 
@@ -187,7 +187,7 @@ class LoginScreen extends Component {
 
 
   componentDidMount() {
-    console.log("componentDidMount...............................................");
+    
     AsyncStorage.getItem("nboxitUserType").then((nboxitUserType) => {
       userType = nboxitUserType;
       if (nboxitUserType == 'customer') {
@@ -208,25 +208,25 @@ class LoginScreen extends Component {
 
 
   componentDidUpdate() {
-    console.log("componentDidUpdate...............................................");
+    
     if (this.props.loginResponseData != undefined && this.props.loginResponseData != '') {
       this.props.clearLoginRecord();
     }
   }
 
   componentWillUnmount() {
-    console.log("componentWillUnmount...............................................");
+    
     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
   }
 
   onBackPress() {
     if (Actions.state.index === 1) {
-      console.log("onBackPress1.................", Actions.state.index)
+      
       BackHandler.exitApp();
       return false;
     }
-    console.log("onBackPress2..............", Actions.state.index)
+    
     Actions.pop();
     return true;
   }

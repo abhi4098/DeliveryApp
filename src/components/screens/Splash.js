@@ -21,7 +21,7 @@ export default class Splash extends Component {
 
 	componentWillMount() {
 		setTimeout(() => {
-			console.log("user data................................")
+			
 
 			AsyncStorage.getItem("userData").then((token) => {
 				if (token) {
@@ -32,7 +32,7 @@ export default class Splash extends Component {
 					if (token.length > 0) {
 						if (usertype == 'driver') {
 						driverStatus = JSON.parse(token).dutystatus;
-							console.log("dutystatus.........................." ,driverStatus)
+							
 							if (driverStatus == 'on') {
 								Actions.Dashboard();
 							}

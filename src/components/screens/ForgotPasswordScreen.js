@@ -34,7 +34,7 @@ class ForgotPasswordScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
     // Handle getSites service response
-    console.log("forgot password response..................." ,this.props.isForgotLoading)
+    
 
       if(nextProps.forgotResponseData != undefined && nextProps.forgotResponseData != ''){
         if(nextProps.forgotResponseData.status= 200){ 
@@ -105,11 +105,11 @@ class ForgotPasswordScreen extends Component {
   
     onBackPress () {
       if (Actions.state.index === 1) {
-        console.log("onBackPress1",Actions.state.index)
+        
         BackHandler.exitApp();
         return false;
       }
-      console.log("onBackPress2",Actions.state.index)
+      
       Actions.pop();
       return true;
     }

@@ -23,7 +23,7 @@ import AppLogo from "../../assets/app_logo.png";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions";
-import Button  from '../common/Button';
+import Button from '../common/Button';
 class EditProfileScreen extends Component {
 
     constructor(props) {
@@ -74,6 +74,7 @@ class EditProfileScreen extends Component {
         this.setState({ selectedButton: "changePassword" });
         Actions.pop();
         Actions.UpdatePasswordScreen();
+        
     }
 
     onUpdateButtonPress() {
@@ -83,7 +84,7 @@ class EditProfileScreen extends Component {
             if (value) {
                 userId = JSON.parse(value)._id;
                 userType = JSON.parse(value).type;
-                console.log("type with state................................................", userType)
+                
 
 
 
@@ -98,6 +99,7 @@ class EditProfileScreen extends Component {
                 }
 
                 this.props.userProfileUpdate(updateProfile);
+                
 
             }
 
@@ -129,7 +131,7 @@ class EditProfileScreen extends Component {
         return (
 
             <View
-                style={{ flex: 1, backgroundColor: '#fff'}}>
+                style={{ flex: 1, backgroundColor: '#fff' }}>
                 <Loader
                     loading={this.props.isLoading} />
                 <View
@@ -228,24 +230,24 @@ class EditProfileScreen extends Component {
 
 
                 </View>
-              
-
-                 <View
-                        style={{flexDirection: 'row', marginTop: 70, marginStart: 10, marginEnd: 10,alignItems:"center" }}>
 
 
-                      <TouchableOpacity onPress={() =>this.onUpdateButtonPress()} style= {styles.buttonStyle}>
-		<Text style = {styles.textStyle}>
-        UPDATE
+                <View
+                    style={{ flexDirection: 'row', marginTop: 70, marginStart: 10, marginEnd: 10, alignItems: "center" }}>
+
+
+                    <TouchableOpacity onPress={() => this.onUpdateButtonPress()} style={styles.buttonStyle}>
+                        <Text style={styles.textStyle}>
+                            UPDATE
 			</Text>
-            </TouchableOpacity>
+                    </TouchableOpacity>
 
-             <TouchableOpacity  onPress={() =>this.onChangePasswordButtonPress()} style= {styles.buttonStyle1}>
-		<Text style = {styles.textStyle}>
-        CHANGE PASSWORD
+                    <TouchableOpacity onPress={() => this.onChangePasswordButtonPress()} style={styles.buttonStyle1}>
+                        <Text style={styles.textStyle}>
+                            CHANGE PASSWORD
 			</Text>
-            </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -275,7 +277,7 @@ const styles = StyleSheet.create({
 
 
         marginTop: 70,
-       
+
         padding: 5,
         width: 150,
         height: 35,
@@ -296,10 +298,10 @@ const styles = StyleSheet.create({
 
 
     }
-    ,buttonContainer2: {
+    , buttonContainer2: {
 
 
-        marginTop:10,
+        marginTop: 10,
         width: 250,
         height: 35,
         alignItems: 'center',
@@ -319,7 +321,7 @@ const styles = StyleSheet.create({
 
 
     },
-   
+
 
     buttonTextOnPress: {
         color: '#ffffff',
@@ -338,43 +340,43 @@ const styles = StyleSheet.create({
         height: 35,
     },
     textStyle: {
-        
+
         fontSize: 16,
         fontWeight: '600',
-        marginTop:6,
-        color:'#fff'
-        
+        marginTop: 6,
+        color: '#fff'
+
     },
 
-	buttonStyle: {
-        marginStart:20,
-        width:120,
-	    alignItems:'center',
-		borderRadius: 3,
-		backgroundColor: '#14136d',
-        height:35,
-        shadowOpacity:0.3,
-        shadowRadius:3,
-        shadowColor:'#000',
-        shadowOffset:5,
+    buttonStyle: {
+        marginStart: 20,
+        width: 120,
+        alignItems: 'center',
+        borderRadius: 3,
+        backgroundColor: '#14136d',
+        height: 35,
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        shadowColor: '#000',
+        shadowOffset: 5,
         elevation: 3,
-        marginEnd:20
+        marginEnd: 20
 
     },
     buttonStyle1: {
-        width:170,
-        marginStart:20,
-	    alignItems:'center',
-		borderRadius: 3,
-		backgroundColor: '#14136d',
-        height:35,
-        shadowOpacity:0.3,
-        shadowRadius:3,
-        shadowColor:'#000',
-        shadowOffset:5,
+        width: 170,
+        marginStart: 20,
+        alignItems: 'center',
+        borderRadius: 3,
+        backgroundColor: '#14136d',
+        height: 35,
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        shadowColor: '#000',
+        shadowOffset: 5,
         elevation: 3
 
-	}
+    }
 
 
 
