@@ -147,7 +147,8 @@ class OtpVerificationScreen extends Component {
             var optVerifyRequest = {
                 phoneNumber: phoneNumber,
                 code: code,
-                mode: "mobile"
+                mode: "mobile",
+                type: "customer"
             };
             this.props.verifyOtp(optVerifyRequest);
 

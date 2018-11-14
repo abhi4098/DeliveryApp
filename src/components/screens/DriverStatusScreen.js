@@ -67,7 +67,7 @@ class DriverStatusScreen extends Component {
 
 
 	renderBulbImage() {
-		var imgSource = this.state.showRedBulb ? RedBulb : GreenBulb;
+		var imgSource = this.state.showRedBulb ?  GreenBulb : RedBulb ;
 		return (
 
 			<Image

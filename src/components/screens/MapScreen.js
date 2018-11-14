@@ -11,7 +11,8 @@ import {
     Text,
     Alert,
     TouchableOpacity,
-    TouchableNativeFeedback
+    TouchableNativeFeedback,
+    ScrollView 
 
 } from "react-native";
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
@@ -30,7 +31,7 @@ import { saveAdd, showSaveAddLoading, clearSaveAddressRecord } from '../../actio
 import Loader from '../common/Loader';
 import Button  from '../common/Button';
 
-
+var saveLocationname = '';
 
 class MapScreen extends Component {
 
@@ -41,10 +42,10 @@ class MapScreen extends Component {
 
         this.state = {
             focusedLocation: {
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0,
-                longitudeDelta: 0
+                latitude: 25.025885,
+                longitude: -78.035889,
+                latitudeDelta: 1,
+                longitudeDelta: 1
             },
             markerPosition: new AnimatedRegion({
                 latitude: 0,
@@ -63,29 +64,18 @@ class MapScreen extends Component {
     }
 
     componentWillUnmount() {
-        
+        console.log( "componentWillUnmount.................................................mapscreen");
         this.props.clearSaveAddressRecord();
     }
 
-    componentDidMount() {
-        
-        
-        
-           console.log( "componendidmpount.................................................mapscreen");
+    
 
-        navigator.geolocation.getCurrentPosition((position) => {
-
-            if (this.props.isFrom == "MyAddress") {
-                var lat = parseFloat(this.props.lat)
-                var long = parseFloat(this.props.lng)
-                this.setState({ saveLocationname: this.props.addName })
-              //  console.log('saveLocationname:..................................... ', saveLocationname);
-
-            }
-            else {
-                var lat = parseFloat(position.coords.latitude)
-                var long = parseFloat(position.coords.longitude)
-            }
+    componentWillMount() {
+        
+        if (this.props.isFrom == "MyAddress") {
+            var lat = parseFloat(this.props.lat)
+            var long = parseFloat(this.props.lng)
+            this.setState({ saveLocationname: this.props.addName })
 
             var initialRegion = {
                 latitude: lat,
@@ -96,14 +86,44 @@ class MapScreen extends Component {
 
             this.setState({ focusedLocation: initialRegion })
             this.setState({ markerPosition: initialRegion })
+        }
+        else
+        {
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log( " navigator.geolocation.getCurrentPosition((position)t.................................................",this.props.isFrom);
+           
+                var lat = parseFloat(position.coords.latitude)
+                var long = parseFloat(position.coords.longitude)
+                
+            
+
+            var initialRegion = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            }
+
+            this.setState({ focusedLocation: initialRegion })
+            this.setState({ markerPosition: initialRegion })
+            console.log('initialRegion:..................................... ', initialRegion);
+            
 
         },
-            (error) => alert(JSON.stringify(error)),
+            (error) =>  console.log("Location not fetched, please select manually!!"),
             {  enableHighAccuracy: false,
                 timeout: 5000,
                 maximumAge: 10000 })
+            
     }
+}
 
+
+    componentDidMount()
+    {
+        this.componentWillMount();
+    }
 
     onConfirmButtonPress() {
         AsyncStorage.getItem("userData").then((value) => {
@@ -113,7 +133,7 @@ class MapScreen extends Component {
                 
                 this.props.showSaveAddLoading(true);
                 console.log('this.state.checked...............................', this.state.checked);
-                if(this.state.checked ==true)
+                if(this.state.checked ==true || this.props.from == "SlidingMenu")
                 {
                     isAddressSaved = 1
                     console.log('isAddressSaved: true...............................', isAddressSaved);
@@ -195,11 +215,70 @@ class MapScreen extends Component {
             })
     }
 
+    // componentWillMount()
+    // {
+    //     this.updateUserProfile();
+    // }
+
+    // updateUserProfile() {
+    //     /********************** Call getUsersInfo from ASYNC Storage **********************/
+    //     AsyncStorage.getItem("userData").then((value) => {
+    //       if (value) {
+    //         userType = JSON.parse(value).type;
+    
+    
+    //       }
+    
+    //     }).done();
+    //     /*********************************************************************************/
+    //   }
+      
     _onSaveAddressPress() {
         
         Actions.pop();
         Actions.MyAddress({ from: 'Mapscreen', shipId: this.props.shipmentId });
     }
+
+    SaveAddressOption()
+    {
+        if(this.props.from != "SlidingMenu")
+    {
+        return <View
+        style = {{alignItems:'center'}}>
+<Text
+                    style={{ marginTop: 15 }}>-OR-</Text>
+
+                <TouchableOpacity
+                    onPress={() => this._onSaveAddressPress()}
+                >
+                    <Text
+                        style={{ marginTop: 15, color: "#14136d" }}>Select from Saved Address</Text>
+                </TouchableOpacity>
+        </View>;
+     }
+     
+
+    }
+
+    showCheckBox()
+    {
+        if(this.props.from != "SlidingMenu")
+    {
+        return <CheckBox
+        center
+        title='Save Address'
+        checked={this.state.checked}
+        onPress={() => this._onCheckboxPress()}
+        containerStyle={{backgroundColor: '#f1f1fd',marginTop:-20,borderColor:'#f1f1fd'}}
+      
+      />;
+     }
+
+
+     
+
+    }
+
 
     componentWillReceiveProps(nextProps) {
 
@@ -208,9 +287,19 @@ class MapScreen extends Component {
 
             if (nextProps.saveAddResponse.status == 200) {
                 this.props.showSaveAddLoading(false);
+                console.log("this.props.from........................",this.props.from);
+                if(this.props.from != "SlidingMenu")
+                {
                 Actions.pop();
                 Actions.ConfirmOrderScreen();
                 //this.setState({ data: nextProps.saveAddResponse.data })
+                }
+                else{
+                   Alert.alert("Message","Address saved Successfully");
+                    Actions.pop();
+                    Actions.Dashboard();
+                   
+                }
 
             }
 
@@ -251,6 +340,8 @@ class MapScreen extends Component {
             marker = <MapView.Marker coordinate={this.state.focusedLocation} />
         }
         return (
+            <ScrollView
+            style={{ backgroundColor: '#f1f1fd'}}>
             <View
                 style={styles.controlsContainer}>
                 <Loader
@@ -292,14 +383,9 @@ class MapScreen extends Component {
                     </View>
                 </View>
 
-<CheckBox
-  center
-  title='Save Address'
-  checked={this.state.checked}
-  onPress={() => this._onCheckboxPress()}
-  containerStyle={{backgroundColor: '#f1f1fd',marginTop:-20,borderColor:'#f1f1fd'}}
 
-/>
+
+                {this.showCheckBox()}  
 
          <Button
                  
@@ -307,8 +393,8 @@ class MapScreen extends Component {
                        
  > CONFIRM</Button> 
                
-
-                <Text
+            {this.SaveAddressOption()}
+                {/* <Text
                     style={{ marginTop: 15 }}>-OR-</Text>
 
                 <TouchableOpacity
@@ -316,10 +402,11 @@ class MapScreen extends Component {
                 >
                     <Text
                         style={{ marginTop: 15, color: "#14136d" }}>Select from Saved Address</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
              
             </View>
+            </ScrollView>
         );
     }
 }

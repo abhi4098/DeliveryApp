@@ -243,7 +243,7 @@ class CustomerLoginScreen extends Component {
 
 
           <View
-            style={{ alignItems: 'center', flexDirection: 'row' }}>
+            style={{ alignItems: 'center', flexDirection: 'column' }}>
             <View>
               <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }} >If Already Registered?</Text>
             </View>
@@ -251,7 +251,7 @@ class CustomerLoginScreen extends Component {
               <View>
                 <Text
                   onPress={this.onLoginViaEmailNowPress.bind(this)}
-                  style={{ color: '#14136d', marginLeft: 5, fontSize: 16, fontWeight: 'bold' }} >Login Via Email/Phone</Text>
+                  style={{ color: '#14136d', marginLeft: 5, fontSize: 16, fontWeight: 'bold',marginTop:10 }} >Login Via Email/Phone</Text>
               </View>
             </TouchableHighlight>
           </View>

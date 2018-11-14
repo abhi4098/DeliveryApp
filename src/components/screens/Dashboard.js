@@ -28,7 +28,8 @@ import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
-
+import FlipToggle from 'react-native-flip-toggle-button';
+var userType = '';
 
 
 
@@ -51,13 +52,14 @@ class Dashboard extends Component {
 			dashboardData: '',
 			pressStatus: false,
 			isActive: true,
-
+            userType: ''
 		}
 	}
 
 
 
 	componentWillMount() {
+		console.log("componentWillMount////////////////////////////////////////////////////////")
 		
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
@@ -104,6 +106,7 @@ class Dashboard extends Component {
 				
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
+				userType =JSON.parse(value).type;
 
 				this.props.showDashBoardLoading(true);
 				if (JSON.parse(value).type == 'customer') {
@@ -116,7 +119,7 @@ class Dashboard extends Component {
 				}
 				else {
 					var dashboard = {
-						shipment_status: "Pending",
+						shipment_status: "Driver Assigned",
 						userid: userId,
 						type: JSON.parse(value).type
 
@@ -131,6 +134,8 @@ class Dashboard extends Component {
 		}).done();
 
 	}
+
+	
 
 	componentWillReceiveProps(nextProps) {
 
@@ -210,6 +215,7 @@ class Dashboard extends Component {
 
 
 	onBackPress() {
+		console.log("Actions state index...................." ,Actions.state.index);
 		if (Actions.state.index === 1) {
 			
 			BackHandler.exitApp();
@@ -218,6 +224,7 @@ class Dashboard extends Component {
 		
 		Actions.pop();
 		return true;
+	
 	}
 
 	toggle() {
@@ -259,6 +266,10 @@ class Dashboard extends Component {
 		if (item == 'OrderDeliveredScreen') {
 			Actions.OrderDeliveredScreen();
 		}
+		if (item == 'PinLocation') {
+			Actions.MapScreen({from: 'SlidingMenu'});
+		}
+
 
 		if (item == 'Logout') {
 			//Actions.MapScreen();
@@ -310,8 +321,25 @@ class Dashboard extends Component {
 
 	_onPress(item) {
 		// your code on item press
+		AsyncStorage.getItem("userData").then((value) => {
+
+			if (value) {
+				
+			if (JSON.parse(value).type == 'driver' ) {
+				//Actions.GeoLocationExampleScreen();	
+				}
+				else if (JSON.parse(value).type == 'customer') {
+					
+					Actions.MapScreen({shipmentId:item._id,from: 'Dashboard'});
+				}
+
+
+
+			}
+
+		}).done();
 		
-		Actions.MapScreen({shipmentId:item._id});
+		
 		
 	};
 
@@ -320,6 +348,50 @@ class Dashboard extends Component {
 		this.requestMakeCallPermission(item.sender_phone);
 		
 	}
+
+
+	renderFlipFlopToggleButton() {
+
+		if (userType != 'customer') {
+		  return <View
+		  style={{
+			  flexDirection: 'row',
+			  justifyContent: 'flex-end',
+			  marginEnd: 10,
+			  marginTop: 10
+		  }}>
+
+		  <Text
+			  style={styles.onDutyText}
+		  >On-Duty</Text>
+		  <FlipToggle
+			  value={this.state.isActive}
+			  buttonWidth={40}
+			  buttonHeight={12}
+			  buttonRadius={50}
+			  sliderWidth={10}
+			  sliderHeight={10}
+			  sliderRadius={50}
+			  //onLabel={'ON DUTY'}
+			  //offLabel={'OFF DUTY'}
+			  sliderOnColor="black"
+			  sliderOffColor="black"
+			  buttonOnColor="green"
+			  buttonOffColor="red"
+			  labelStyle={{ fontSize: 16, color: 'white' }}
+			  
+			  onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
+
+		  />
+	  </View>;
+		}
+		else {
+		  return ;
+		}
+	
+	
+	
+	  }
 
 	_renderItem({ item,index }) {
 		Moment.locale('en');
@@ -449,38 +521,9 @@ class Dashboard extends Component {
 
 
 					<View style={styles.mainContainer}>
-						{/* <View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'flex-end',
-								marginEnd: 40,
-								marginTop: 10
-							}}>
 
-							<Text
-								style={styles.onDutyText}
-							>On-Duty</Text>
-							<FlipToggle
-								value={this.state.isActive}
-								buttonWidth={40}
-								buttonHeight={12}
-								buttonRadius={50}
-								sliderWidth={10}
-								sliderHeight={10}
-								sliderRadius={50}
-								//onLabel={'ON DUTY'}
-								//offLabel={'OFF DUTY'}
-								sliderOnColor="black"
-								sliderOffColor="black"
-								buttonOnColor="green"
-								buttonOffColor="red"
-								labelStyle={{ fontSize: 16, color: 'white' }}
-								
-								onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
-
-							/>
-						</View> */}
+					{this.renderFlipFlopToggleButton()}
+						
 						<FlatList
 							data={this.state.data}
 							renderItem={this._renderItem.bind(this)}
@@ -739,17 +782,17 @@ const styles = StyleSheet.create({
 
 
 	}
-	// , onDutyText: {
-	// 	color: '#000000',
-	// 	fontSize: 15,
-	// 	alignItems: 'center',
-	// 	marginEnd: 15,
-	// 	paddingBottom: 2
+	, onDutyText: {
+		color: '#000000',
+		fontSize: 15,
+		alignItems: 'center',
+		marginEnd: 15,
+		paddingBottom: 2
 
 
 
 
-	// }
+	}
 
 });
 

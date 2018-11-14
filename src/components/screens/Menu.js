@@ -181,7 +181,34 @@ export default class Menu extends Component {
     }).done();
     /*********************************************************************************/
   }
+  
+  renderPinLocation() {
 
+    if (userType == 'customer') {
+      return <View style={{
+        height: 40, paddingLeft: 10,
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: (this.props.selectedMenu == 'Pin Location') ? '#d2e0fc' : 'transparent'
+      }}>
+        <Image style={styles.itemImage} source={AcceptedReq}>
+        </Image>
+        <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('PinLocation')}>
+          <Text
+            style={styles.item}>
+            Pin Location
+                        </Text>
+        </TouchableHighlight>
+      </View>;
+    }
+    else {
+      return ;
+    }
+
+
+
+  }
 
   renderMyAddress() {
 
@@ -254,6 +281,8 @@ export default class Menu extends Component {
             </View>
 
             {this.renderMyAddress()}
+
+             {this.renderPinLocation()}
 
             <View style={{
               height: 40, paddingLeft: 10,

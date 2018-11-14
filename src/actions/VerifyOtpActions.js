@@ -18,9 +18,9 @@ import {
     }
   };
   
-  export const verifyOtp = ({phoneNumber,code,mode}) => {
+  export const verifyOtp = ({phoneNumber,code,mode,type}) => {
   
-      
+      console.log("....................................................",{phoneNumber,code,mode,type})
       
       
      
@@ -36,7 +36,7 @@ import {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({phoneNumber,code,mode})
+          body: JSON.stringify({phoneNumber,code,mode,type})
         })
         .then( (response) => {
           

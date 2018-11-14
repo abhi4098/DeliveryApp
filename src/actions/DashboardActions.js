@@ -72,7 +72,7 @@ export const showDashBoardLoading =(value)=>{
 
     
     
-    
+    console.log("driverStatusCallFromDashboard..............................." ,{driverid,dutystatus})
    
   
     return (dispatch) => {
@@ -93,7 +93,7 @@ export const showDashBoardLoading =(value)=>{
         return response.json();
       })
       .then( (responseJSON) => {
-        
+        console.log("............................................."  ,responseJSON)
   
         dispatch({
           type:DRIVER_STATUS,
