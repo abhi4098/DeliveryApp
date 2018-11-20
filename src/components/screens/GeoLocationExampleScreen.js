@@ -4,12 +4,13 @@ import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import TestImage from "../../assets/marker_icon1.png";
 import Polyline from '@mapbox/polyline';
 const { width, height } = Dimensions.get("window")
-
+import { Actions } from "react-native-router-flux";
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.0030
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+const GOOGLE_MAPS_APIKEY = 'AIzaSyA9kTgADps5-FpFzq56Dbn9-tCU-kUUFMw';
 
 class GeoLocationExampleScreen extends Component {
     constructor(props) {
@@ -26,8 +27,8 @@ class GeoLocationExampleScreen extends Component {
                 latitude: 0,
                 longitude: 0
             }),
-            cordLatitude: -6.23,
-            cordLongitude: 106.75,
+            cordLatitude: 30.7333,
+            cordLongitude: 76.7794,
             error: null,
             concat: null,
             coords: [],
@@ -74,6 +75,7 @@ class GeoLocationExampleScreen extends Component {
 
             this.setState({ initialPositon: initialRegion })
             this.setState({ markerPosition: initialRegion })
+            console.log("initial regions................................" ,initialRegion);
             this.mergeLot();
 
         },
@@ -103,32 +105,43 @@ class GeoLocationExampleScreen extends Component {
     async getDirections(startLoc, destinationLoc) {
 
         try {
-            let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}`)
+            let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAPS_APIKEY}`)
+            
+           // let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood&key=${GOOGLE_MAPS_APIKEY}`)
+
+            console.log("resp..............................................",resp);
             let respJson = await resp.json();
+            console.log("respJson................................................",respJson);
             let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+            console.log("points................................................",points);
             let coords = points.map((point, index) => {
                 return {
                     latitude: point[0],
                     longitude: point[1]
                 }
             })
+            console.log("coords................................................",coords);
             this.setState({ coords: coords })
             this.setState({ x: "true" })
             return coords
         } catch (error) {
-            console.log('masuk fungsi')
+            console.log('error get direction.........................................',error)
             this.setState({ x: "error" })
             return error
         }
     }
 
     mergeLot() {
-        if (this.state.latitude != null && this.state.longitude != null) {
-            let concatLot = this.state.latitude + "," + this.state.longitude
+
+       
+        if (this.state.initialPositon.latitude != null && this.state.initialPositon.longitude != null) {
+            let concatLot = this.state.initialPositon.latitude + "," + this.state.initialPositon.longitude
+            console.log("concatLot................................" ,concatLot);
             this.setState({
                 concat: concatLot
             }, () => {
-                this.getDirections(concatLot, "-6.270565,106.759550");
+                this.getDirections(concatLot, "30.7333,76.7794");
+                console.log("getDirections................................" ,concatLot);
             });
         }
 
@@ -139,15 +152,12 @@ class GeoLocationExampleScreen extends Component {
     }
     render() {
         return (
-            <MapView style={styles.map} initialRegion={{
-                latitude: -6.270565,
-                longitude: 106.759550,
-                latitudeDelta: 1,
-                longitudeDelta: 1
-            }}>
+            <MapView style={styles.map}
+            showsUserLocation = {true} 
+            region={this.state.initialPositon}>
 
-                {!!this.state.latitude && !!this.state.longitude && <MapView.Marker
-                    coordinate={{ "latitude": this.state.latitude, "longitude": this.state.longitude }}
+                {!!this.state.initialPositon.latitude && !!this.state.initialPositon.longitude && <MapView.Marker
+                    coordinate={{ "latitude": this.state.initialPositon.latitude, "longitude": this.state.initialPositon.longitude }}
                     title={"Your Location"}
                 />}
 
@@ -156,19 +166,19 @@ class GeoLocationExampleScreen extends Component {
                     title={"Your Destination"}
                 />}
 
-                {!!this.state.latitude && !!this.state.longitude && this.state.x == 'true' && <MapView.Polyline
+                {!!this.state.initialPositon.latitude && !!this.state.initialPositon.longitude && this.state.x == 'true' && <MapView.Polyline
                     coordinates={this.state.coords}
-                    strokeWidth={2}
-                    strokeColor="red" />
+                    strokeWidth={5}
+                    strokeColor="#14136d" />
                 }
 
-                {!!this.state.latitude && !!this.state.longitude && this.state.x == 'error' && <MapView.Polyline
+                {!!this.state.initialPositon.latitude && !!this.state.initialPositon.longitude && this.state.x == 'error' && <MapView.Polyline
                     coordinates={[
-                        { latitude: this.state.latitude, longitude: this.state.longitude },
+                        { latitude: this.state.initialPositon.latitude, longitude: this.state.initialPositon.longitude },
                         { latitude: this.state.cordLatitude, longitude: this.state.cordLongitude },
                     ]}
-                    strokeWidth={2}
-                    strokeColor="red" />
+                    strokeWidth={5}
+                    strokeColor="#14136d" />
                 }
             </MapView>
         );

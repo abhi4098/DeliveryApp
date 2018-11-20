@@ -49,7 +49,7 @@ export const receiveOtp = ({phoneNumber,type}) => {
         return response.json();
       })
       .then( (responseJSON) => {
-        
+        console.log("sent otp client response........................................",responseJSON)
   
         dispatch({
           type:RECEIVE_OTP,

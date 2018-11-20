@@ -132,6 +132,12 @@ class AcceptedDeliveryRequestScreen extends Component {
 		}
 
         }
+
+        _onPhoneIconPress(item){
+		
+            this.requestMakeCallPermission(item.sender_phone);
+            
+        }
         
         onBackPress() {
             if (Actions.state.index === 1) {

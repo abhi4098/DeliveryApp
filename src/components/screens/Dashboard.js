@@ -326,7 +326,7 @@ class Dashboard extends Component {
 			if (value) {
 				
 			if (JSON.parse(value).type == 'driver' ) {
-				//Actions.GeoLocationExampleScreen();	
+				Actions.GeoLocationExampleScreen();	
 				}
 				else if (JSON.parse(value).type == 'customer') {
 					

@@ -9,13 +9,15 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
-    Alert
+    Alert,
+    ImageBackground
 } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import AddressIcon from "../../assets/location.png";
 import Delete from "../../assets/delete.png";
 import Loader from '../common/Loader';
+var isListEmpty = "";
 
 import { Card, List } from 'react-native-elements';
 
@@ -27,7 +29,8 @@ class MyAddress extends Component {
         super(props);
         this.state = {
             loading: false,
-            selectedItem: 'test'
+            selectedItem: 'test',
+            isListEmpty:false
 
 
         }
@@ -140,7 +143,12 @@ class MyAddress extends Component {
                 this.props.showAddressLoading(false);
 
                 this.setState({ data: nextProps.deleteAddressResponse.data })
-                //this.deleteAddressItem(selectedItem);
+                console.log("data id.................................................",nextProps.deleteAddressResponse.data.length)
+                if(nextProps.deleteAddressResponse.data.length == 0)
+                {
+                    
+                this.setState({ isListEmpty: false })
+                }
 
             }
 
@@ -159,6 +167,22 @@ class MyAddress extends Component {
 
 
     }
+
+    backgroundImage()
+    {
+
+        console.log("data....................................................",this.state.isListEmpty);
+        if (!this.state.isListEmpty) {
+          return<ImageBackground
+          //resizeMode={'stretch'} // or cover
+          style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+          source={require('../../assets/noAddressFound.png/')}
+        >
+         </ImageBackground>;
+        }
+    }
+
+
     componentWillUnmount()
     {
         
@@ -173,9 +197,8 @@ class MyAddress extends Component {
     // }
 
     _renderItem({ item, index }) {
-        //
-           //if(item.addr_status == true )
-           //{
+        console.log("item.....................................................",item)
+        this.setState({ isListEmpty: true })
         return 	<TouchableOpacity
 		onPress={() =>this._onPress(item)}
 		>
@@ -237,7 +260,9 @@ class MyAddress extends Component {
                     loading={this.props.isLoading} />
                     <View
                 style={styles.parentContainer}>
-
+                
+                {this.backgroundImage()} 
+                
 
                 <FlatList
                     data={this.state.data}
@@ -255,7 +280,8 @@ class MyAddress extends Component {
 const styles = StyleSheet.create({
 
     parentContainer: {
-        flex: 1,
+        flex: 0,
+        justifyContent: 'center'
         
  },
     inputContainer: {

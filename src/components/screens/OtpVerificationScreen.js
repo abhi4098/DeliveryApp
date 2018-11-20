@@ -56,6 +56,7 @@ class OtpVerificationScreen extends Component {
     }
     async requestReadSmsPermission() {
         try {
+        
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_SMS, {
                     title: 'Auto Verification OTP',

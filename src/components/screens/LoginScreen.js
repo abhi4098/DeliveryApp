@@ -93,6 +93,7 @@ class LoginScreen extends Component {
   onRegisteNowPress() {
     this.props.usernameChanged('');
     this.props.passwordChanged('');
+   // Actions.pop();
     Actions.RegistrationScreen();
   }
 

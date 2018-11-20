@@ -10,6 +10,7 @@ import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.github.wumke.RNImmediatePhoneCall.RNImmediatePhoneCallPackage;
 import com.centaurwarchief.smslistener.SmsListenerPackage;
+import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 
 
 
@@ -25,7 +26,6 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
-import com.imagepicker.ImagePickerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -44,7 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
             new MapsPackage(),
             new LinearGradientPackage(),
             new RNImmediatePhoneCallPackage(),
-            new SmsListenerPackage()
+            new SmsListenerPackage(),
+              new RNFusedLocationPackage()
 
              
 

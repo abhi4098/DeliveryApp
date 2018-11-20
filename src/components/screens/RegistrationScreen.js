@@ -170,8 +170,7 @@ class RegistrationScreen extends Component {
           this.props.passChanged('');
           this.props.phoneChanged('');
           this.props.emailIsChanged('');
-          Actions.pop();
-          Actions.LoginScreen();
+          Actions.AppSelectionScreen();
         }
         else {
           AsyncStorage.setItem("userData", JSON.stringify(nextProps.registerResponseData.data));

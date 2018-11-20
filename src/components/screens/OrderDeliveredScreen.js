@@ -66,7 +66,11 @@ class OrderDeliveredScreen extends Component {
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
-
+	_onPhoneIconPress(item){
+		
+		this.requestMakeCallPermission(item.sender_phone);
+		
+	}
 	getProfileData() {
 
 		AsyncStorage.getItem("userData").then((value) => {

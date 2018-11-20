@@ -42,14 +42,14 @@ class MapScreen extends Component {
 
         this.state = {
             focusedLocation: {
-                latitude: 25.025885,
-                longitude: -78.035889,
-                latitudeDelta: 1,
-                longitudeDelta: 1
+                latitude: 25.0582,
+                longitude:  -77.3431,
+                latitudeDelta: .05,
+                longitudeDelta: .05
             },
             markerPosition: new AnimatedRegion({
-                latitude: 0,
-                longitude: 0
+                latitude:25.0582,
+                longitude: -77.3431
             }),
             locationChosen: true,
             marginBottom: 1,
@@ -348,7 +348,7 @@ class MapScreen extends Component {
                     loading={this.props.isLoading} />
 
                 <MapView
-                    initialRegion={this.state.focusedLocation}
+                    region={this.state.focusedLocation}
                     style={{ width: "100%", height: 300, marginBottom: this.state.marginBottom, marginTop: 0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}

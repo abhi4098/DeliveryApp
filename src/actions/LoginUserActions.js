@@ -39,7 +39,7 @@ export const showLoading =(value)=>{
   export const loginUser = ({phone,password,type}) => {
 
     
-    
+    console.log("........................................",{phone,password,type})
     
    
   
@@ -61,7 +61,7 @@ export const showLoading =(value)=>{
         return response.json();
       })
       .then( (responseJSON) => {
-        
+        console.log("login response........................................",responseJSON)
   
         dispatch({
           type:LOGIN_USER,

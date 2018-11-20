@@ -43,7 +43,7 @@ import {
           return response.json();
         })
         .then( (responseJSON) => {
-          
+          console.log("....................................................",responseJSON)
     
           dispatch({
             type:VERIFY_OTP,
