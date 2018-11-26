@@ -11,7 +11,9 @@ import {
 	Alert,
 	AsyncStorage,
 	FlatList,
-	TouchableOpacity
+	TouchableOpacity,
+	Swiper,
+	Dimensions
 
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
@@ -19,7 +21,7 @@ import SideMenu from "react-native-side-menu";
 import Menu from "./Menu";
 import { connect } from "react-redux";
 import hamburger from "../../assets/hamburger.png";
-import { Card,List } from 'react-native-elements';
+import { Card, List } from 'react-native-elements';
 import UsernameIcon from "../../assets/name.png";
 import Order from "../../assets/order.png";
 import DummyOrder from "../../assets/dummyOrder.png";
@@ -29,6 +31,10 @@ import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
 import FlipToggle from 'react-native-flip-toggle-button';
+import DashListIcon from "../../assets/dashboardlistIcon.png";
+import DashPersonIcon from "../../assets/dashmanIcon.png";
+import DashTruckIcon from "../../assets/dashTruckIcon.png";
+import DashRoundIcon from "../../assets/dashroundIcon.png";
 var userType = '';
 
 
@@ -41,6 +47,7 @@ import {
 	driverStatusCallFromDashboard,
 	clearDriverStatusResponseRecord
 } from "../../actions/index";
+import { bold } from 'ansi-colors';
 
 
 class Dashboard extends Component {
@@ -52,7 +59,7 @@ class Dashboard extends Component {
 			dashboardData: '',
 			pressStatus: false,
 			isActive: true,
-            userType: ''
+			userType: ''
 		}
 	}
 
@@ -60,7 +67,7 @@ class Dashboard extends Component {
 
 	componentWillMount() {
 		console.log("componentWillMount////////////////////////////////////////////////////////")
-		
+
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
 		}
@@ -69,24 +76,24 @@ class Dashboard extends Component {
 
 	}
 	async requestMakeCallPermission(number) {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.CALL_PHONE, {
-                    title: 'Make Call',
-                    message: 'need access to call from phone'
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-				
-				RNImmediatePhoneCall.immediatePhoneCall(number);
-            } else {
-                
-            }
-        } catch (err) {
-            
-        }
+		try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.CALL_PHONE, {
+					title: 'Make Call',
+					message: 'need access to call from phone'
+				}
+			)
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 
-    }
+				RNImmediatePhoneCall.immediatePhoneCall(number);
+			} else {
+
+			}
+		} catch (err) {
+
+		}
+
+	}
 
 
 	componentDidMount() {
@@ -94,7 +101,7 @@ class Dashboard extends Component {
 	}
 
 	componentWillUnmount() {
-		
+
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -103,10 +110,10 @@ class Dashboard extends Component {
 
 		AsyncStorage.getItem("userData").then((value) => {
 			if (value) {
-				
+
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
-				userType =JSON.parse(value).type;
+				userType = JSON.parse(value).type;
 
 				this.props.showDashBoardLoading(true);
 				if (JSON.parse(value).type == 'customer') {
@@ -116,17 +123,18 @@ class Dashboard extends Component {
 						type: JSON.parse(value).type
 
 					};
+					this.props.dashboardData(dashboard);
 				}
 				else {
 					var dashboard = {
-						shipment_status: "Driver Assigned",
-						userid: userId,
-						type: JSON.parse(value).type
+						//shipment_status: "Driver Assigned",
+						//userid: userId,
+						//type: JSON.parse(value).type
 
 					};
 				}
 
-				this.props.dashboardData(dashboard);
+
 
 
 			}
@@ -135,7 +143,7 @@ class Dashboard extends Component {
 
 	}
 
-	
+
 
 	componentWillReceiveProps(nextProps) {
 
@@ -144,7 +152,7 @@ class Dashboard extends Component {
 
 
 		if (nextProps.dasboardResponseData != undefined && nextProps.dasboardResponseData != '') {
-			
+
 
 			if (nextProps.dasboardResponseData.status == 200) {
 				this.props.showDashBoardLoading(false);
@@ -165,7 +173,7 @@ class Dashboard extends Component {
 		}
 
 		if (nextProps.driverStatusResData != undefined && nextProps.driverStatusResData != '') {
-			
+
 
 			if (nextProps.driverStatusResData.status == 200) {
 
@@ -174,7 +182,7 @@ class Dashboard extends Component {
 
 				AsyncStorage.getItem("isClicked").then((value) => {
 					if (value) {
-						
+
 						if (value == 'logout') {
 							AsyncStorage.setItem("userData", '');
 							AsyncStorage.setItem("isClicked", '');
@@ -215,16 +223,16 @@ class Dashboard extends Component {
 
 
 	onBackPress() {
-		console.log("Actions state index...................." ,Actions.state.index);
+		console.log("Actions state index....................", Actions.state.index);
 		if (Actions.state.index === 1) {
-			
+
 			BackHandler.exitApp();
 			return false;
 		}
-		
+
 		Actions.pop();
 		return true;
-	
+
 	}
 
 	toggle() {
@@ -256,7 +264,7 @@ class Dashboard extends Component {
 		}
 
 		if (item == 'MyAddress') {
-			Actions.MyAddress({from: 'Dashboard'});
+			Actions.MyAddress({ from: 'Dashboard' });
 		}
 
 		if (item == 'AcceptedDeliveryRequestScreen') {
@@ -267,13 +275,13 @@ class Dashboard extends Component {
 			Actions.OrderDeliveredScreen();
 		}
 		if (item == 'PinLocation') {
-			Actions.MapScreen({from: 'SlidingMenu'});
+			Actions.MapScreen({ from: 'SlidingMenu' });
 		}
 
 
 		if (item == 'Logout') {
 			//Actions.MapScreen();
-			
+
 			AsyncStorage.setItem("isClicked", 'logout');
 			this.onLogoutOrToggleClicked();
 			this.setState({ isActive: false });
@@ -289,7 +297,7 @@ class Dashboard extends Component {
 		AsyncStorage.getItem("userData").then((value) => {
 
 			if (value) {
-				
+
 				userId = JSON.parse(value)._id;
 				this.props.showDashBoardLoading(true);
 
@@ -316,7 +324,7 @@ class Dashboard extends Component {
 	}
 	onPlaceOrderPress() {
 		Alert.alert("Place Oreder Button Pressed");
-		
+
 	}
 
 	_onPress(item) {
@@ -324,13 +332,14 @@ class Dashboard extends Component {
 		AsyncStorage.getItem("userData").then((value) => {
 
 			if (value) {
-				
-			if (JSON.parse(value).type == 'driver' ) {
-				Actions.GeoLocationExampleScreen();	
+
+				if (JSON.parse(value).type == 'driver') {
+					console.log("recipient_address add...................................", item.recipient_address);
+					Actions.GeoLocationExampleScreen({ destination: item.recipient_address });
 				}
 				else if (JSON.parse(value).type == 'customer') {
-					
-					Actions.MapScreen({shipmentId:item._id,from: 'Dashboard'});
+
+					Actions.MapScreen({ shipmentId: item._id, from: 'Dashboard' });
 				}
 
 
@@ -338,150 +347,252 @@ class Dashboard extends Component {
 			}
 
 		}).done();
-		
-		
-		
+
+
+
 	};
 
-	_onPhoneIconPress(item){
-		
+	_onPhoneIconPress(item) {
+
 		this.requestMakeCallPermission(item.sender_phone);
-		
+
 	}
 
 
 	renderFlipFlopToggleButton() {
 
 		if (userType != 'customer') {
-		  return <View
-		  style={{
-			  flexDirection: 'row',
-			  justifyContent: 'flex-end',
-			  marginEnd: 10,
-			  marginTop: 10
-		  }}>
+			return <View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'flex-end',
+					marginEnd: 10,
+					alignItems:"center",
+					position:'absolute',
+					right:0,
+					marginTop:15
+				
+				}}>
 
-		  <Text
-			  style={styles.onDutyText}
-		  >On-Duty</Text>
-		  <FlipToggle
-			  value={this.state.isActive}
-			  buttonWidth={40}
-			  buttonHeight={12}
-			  buttonRadius={50}
-			  sliderWidth={10}
-			  sliderHeight={10}
-			  sliderRadius={50}
-			  //onLabel={'ON DUTY'}
-			  //offLabel={'OFF DUTY'}
-			  sliderOnColor="black"
-			  sliderOffColor="black"
-			  buttonOnColor="green"
-			  buttonOffColor="red"
-			  labelStyle={{ fontSize: 16, color: 'white' }}
-			  
-			  onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
+				<Text
+					style={styles.onDutyText}
+				>On-Duty</Text>
+				<FlipToggle
+					value={this.state.isActive}
+					buttonWidth={40}
+					buttonHeight={12}
+					buttonRadius={50}
+					sliderWidth={10}
+					sliderHeight={10}
+					sliderRadius={50}
+					//onLabel={'ON DUTY'}
+					//offLabel={'OFF DUTY'}
+					sliderOnColor="black"
+					sliderOffColor="black"
+					buttonOnColor="green"
+					buttonOffColor="red"
+					labelStyle={{ fontSize: 16, color: 'white' }}
 
-		  />
-	  </View>;
+					onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
+
+				/>
+			</View>;
 		}
 		else {
-		  return ;
+			return;
 		}
-	
-	
-	
-	  }
 
-	_renderItem({ item,index }) {
+
+
+	}
+
+
+	renderFlatList() {
+		console.log("usertype..........................................", userType);
+		if (userType == 'customer') {
+			return <View
+				style={{
+					flex: 1
+				}}>
+
+				<FlatList
+					data={this.state.data}
+					renderItem={this._renderItem.bind(this)}
+					keyExtractor={this._keyExtractor}
+
+				/>
+			</View>;
+		}
+		else {
+
+			return <View style={styles.container}>
+				<View style={styles.content}>
+					<View style={{ backgroundColor: '#ffffff', flex: 1, justifyContent: 'center' }}>
+
+						<View style={styles.rowContent}>
+						<TouchableOpacity
+						style={{ backgroundColor: '#e8e8e8', height: "45%", justifyContent: 'center', alignItems: 'center' }}
+								//onPress={() => this._onPhoneIconPress(item)}
+							>
+							{/* <View style={{ backgroundColor: '#e8e8e8', height: "45%", justifyContent: 'center', alignItems: 'center' }}> */}
+								<Image
+
+									source={DashTruckIcon
+									}
+								></Image>
+								<Text
+									style={{ color: '#2a2a2a', fontSize: 12, marginTop: 25, }}
+								>OPEN</Text>
+								<Text
+									style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
+								>JOBS</Text>
+								<Image
+
+									source={DashRoundIcon
+									}></Image>
+							
+							</TouchableOpacity>
+							
+							<TouchableOpacity 
+							onPress={() => Actions.AcceptedDeliveryRequestScreen()}
+						
+							style={{ backgroundColor: '#f2f2f2', height: "55%", justifyContent: 'center', alignItems: 'center' }}
+							>
+								<Image
+
+									source={DashListIcon
+									}
+								></Image>
+
+								<Text
+									style={{ color: '#2a2a2a', fontSize: 12, marginTop: 25, }}
+								>ASSIGNED</Text>
+								<Text
+									style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
+								>SHIPMENTS</Text>
+								<Image
+									style={{  marginBottom: 30 }}
+									source={DashRoundIcon
+									}></Image>
+							</TouchableOpacity>
+
+						</View>
+					</View>
+					<TouchableOpacity style={{ backgroundColor: '#ffffff', flex: 1, justifyContent: 'center', alignItems: 'center' }}
+					onPress={() => Actions.OrderDeliveredScreen()}>
+						<Image
+
+							source={DashPersonIcon
+							}
+						></Image>
+						<Text
+							style={{ color: '#2a2a2a', fontSize: 12, marginTop: 25, }}
+						>SHIPMENT</Text>
+						<Text
+							style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
+						>DELIVERED</Text>
+
+						<Image
+                          style={{  marginBottom: 100 }}
+							source={DashRoundIcon
+							}></Image>
+					</TouchableOpacity>
+				</View>
+			</View>;
+		}
+
+
+	}
+
+	_renderItem({ item, index }) {
 		Moment.locale('en');
 		var dt = item.receiveddate;
 		var orderStatus = item.shipment_status;
-		return	<TouchableOpacity
-		onPress={() =>this._onPress(item)}
+		return <TouchableOpacity
+			onPress={() => this._onPress(item)}
 		>
-		<Card
-			containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}
-		//	onPress={this._onPress}
-		>
+			<Card
+				containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}
+			//	onPress={this._onPress}
+			>
 
-			<View style={styles.inputContainer}>
-				<View
-					style={styles.statusIconContainer}>
-					<Text
-						style={
-							orderStatus == "Pending"
-								? styles.statusTextContainer1
-								: styles.statusTextContainer
-						}
-					>{item.shipment_status}</Text>
-					<View style={styles.iconContainer}>
+				<View style={styles.inputContainer}>
+					<View
+						style={styles.statusIconContainer}>
+						<Text
+							style={
+								orderStatus == "Pending"
+									? styles.statusTextContainer1
+									: styles.statusTextContainer
+							}
+						>{item.shipment_status}</Text>
+						<View style={styles.iconContainer}>
 
 
-						<Image
-							source={DummyOrder}
-							style={styles.inputIcon}
+							<Image
+								source={DummyOrder}
+								style={styles.inputIcon}
 
-						/>
+							/>
 
+						</View>
 					</View>
-				</View>
-				<View
-					style={styles.informationContainer}>
-					
+					<View
+						style={styles.informationContainer}>
+
 						<View style={styles.phoneIconContainer}
 						>
 
-						<TouchableOpacity
-						onPress={() => this._onPhoneIconPress(item)}
-						>
+							<TouchableOpacity
+								onPress={() => this._onPhoneIconPress(item)}
+							>
+
+								<Image
+									source={Phone}
+									style={styles.phoneIcon}
+
+								/>
+							</TouchableOpacity>
+						</View>
+
+						<View
+							style={{ flexDirection: 'row' }}>
+							<Text
+								style={{ fontSize: 14, color: '#333333' }}
+							>ORDER ID  :  </Text>
+							<Text
+								style={{ fontSize: 14, color: '#5e5e5e' }}
+							>{item.packageno}</Text>
+
+						</View>
+
+						<View
+							style={{ flexDirection: 'row', marginBottom: 30 }}>
 
 							<Image
-								source={Phone}
-								style={styles.phoneIcon}
+								source={HalfBottomIcon}
+								style={styles.halfBottomIcon}
 
 							/>
-                           </TouchableOpacity>
+							<Text
+								style={{ fontSize: 11, color: '#333333', marginTop: 11, marginStart: 3, }}
+							>WAREHOUSE : </Text>
+							<Text
+								numberOfLines={4}
+
+								style={{ fontSize: 11, color: '#53a602', marginTop: 11, paddingEnd: 20, flexWrap: 'wrap', flex: 1 }}
+							>{item.sender_address}</Text>
+
 						</View>
-					
-					<View
-						style={{ flexDirection: 'row' }}>
+
 						<Text
-							style={{ fontSize: 14, color: '#333333' }}
-						>ORDER ID  :  </Text>
-						<Text
-							style={{ fontSize: 14, color: '#5e5e5e' }}
-						>{item.packageno}</Text>
+							style={styles.shippingDateContainer}
+						>Shipped on {Moment(dt).format('DD/MM/YYYY')}</Text>
 
 					</View>
-
-					<View
-						style={{ flexDirection: 'row', marginBottom: 30 }}>
-
-						<Image
-							source={HalfBottomIcon}
-							style={styles.halfBottomIcon}
-
-						/>
-						<Text
-							style={{ fontSize: 11, color: '#333333', marginTop: 11, marginStart: 3, }}
-						>WAREHOUSE : </Text>
-						<Text
-							numberOfLines={4}
-
-							style={{ fontSize: 11, color: '#53a602', marginTop: 11, paddingEnd: 20, flexWrap: 'wrap', flex: 1 }}
-						>{item.sender_address}</Text>
-
-					</View>
-
-					<Text
-						style={styles.shippingDateContainer}
-					>Shipped on {Moment(dt).format('DD/MM/YYYY')}</Text>
-
 				</View>
-			</View>
-		</Card>
-					</TouchableOpacity>;
+			</Card>
+		</TouchableOpacity>;
 
 
 
@@ -515,21 +626,17 @@ class Dashboard extends Component {
 						<Text
 							style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}
 						>Dashboard</Text>
-
+						
+                           {this.renderFlipFlopToggleButton()}
 					</View>
-
+                           
 
 
 					<View style={styles.mainContainer}>
 
-					{this.renderFlipFlopToggleButton()}
 						
-						<FlatList
-							data={this.state.data}
-							renderItem={this._renderItem.bind(this)}
-							keyExtractor={this._keyExtractor}
+						{this.renderFlatList()}
 
-						/>
 
 
 
@@ -543,7 +650,25 @@ class Dashboard extends Component {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flexDirection: 'column',
+		backgroundColor: 'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: " 100%",
+		
+	},
 
+	rowContent: {
+		flex: 1,
+		alignItems: 'stretch',
+		flexDirection: 'column',
+	},
+	content: {
+		flex: 1,
+		alignItems: 'stretch',
+		flexDirection: 'row',
+	},
 	mainContainer: {
 
 		flex: 1,
@@ -645,11 +770,11 @@ const styles = StyleSheet.create({
 		marginStart: 10,
 		flex: 1,
 		flexDirection: "column",
-		
+
 
 	},
 	phoneIconContainer: {
-	  alignSelf: 'flex-end',
+		alignSelf: 'flex-end',
 		// position:"absolute",
 		// right: 0
 
@@ -743,7 +868,7 @@ const styles = StyleSheet.create({
 	phoneIcon: {
 		width: 40,
 		height: 40,
-		
+
 
 
 	},
@@ -786,7 +911,7 @@ const styles = StyleSheet.create({
 		color: '#000000',
 		fontSize: 15,
 		alignItems: 'center',
-		marginEnd: 15,
+		marginEnd: 5,
 		paddingBottom: 2
 
 

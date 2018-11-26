@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dimensions, StyleSheet,Image, View, StatusBar, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet,Image, View,TouchableOpacity, StatusBar,Alert ,Text} from "react-native";
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import TestImage from "../../assets/marker_icon1.png";
 import Polyline from '@mapbox/polyline';
@@ -11,7 +11,10 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.0030
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 const GOOGLE_MAPS_APIKEY = 'AIzaSyA9kTgADps5-FpFzq56Dbn9-tCU-kUUFMw';
-
+import getDirections from 'react-native-google-maps-directions';
+import { Button } from "react-native-elements";
+ var concatLot = '';
+ var destLoc = '';
 class GeoLocationExampleScreen extends Component {
     constructor(props) {
         super(props)
@@ -61,7 +64,7 @@ class GeoLocationExampleScreen extends Component {
 
     watchID: ?number = null
 
-    componentDidMount() {
+    componentWillMount() {
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
             var long = parseFloat(position.coords.longitude)
@@ -69,8 +72,8 @@ class GeoLocationExampleScreen extends Component {
             var initialRegion = {
                 latitude: lat,
                 longitude: long,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
+                latitudeDelta: 0.3,
+                longitudeDelta: 0.3
             }
 
             this.setState({ initialPositon: initialRegion })
@@ -89,8 +92,8 @@ class GeoLocationExampleScreen extends Component {
             var lastRegion = {
                 latitude: lat,
                 longitude: long,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
+                latitudeDelta: 0.3,
+                longitudeDelta: 0.3
             }
 
             this.setState({ initialPositon: lastRegion })
@@ -126,33 +129,65 @@ class GeoLocationExampleScreen extends Component {
             return coords
         } catch (error) {
             console.log('error get direction.........................................',error)
+            Alert.alert("Message","Not able to fetch location path  Network Error !!")
             this.setState({ x: "error" })
             return error
         }
     }
 
     mergeLot() {
-
+              destLoc = this.props.destination.lat + "," + this.props.destination.lng;
        
         if (this.state.initialPositon.latitude != null && this.state.initialPositon.longitude != null) {
-            let concatLot = this.state.initialPositon.latitude + "," + this.state.initialPositon.longitude
+             concatLot = this.state.initialPositon.latitude + "," + this.state.initialPositon.longitude
             console.log("concatLot................................" ,concatLot);
             this.setState({
                 concat: concatLot
             }, () => {
-                this.getDirections(concatLot, "30.7333,76.7794");
-                console.log("getDirections................................" ,concatLot);
+                this.getDirections(concatLot, destLoc);
+                console.log("getDirections................................" ,this.props.destination.lat );
             });
         }
 
     }
 
+    onStartNavigationPress()
+    {
+
+        var destLat = parseFloat(this.props.destination.lat);
+        var destlong = parseFloat(this.props.destination.lng)
+        const data = {
+            source: {
+             latitude: this.state.initialPositon.latitude,
+             longitude: this.state.initialPositon.longitude
+           },
+           destination: {
+             latitude: destLat,
+             longitude: destlong
+           },
+           params: [
+             {
+               key: "travelmode",
+               value: "driving"        // may be "walking", "bicycling" or "transit" as well
+             },
+             {
+               key: "dir_action",
+               value: "navigate"       // this instantly initializes navigation using the given travel mode 
+             }
+           ]
+
+    }
+    console.log("data...................................................",data)
+    getDirections(data);
+}
+
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID)
     }
     render() {
-        return (
-            <MapView style={styles.map}
+        return (   <View
+            style={styles.controlsContainer}>
+            <MapView style={{ width: "100%", height: 400, marginBottom: this.state.marginBottom, marginTop: 0 }}
             showsUserLocation = {true} 
             region={this.state.initialPositon}>
 
@@ -181,16 +216,43 @@ class GeoLocationExampleScreen extends Component {
                     strokeColor="#14136d" />
                 }
             </MapView>
+
+             <TouchableOpacity onPress={() => this.onStartNavigationPress()} style={styles.buttonStyle}>
+                        <Text style={styles.textStyle}>
+                            Start Navigation
+			</Text>
+                    </TouchableOpacity>
+            </View>
         );
     }
 }
 const styles = StyleSheet.create({
-    map: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+    controlsContainer: {
+        flex: 1,
+     //   justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f1f1fd'
     },
+    textStyle: {
+
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop: 6,
+        color: '#fff'
+
+    },
+    buttonStyle: {
+        width: 170,
+        alignItems: 'center',
+        borderRadius: 3,
+        backgroundColor: '#14136d',
+        height: 35,
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        shadowColor: '#000',
+        shadowOffset:{width: 0,height:5},
+        elevation: 3
+
+    }
 });
 export default GeoLocationExampleScreen;

@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     api project(':react-native-image-picker')
     api project(':react-native-vector-icons')
     api project(':react-native-maps')
@@ -156,7 +157,7 @@ dependencies {
     // From node_modules
     api project(':react-native-maps')
     api project(':react-native-image-picker')
-    api project(':react-native-geolocation-service')
+    //api project(':react-native-geolocation-service')
 
    
 }

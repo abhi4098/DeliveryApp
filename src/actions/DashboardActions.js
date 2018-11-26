@@ -45,7 +45,7 @@ export const showDashBoardLoading =(value)=>{
         return response.json();
       })
       .then( (responseJSON) => {
-        
+        console.log("response json.................................." ,responseJSON);
   
         dispatch({
           type:DASHBOARD_API,

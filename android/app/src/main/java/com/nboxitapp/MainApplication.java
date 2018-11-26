@@ -5,12 +5,13 @@ import android.app.Application;
 import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.github.wumke.RNImmediatePhoneCall.RNImmediatePhoneCallPackage;
 import com.centaurwarchief.smslistener.SmsListenerPackage;
-import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
+
 
 
 
@@ -39,13 +40,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new ImagePickerPackage(),
+              new ImagePickerPackage(),
             new VectorIconsPackage(),
             new MapsPackage(),
             new LinearGradientPackage(),
             new RNImmediatePhoneCallPackage(),
-            new SmsListenerPackage(),
-              new RNFusedLocationPackage()
+            new SmsListenerPackage()
+
 
              
 

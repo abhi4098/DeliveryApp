@@ -98,7 +98,7 @@ const RouterComponent = () => {
 	                key="GeoLocationExampleScreen"      
 	                component={GeoLocationExampleScreen}  
 					title = "Navigation"
-					titleStyle={{textAlign: 'center' ,marginLeft:10, fontSize: 20}}
+					titleStyle={{textAlign: 'center' ,marginLeft:65, fontSize: 20}}
 				  
 					
 					
@@ -121,8 +121,8 @@ const RouterComponent = () => {
 					 <Scene
 	                key="AcceptedDeliveryRequestScreen"      
 	                component={AcceptedDeliveryRequestScreen}  
-					title = "Current Orders"
-					titleStyle={{textAlign: 'center' ,marginLeft:55, fontSize: 20}}
+					title = "Assigned Shipments"
+					titleStyle={{textAlign: 'center' ,marginLeft:40, fontSize: 20}}
 					
 					
 	                />
@@ -130,8 +130,8 @@ const RouterComponent = () => {
 					 <Scene
 	                key="OrderDeliveredScreen"      
 	                component={OrderDeliveredScreen}  
-					title = "Order Delivered"
-					titleStyle={{textAlign: 'center' ,marginLeft:50, fontSize: 20}}
+					title = "Shipment Delivered"
+					titleStyle={{textAlign: 'center' ,marginLeft:40, fontSize: 20}}
 					
 					
 	                />

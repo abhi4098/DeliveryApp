@@ -12,7 +12,8 @@ import {
     Alert,
     TouchableOpacity,
     TouchableNativeFeedback,
-    ScrollView 
+    ScrollView ,
+    
 
 } from "react-native";
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
