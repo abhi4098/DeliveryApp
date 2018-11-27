@@ -15,6 +15,7 @@ const APIURLCONSTANTS = {
     ADDRESS_LIST_URL                            : BASE_URL+ 'users/getAddressList',
     ADDRESS_DELETE_URL                            : BASE_URL+ 'users/deleteAddress',
     PIN_MAP_URL                            : BASE_URL+ 'users/addAddress',
+    DASHBOARD_COUNT_URL                           : BASE_URL+ 'shipments/getDriverDashboardCounts',
 }
 
 export default APIURLCONSTANTS;

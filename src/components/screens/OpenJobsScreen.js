@@ -29,19 +29,19 @@ import { PermissionsAndroid } from 'react-native';
 
 
 import {
-	orderDeliveredData,
-	showOrderDeliveredLoading,
-    clearShipmentDeliveredData,
+	openJobData,
+	showOpenJobsLoading,
+    clearOpenJobsData,
 } from "../../actions/index";
 
-class OrderDeliveredScreen extends Component {
+class OpenJobsScreen extends Component {
 
     constructor(props) {
 
 		super(props);
 		this.state = {
 			loading: false,
-			orderDeliveredData: '',
+			openJobData: '',
 			pressStatus: false,
 			usertype: '',
 			isActive: true,
@@ -79,51 +79,61 @@ class OrderDeliveredScreen extends Component {
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
 
-				this.props.showOrderDeliveredLoading(true);
-				if (JSON.parse(value).type == 'customer') {
-					var dashboard = {
-						shipment_status: "Delivered",
-						userid: phoneNumber,
-						type: usertype
+				this.props.showOpenJobsLoading(true);
+				// if (JSON.parse(value).type == 'customer') {
+				// 	var dashboard = {
+				// 		shipment_status: "Delivered",
+				// 		userid: phoneNumber,
+				// 		type: usertype
 
-					};
-				}
-				else {
-					var dashboard = {
-						shipment_status: "Delivered",
-						userid: userId,
-						type: usertype
+				// 	};
+				// }
+				// else {
+				// 	var dashboard = {
+				// 		shipment_status: "Delivered",
+				// 		userid: userId,
+				// 		type: usertype
 
-					};
-				}
+				// 	};
+				// }
+                var openJobs = {
+                    shipment_status:"Package Delivery Requested",
+                    userid: userId,
+                    type: usertype,
+                    listtype:"openjobs"
 
-				this.props.orderDeliveredData(dashboard);
+                };
+				this.props.openJobData(openJobs);
 
 
 			}
 
 		}).done();
 
-	}
+    }
+    
+
+
+
 	componentWillReceiveProps(nextProps) {
 
 
 
 
 
-		if (nextProps.orderDeliveredResponseData != undefined && nextProps.orderDeliveredResponseData != '') {
+		if (nextProps.openJobsResponseData != undefined && nextProps.openJobsResponseData != '') {
 			
 
-			if (nextProps.orderDeliveredResponseData.status == 200) {
-				this.props.showOrderDeliveredLoading(false);
-
-				this.setState({ data: nextProps.orderDeliveredResponseData.data })
+			if (nextProps.openJobsResponseData.status == 200) {
+				this.props.showOpenJobsLoading(false);
+                console.log("response................",nextProps.openJobsResponseData.data)
+				this.setState({ data: nextProps.openJobsResponseData.data })
 
 			}
 
 			else {
-				this.props.showOrderDeliveredLoading(false);
-				alert(nextProps.orderDeliveredResponseData.message);
+				this.props.showOpenJobsLoading(false);
+				alert(nextProps.openJobsResponseData.message);
 
 
 			}
@@ -140,8 +150,8 @@ class OrderDeliveredScreen extends Component {
                 BackHandler.exitApp();
                 return false;
             }
-            console.log("on back press....................................")
-            this.props.clearShipmentDeliveredData();
+            
+            //this.props.clearOpenJobsData();
             Actions.pop();
             return true;
         }
@@ -510,28 +520,18 @@ class OrderDeliveredScreen extends Component {
     
     
         }
-        // , onDutyText: {
-        // 	color: '#000000',
-        // 	fontSize: 15,
-        // 	alignItems: 'center',
-        // 	marginEnd: 15,
-        // 	paddingBottom: 2
-    
-    
-    
-    
-        // }
+      
     
     });
     
-    const mapStateToProps = ({ orderDeliveredReducer }) => {
-        const { orderDeliveredResponseData, isLoading } = orderDeliveredReducer;
+    const mapStateToProps = ({ openJobsScnReducer }) => {
+        const { openJobsResponseData, isLoading } = openJobsScnReducer;
     
     
         return {
-            orderDeliveredResponseData: orderDeliveredResponseData,
+            openJobsResponseData: openJobsResponseData,
             isLoading: isLoading
         }
     }
-//export default OrderDeliveredScreen;
-export default connect(mapStateToProps, { orderDeliveredData, showOrderDeliveredLoading,clearShipmentDeliveredData })(OrderDeliveredScreen);
+
+export default connect(mapStateToProps, { openJobData, showOpenJobsLoading,clearOpenJobsData })(OpenJobsScreen);

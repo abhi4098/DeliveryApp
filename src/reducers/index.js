@@ -11,6 +11,8 @@ import DashboardReducer from './DashboardReducer';
 import DriverStatusReducer from './DriverStatusReducer';
 import MapScreenReducer from './MapScreenReducer';
 import OrderDeliveredReducer from './OrderDeliveredReducer';
+import openJobsScreenReducer from './openJobsScreenReducer';
+import AcceptedDeliveryRequestReducer from './AcceptedDeliveryRequestReducer';
 
 
 export default combineReducers({
@@ -24,5 +26,7 @@ export default combineReducers({
   dashboardReducer: DashboardReducer,
   driverStatusReducer:DriverStatusReducer,
   mapScreenReducer:MapScreenReducer,
-  orderDeliveredReducer:OrderDeliveredReducer
+  orderDeliveredReducer:OrderDeliveredReducer,
+  openJobsScnReducer:openJobsScreenReducer,
+  acceptedDeliveryRequestReducer:AcceptedDeliveryRequestReducer
 });

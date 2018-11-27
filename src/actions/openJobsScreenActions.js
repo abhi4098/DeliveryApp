@@ -1,23 +1,23 @@
 import {
 
-    ORDER_DELIVERED_API,
-    SHOW_ORDER_DELIVER_LOADING,
-    CLEAR_SHIPMENT_DELIVERED_RECORD
+    OPEN_JOB_API,
+    SHOW_OPEN_JOB_LOADING,
+    CLEAR_OPEN_JOB_RECORD
                                 
  } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
-export const showOrderDeliveredLoading =(value)=>{
+export const showOpenJobsLoading =(value)=>{
    //
    return (dispatch) => {
      dispatch({
-       type: SHOW_ORDER_DELIVER_LOADING,
+       type: SHOW_OPEN_JOB_LOADING,
        payload: value
      });
    }
  };
 
- export const orderDeliveredData = ({shipment_status,userid,type}) => {
+ export const openJobData = ({shipment_status,userid,type,listtype}) => {
 
    
    
@@ -28,24 +28,24 @@ export const showOrderDeliveredLoading =(value)=>{
  
      //call the API and use the promise to check the response
      // in response callBack .then() call the dispatcher.
- 
+     console.log("request..................................................",{shipment_status,userid,type,listtype})
      fetch(APIURLCONSTANTS.DASHBOARD_URL , {
        method: 'POST',
        headers: {
          'Accept': 'application/json',
          'Content-Type': 'application/json',
        },
-       body: JSON.stringify({shipment_status,userid,type})
+       body: JSON.stringify({shipment_status,userid,type,listtype})
      })
      .then( (response) => {
        
        return response.json();
      })
      .then( (responseJSON) => {
-       
+       console.log("response.........................................",responseJSON);
  
        dispatch({
-         type:ORDER_DELIVERED_API,
+         type:OPEN_JOB_API,
          payload: responseJSON
        });
          
@@ -56,7 +56,7 @@ export const showOrderDeliveredLoading =(value)=>{
        
        alert('Server not responding');
        dispatch({
-         type: SHOW_ORDER_DELIVER_LOADING,
+         type: SHOW_OPEN_JOB_LOADING,
          payload: false
        });
  
@@ -68,7 +68,7 @@ export const showOrderDeliveredLoading =(value)=>{
  
 
 
- export const clearShipmentDeliveredData = () => ({
-   type:CLEAR_SHIPMENT_DELIVERED_RECORD
+ export const clearOpenJobsData = () => ({
+   type:CLEAR_OPEN_JOB_RECORD
  });
  

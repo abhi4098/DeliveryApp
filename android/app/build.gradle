@@ -139,7 +139,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-image-picker')
+    api project(':react-native-image-picker')
     api project(':react-native-image-picker')
     api project(':react-native-vector-icons')
     api project(':react-native-maps')

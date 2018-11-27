@@ -1,23 +1,23 @@
 import {
 
-    ORDER_DELIVERED_API,
-    SHOW_ORDER_DELIVER_LOADING,
-    CLEAR_SHIPMENT_DELIVERED_RECORD
+    OPEN_ACCEPTED_DELIVERY_API,
+    SHOW_ACCEPTED_DELIVERY_LOADING,
+    CLEAR_ACCEPTED_DELIVERY_RECORD
                                 
  } from './actionTypes';
 import APIURLCONSTANTS from "../ApiUrlList";
 
-export const showOrderDeliveredLoading =(value)=>{
+export const showAcceptedDeliveryLoading =(value)=>{
    //
    return (dispatch) => {
      dispatch({
-       type: SHOW_ORDER_DELIVER_LOADING,
+       type: SHOW_ACCEPTED_DELIVERY_LOADING,
        payload: value
      });
    }
  };
 
- export const orderDeliveredData = ({shipment_status,userid,type}) => {
+ export const orderAcceptedDeliveredData = ({shipment_status,userid,type,listtype}) => {
 
    
    
@@ -35,17 +35,17 @@ export const showOrderDeliveredLoading =(value)=>{
          'Accept': 'application/json',
          'Content-Type': 'application/json',
        },
-       body: JSON.stringify({shipment_status,userid,type})
+       body: JSON.stringify({shipment_status,userid,type,listtype})
      })
      .then( (response) => {
        
        return response.json();
      })
      .then( (responseJSON) => {
-       
+       console.log("response........................................",responseJSON);
  
        dispatch({
-         type:ORDER_DELIVERED_API,
+         type:OPEN_ACCEPTED_DELIVERY_API,
          payload: responseJSON
        });
          
@@ -56,7 +56,7 @@ export const showOrderDeliveredLoading =(value)=>{
        
        alert('Server not responding');
        dispatch({
-         type: SHOW_ORDER_DELIVER_LOADING,
+         type: SHOW_ACCEPTED_DELIVERY_LOADING,
          payload: false
        });
  
@@ -68,7 +68,7 @@ export const showOrderDeliveredLoading =(value)=>{
  
 
 
- export const clearShipmentDeliveredData = () => ({
-   type:CLEAR_SHIPMENT_DELIVERED_RECORD
+ export const clearAcceptedDeliveryData = () => ({
+   type:CLEAR_ACCEPTED_DELIVERY_RECORD
  });
  

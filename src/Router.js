@@ -23,6 +23,7 @@ import AppSelectionScreen from './components/screens/AppSelectionScreen';
 import CustomerLoginScreen from './components/screens/CustomerLoginScreen';
 import OtpVerificationScreen from './components/screens/OtpVerificationScreen';
 import ConfirmOrderScreen from './components/screens/ConfirmOrderScreen';
+import OpenJobsScreen from './components/screens/OpenJobsScreen';
 
 
 
@@ -188,7 +189,14 @@ const RouterComponent = () => {
 				
 					
 	                />
-	   
+				 <Scene
+	                key="OpenJobsScreen"      
+	                component={OpenJobsScreen}  
+					title = "Open Jobs"
+					titleStyle={{textAlign: 'center' ,marginLeft:80, fontSize: 20}}
+				
+					
+	                />
 
 
 	 

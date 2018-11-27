@@ -13,7 +13,8 @@ import {
 	FlatList,
 	TouchableOpacity,
 	Swiper,
-	Dimensions
+	Dimensions,
+	ImageBackground
 
 } from 'react-native';
 import { Actions, Stack } from 'react-native-router-flux';
@@ -45,7 +46,8 @@ import {
 	dashboardData,
 	showDashBoardLoading,
 	driverStatusCallFromDashboard,
-	clearDriverStatusResponseRecord
+	clearDriverStatusResponseRecord,
+	dashboardCounts
 } from "../../actions/index";
 import { bold } from 'ansi-colors';
 
@@ -57,6 +59,7 @@ class Dashboard extends Component {
 		this.state = {
 			loading: false,
 			dashboardData: '',
+			dashboardCounts:'',
 			pressStatus: false,
 			isActive: true,
 			userType: ''
@@ -126,12 +129,11 @@ class Dashboard extends Component {
 					this.props.dashboardData(dashboard);
 				}
 				else {
-					var dashboard = {
-						//shipment_status: "Driver Assigned",
-						//userid: userId,
-						//type: JSON.parse(value).type
+					var dashCount = {
+						id:userId
 
 					};
+					this.props.dashboardCounts(dashCount)
 				}
 
 
@@ -147,13 +149,32 @@ class Dashboard extends Component {
 
 	componentWillReceiveProps(nextProps) {
 
+		if (nextProps.dashboardCountResponse != undefined && nextProps.dashboardCountResponse != '') {
 
+
+			if (nextProps.dashboardCountResponse.status == 200) {
+				this.props.showDashBoardLoading(false);
+                //console.log("dasg board count.....................................",nextProps.dashboardCountResponse.data[2].assignedJobs);
+				this.setState({ data: nextProps.dashboardCountResponse.data })
+
+			}
+
+			else {
+				this.props.showDashBoardLoading(false);
+				alert(nextProps.dashboardCountResponse.message);
+
+
+			}
+
+
+
+		}
 
 
 
 		if (nextProps.dasboardResponseData != undefined && nextProps.dasboardResponseData != '') {
 
-
+			//console.log("dasboardResponseData.....................................");
 			if (nextProps.dasboardResponseData.status == 200) {
 				this.props.showDashBoardLoading(false);
 
@@ -174,7 +195,7 @@ class Dashboard extends Component {
 
 		if (nextProps.driverStatusResData != undefined && nextProps.driverStatusResData != '') {
 
-
+			//console.log("driverStatusResData.....................................");
 			if (nextProps.driverStatusResData.status == 200) {
 
 
@@ -370,7 +391,8 @@ class Dashboard extends Component {
 					alignItems:"center",
 					position:'absolute',
 					right:0,
-					marginTop:15
+					bottom:0
+					
 				
 				}}>
 
@@ -378,6 +400,7 @@ class Dashboard extends Component {
 					style={styles.onDutyText}
 				>On-Duty</Text>
 				<FlipToggle
+				
 					value={this.state.isActive}
 					buttonWidth={40}
 					buttonHeight={12}
@@ -385,13 +408,14 @@ class Dashboard extends Component {
 					sliderWidth={10}
 					sliderHeight={10}
 					sliderRadius={50}
+					
 					//onLabel={'ON DUTY'}
 					//offLabel={'OFF DUTY'}
 					sliderOnColor="black"
 					sliderOffColor="black"
 					buttonOnColor="green"
 					buttonOffColor="red"
-					labelStyle={{ fontSize: 16, color: 'white' }}
+					//labelStyle={{ fontSize: 16, color: 'white' }}
 
 					onToggle={(value) => { this.setState({ isActive: value }), this.onLogoutOrToggleClicked() }}
 
@@ -425,6 +449,8 @@ class Dashboard extends Component {
 		}
 		else {
 
+			console.log("values........................................",this.state.data);
+
 			return <View style={styles.container}>
 				<View style={styles.content}>
 					<View style={{ backgroundColor: '#ffffff', flex: 1, justifyContent: 'center' }}>
@@ -432,9 +458,9 @@ class Dashboard extends Component {
 						<View style={styles.rowContent}>
 						<TouchableOpacity
 						style={{ backgroundColor: '#e8e8e8', height: "45%", justifyContent: 'center', alignItems: 'center' }}
-								//onPress={() => this._onPhoneIconPress(item)}
+								onPress={() =>Actions.OpenJobsScreen()}
 							>
-							{/* <View style={{ backgroundColor: '#e8e8e8', height: "45%", justifyContent: 'center', alignItems: 'center' }}> */}
+							
 								<Image
 
 									source={DashTruckIcon
@@ -446,10 +472,13 @@ class Dashboard extends Component {
 								<Text
 									style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
 								>JOBS</Text>
-								<Image
-
-									source={DashRoundIcon
-									}></Image>
+								<ImageBackground
+								style={{width: 70, height: 70, alignItems:'center',justifyContent:'center'}}
+                                    source={DashRoundIcon
+									}>
+									<Text
+									style={{fontSize:24,color:'#14136d',fontWeight:"bold"}}>20</Text>
+									</ImageBackground>
 							
 							</TouchableOpacity>
 							
@@ -470,10 +499,14 @@ class Dashboard extends Component {
 								<Text
 									style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
 								>SHIPMENTS</Text>
-								<Image
-									style={{  marginBottom: 30 }}
-									source={DashRoundIcon
-									}></Image>
+								
+									<ImageBackground
+								style={{width: 70, height: 70, alignItems:'center',justifyContent:'center'}}
+                                    source={DashRoundIcon
+									}>
+									<Text
+									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>10</Text>
+									</ImageBackground>
 							</TouchableOpacity>
 
 						</View>
@@ -492,10 +525,13 @@ class Dashboard extends Component {
 							style={{ color: '#2a2a2a', fontWeight: "bold", fontSize: 17, marginBottom: 5 }}
 						>DELIVERED</Text>
 
-						<Image
-                          style={{  marginBottom: 100 }}
-							source={DashRoundIcon
-							}></Image>
+						<ImageBackground
+								style={{width: 70, height: 70, alignItems:'center',justifyContent:'center'}}
+                                    source={DashRoundIcon
+									}>
+									<Text
+									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>10</Text>
+									</ImageBackground>
 					</TouchableOpacity>
 				</View>
 			</View>;
@@ -707,8 +743,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 18,
-		marginBottom: 18
+		marginTop: 20,
+		marginBottom: 20
 	},
 
 	inputContainer: {
@@ -912,7 +948,9 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		alignItems: 'center',
 		marginEnd: 5,
-		paddingBottom: 2
+		marginBottom:2
+		
+		
 
 
 
@@ -922,14 +960,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ dashboardReducer }) => {
-	const { dasboardResponseData, isLoading, driverStatusResData } = dashboardReducer;
+	const { dasboardResponseData,dashboardCountResponse, isLoading, driverStatusResData } = dashboardReducer;
 
 
 	return {
 		dasboardResponseData: dasboardResponseData,
+		dashboardCountResponse: dashboardCountResponse,
 		driverStatusResData: driverStatusResData,
 		isLoading: isLoading
 	}
 }
 
-export default connect(mapStateToProps, { dashboardData, showDashBoardLoading, clearDriverStatusResponseRecord, driverStatusCallFromDashboard })(Dashboard);
+export default connect(mapStateToProps, { dashboardData,dashboardCounts, showDashBoardLoading, clearDriverStatusResponseRecord, driverStatusCallFromDashboard })(Dashboard);

@@ -314,7 +314,7 @@ export default class Menu extends Component {
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('AcceptedDeliveryRequestScreen')}>
                 <Text
                   style={styles.item}>
-                  Current Orders
+                  Assigned Shipments
                 </Text>
               </TouchableHighlight>
             </View>
@@ -332,7 +332,7 @@ export default class Menu extends Component {
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('OrderDeliveredScreen')}>
                 <Text
                   style={styles.item}>
-                  Orders Delivered
+                  Shipment Delivered
                 </Text>
               </TouchableHighlight>
             </View>

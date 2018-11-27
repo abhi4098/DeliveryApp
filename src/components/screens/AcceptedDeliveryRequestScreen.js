@@ -28,11 +28,13 @@ import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
 
 
+
 import {
-	orderDeliveredData,
-	showOrderDeliveredLoading,
-    clearListData,
-} from "../../actions/index";
+	orderAcceptedDeliveredData,
+	showAcceptedDeliveryLoading,
+    clearAcceptedDeliveryData,
+} from "../../actions/AcceptedDeliveryRequestActions";
+
 
 class AcceptedDeliveryRequestScreen extends Component {
 
@@ -41,7 +43,7 @@ class AcceptedDeliveryRequestScreen extends Component {
 		super(props);
 		this.state = {
 			loading: false,
-			orderDeliveredData: '',
+			orderAcceptedDeliveredData: '',
 			pressStatus: false,
 			usertype: '',
 			isActive: true,
@@ -77,26 +79,27 @@ class AcceptedDeliveryRequestScreen extends Component {
 				usertype = JSON.parse(value).type;
 				phoneNumber = JSON.parse(value).phone;
 				userId = JSON.parse(value)._id;
-
-				this.props.showOrderDeliveredLoading(true);
+                 
+				this.props.showAcceptedDeliveryLoading(true);
 				if (JSON.parse(value).type == 'customer') {
-					var dashboard = {
-						shipment_status: "Progress",
+					var acceptedDelivery = {
+						shipment_status: "Driver Assigned",
 						userid: phoneNumber,
-						type: usertype
+                        type: usertype,
+                        listtype:""
 
 					};
 				}
 				else {
-					var dashboard = {
-						shipment_status: "Progress",
+					var acceptedDelivery = {
+						shipment_status: "Driver Assigned",
 						userid: userId,
-						type: usertype
-
+						type: usertype,
+                        listtype:"assignment",
 					};
 				}
 
-				this.props.orderDeliveredData(dashboard);
+				this.props.orderAcceptedDeliveredData(acceptedDelivery);
 
 
 			}
@@ -110,19 +113,19 @@ class AcceptedDeliveryRequestScreen extends Component {
 
 
 
-		if (nextProps.orderDeliveredResponseData != undefined && nextProps.orderDeliveredResponseData != '') {
+		if (nextProps.acceptedDeliveryResponse != undefined && nextProps.acceptedDeliveryResponse != '') {
 			
 
-			if (nextProps.orderDeliveredResponseData.status == 200) {
-				this.props.showOrderDeliveredLoading(false);
-
-				this.setState({ data: nextProps.orderDeliveredResponseData.data })
+			if (nextProps.acceptedDeliveryResponse.status == 200) {
+				this.props.showAcceptedDeliveryLoading(false);
+                console.log("response................",nextProps.acceptedDeliveryResponse.data )
+				this.setState({ data: nextProps.acceptedDeliveryResponse.data })
 
 			}
 
 			else {
-				this.props.showOrderDeliveredLoading(false);
-				alert(nextProps.orderDeliveredResponseData.message);
+				this.props.showAcceptedDeliveryLoading(false);
+				alert(nextProps.acceptedDeliveryResponse.message);
 
 
 			}
@@ -146,7 +149,7 @@ class AcceptedDeliveryRequestScreen extends Component {
                 return false;
             }
             
-            //this.props.clearListData();
+            this.props.clearAcceptedDeliveryData();
             Actions.pop();
             return true;
         }
@@ -529,14 +532,14 @@ class AcceptedDeliveryRequestScreen extends Component {
     
     });
     
-    const mapStateToProps = ({ orderDeliveredReducer }) => {
-        const { orderDeliveredResponseData, isLoading } = orderDeliveredReducer;
+    const mapStateToProps = ({ acceptedDeliveryRequestReducer }) => {
+        const { acceptedDeliveryResponse, isLoading } = acceptedDeliveryRequestReducer;
     
     
         return {
-            orderDeliveredResponseData: orderDeliveredResponseData,
+            acceptedDeliveryResponse: acceptedDeliveryResponse,
             isLoading: isLoading
         }
     }
 //export default OrderDeliveredScreen;
-export default connect(mapStateToProps, { orderDeliveredData, showOrderDeliveredLoading,clearListData })(AcceptedDeliveryRequestScreen);
+export default connect(mapStateToProps, { orderAcceptedDeliveredData, showAcceptedDeliveryLoading,clearAcceptedDeliveryData })(AcceptedDeliveryRequestScreen);

@@ -4,7 +4,7 @@ import {
      SHOW_DASHBOARD_LOADING,
      DRIVER_STATUS,
      CLEAR_DRIVER_STATUS_RESPONSE,
-     CLEAR_FORGOT_RESPONSE_RECORD,
+     DASHBOARD_COUNT,
      
                                  
   } from './actionTypes';
@@ -67,6 +67,52 @@ export const showDashBoardLoading =(value)=>{
     }
   
   };
+
+
+  export const dashboardCounts = ({id}) => {
+
+    
+    return (dispatch) => {
+  
+      //call the API and use the promise to check the response
+      // in response callBack .then() call the dispatcher.
+        console.log("request.............................................",APIURLCONSTANTS.DASHBOARD_COUNT_URL+'/'+id)
+        console.log("request.............................................",{id})
+      fetch(APIURLCONSTANTS.DASHBOARD_COUNT_URL+'/'+id , {
+        method: 'GET',
+        // headers: {
+        //   'Accept': 'application/json',
+        //   'Content-Type': 'application/json',
+        // },
+        //body: JSON.stringify({id})
+      })
+      .then( (response) => {
+        
+        return response.json();
+      })
+      .then( (responseJSON) => {
+        console.log("response json.................................." ,responseJSON);
+  
+        dispatch({
+          type:DASHBOARD_COUNT,
+          payload: responseJSON
+        });
+          
+      
+      })
+      .catch(e => {
+        console.log("error....................................",e)
+        alert('Server not responding');
+        dispatch({
+          type: SHOW_DASHBOARD_LOADING,
+          payload: false
+        });
+  
+      });
+    }
+  
+  };
+
 
   export const driverStatusCallFromDashboard = ({driverid,dutystatus}) => {
 

@@ -1,7 +1,7 @@
 import {
     ORDER_DELIVERED_API,
     SHOW_ORDER_DELIVER_LOADING,
-    CLEAR_LIST_DATA_RECORD
+    CLEAR_SHIPMENT_DELIVERED_RECORD
 } from "../actions/actionTypes";
 
 const INITIAL_STATE = {
@@ -22,7 +22,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, isLoading: action.payload }
 
 
-            case CLEAR_LIST_DATA_RECORD:
+            case CLEAR_SHIPMENT_DELIVERED_RECORD:
             return { ...state, orderDeliveredResponseData: '' }
 
 
