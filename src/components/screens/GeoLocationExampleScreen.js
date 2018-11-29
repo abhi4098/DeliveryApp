@@ -197,6 +197,8 @@ class GeoLocationExampleScreen extends Component {
     onPressShipmentDetails()
     {
         //var shipData = this.props.ship_data;
+       
+          console.log("destination.........................",this.props.destination)
         console.log("ship data.........................",this.props.ship_data)
         this.setModalVisible(true);
     }

@@ -21,7 +21,7 @@ import { Card,List } from 'react-native-elements';
 import UsernameIcon from "../../assets/name.png";
 import Order from "../../assets/order.png";
 import DummyOrder from "../../assets/dummyOrder.png";
-import Phone from "../../assets/phone.png";
+import Tick from "../../assets/tick.png";
 import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
@@ -185,16 +185,14 @@ class OrderDeliveredScreen extends Component {
                             <View style={styles.phoneIconContainer}
                             >
     
-                            <TouchableOpacity
-                            onPress={() => this._onPhoneIconPress(item)}
-                            >
+                          
     
                                 <Image
-                                    source={Phone}
+                                    source={Tick}
                                     style={styles.phoneIcon}
     
                                 />
-                               </TouchableOpacity>
+                               
                             </View>
                         
                         <View
@@ -469,8 +467,8 @@ class OrderDeliveredScreen extends Component {
     
         },
         phoneIcon: {
-            width: 40,
-            height: 40,
+            width: 30,
+            height: 30,
             
     
     

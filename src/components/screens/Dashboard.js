@@ -140,7 +140,7 @@ componentDidCatch(){
 				this.props.showDashBoardLoading(true);
 				if (JSON.parse(value).type == 'customer') {
 					var dashboard = {
-						shipment_status: "Pending",
+						shipment_status: "Draft",
 						userid: phoneNumber,
 						type: JSON.parse(value).type
 
@@ -375,7 +375,7 @@ componentDidCatch(){
 
 				if (JSON.parse(value).type == 'driver') {
 					console.log("recipient_address add...................................", item.recipient_address);
-					Actions.GeoLocationExampleScreen({ destination: item.recipient_address });
+					Actions.GeoLocationExampleScreen({ destination: item.recipient_address, ship_data:item });
 				}
 				else if (JSON.parse(value).type == 'customer') {
 

@@ -264,7 +264,7 @@ class OpenJobsScreen extends Component {
 
                         </View>
                         <View
-                            style={{ flexDirection: 'row' }}>
+                            style={{ flexDirection: 'row' ,marginBottom:5}}>
                             <TouchableOpacity
                                 onPress={() => this.onPressAcceptPress(item)}
                                 style={styles.buttonStyle1}>
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
 
         fontSize: 12,
         fontWeight: '600',
-        marginTop: 6,
+        marginTop: 4,
         color: '#fff'
 
     },

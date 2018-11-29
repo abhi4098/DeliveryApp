@@ -216,23 +216,7 @@ class MapScreen extends Component {
             })
     }
 
-    // componentWillMount()
-    // {
-    //     this.updateUserProfile();
-    // }
-
-    // updateUserProfile() {
-    //     /********************** Call getUsersInfo from ASYNC Storage **********************/
-    //     AsyncStorage.getItem("userData").then((value) => {
-    //       if (value) {
-    //         userType = JSON.parse(value).type;
     
-    
-    //       }
-    
-    //     }).done();
-    //     /*********************************************************************************/
-    //   }
       
     _onSaveAddressPress() {
         
@@ -340,17 +324,14 @@ class MapScreen extends Component {
         if (this.state.locationChosen) {
             marker = <MapView.Marker coordinate={this.state.focusedLocation} />
         }
-        return (
-            <ScrollView
-            style={{ backgroundColor: '#f1f1fd'}}>
-            <View
+        return (<View
                 style={styles.controlsContainer}>
                 <Loader
                     loading={this.props.isLoading} />
 
                 <MapView
                     region={this.state.focusedLocation}
-                    style={{ width: "100%", height: 300, marginBottom: this.state.marginBottom, marginTop: 0 }}
+                    style={{ width: "100%", height: "100%", marginBottom: this.state.marginBottom, marginTop: 0 }}
                     onMapReady={this._onMapReady}
                     showsUserLocation={true}
                     showsMyLocationButton={false}
@@ -360,7 +341,21 @@ class MapScreen extends Component {
                 >
                     {marker}
                 </MapView>
+                <View
+                style={{
+                    padding:20,
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: "auto",
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 10,
+                    right: 10,
+                    backgroundColor: 'rgba(255,255,255,0.95)',
 
+                }}>
                 <View style={styles.inputContainer}>
                     <View style={styles.iconContainer}>
                         <Image
@@ -405,9 +400,9 @@ class MapScreen extends Component {
                         style={{ marginTop: 15, color: "#14136d" }}>Select from Saved Address</Text>
                 </TouchableOpacity> */}
 
-             
+             </View>
             </View>
-            </ScrollView>
+           
         );
     }
 }
@@ -422,7 +417,7 @@ const styles = StyleSheet.create({
 
     inputContainer: {
         flexDirection: 'row',
-        width: 300,
+        width: "auto",
         height: 40,
         backgroundColor: '#ffffff',
         alignItems: 'center',

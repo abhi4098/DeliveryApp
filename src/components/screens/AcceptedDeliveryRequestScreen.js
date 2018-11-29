@@ -187,7 +187,7 @@ class AcceptedDeliveryRequestScreen extends Component {
     
                     if (JSON.parse(value).type == 'driver') {
                         console.log("recipient_address add...................................", item.recipient_address);
-                        Actions.GeoLocationExampleScreen({ destination: item.recipient_address,ship_data:item});
+                        Actions.GeoLocationExampleScreen({ destination: item.recipient_address,ship_data:item });
                     }
                     else if (JSON.parse(value).type == 'customer') {
     
