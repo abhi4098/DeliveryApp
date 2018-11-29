@@ -9,7 +9,9 @@ import {
     Alert,
     Text,
     BackHandler,
- ImageBackground
+    ImageBackground,
+    TouchableHighlight,
+    Modal
 } from "react-native";
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import TestImage from "../../assets/marker_icon1.png";
@@ -27,11 +29,14 @@ import { Button } from "react-native-elements";
 var concatLot = '';
 var destLoc = '';
 import NavIcon from "../../assets/navIcon.png";
+import Cross from "../../assets/cross.png";
+import HalfBottomIcon from "../../assets/halfBottom.png";
 class GeoLocationExampleScreen extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
+            modalVisible: false,
             initialPositon: {
                 latitude: 0,
                 longitude: 0,
@@ -52,6 +57,11 @@ class GeoLocationExampleScreen extends Component {
         this.mergeLot = this.mergeLot.bind(this);
 
     }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+
     componentDidMount() {
         console.log("componentDidMount  geolocation////////////////////////////////////////////////////////")
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -80,6 +90,7 @@ class GeoLocationExampleScreen extends Component {
     watchID: ?number = null
 
     componentWillMount() {
+        
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
             var long = parseFloat(position.coords.longitude)
@@ -183,6 +194,13 @@ class GeoLocationExampleScreen extends Component {
 
     }
 
+    onPressShipmentDetails()
+    {
+        //var shipData = this.props.ship_data;
+        console.log("ship data.........................",this.props.ship_data)
+        this.setModalVisible(true);
+    }
+
     onStartNavigationPress() {
 
         var destLat = parseFloat(this.props.destination.lat);
@@ -212,6 +230,10 @@ class GeoLocationExampleScreen extends Component {
         getDirections(data);
     }
 
+
+    
+   
+
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
         navigator.geolocation.clearWatch(this.watchID)
@@ -219,6 +241,100 @@ class GeoLocationExampleScreen extends Component {
     render() {
         return (<View
             style={styles.controlsContainer}>
+            <Modal
+                transparent={true}  
+                animationType="slide"
+                
+                visible={this.state.modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}>
+                <View style={{
+                    position:'absolute',
+                    bottom:110,
+                    left:10,
+                    right:10
+                    
+                
+                }}>
+
+                    <View
+                    style={{
+                        width: "100%",
+                        height: "auto",
+                        
+                        backgroundColor: 'rgba(255,255,255,0.95)'}}>
+                         <View
+                        style={styles.informationContainer}>
+                         <View
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                                style={{ fontSize: 15, color: '#14136d' }}
+                            >ORDER ID   :  </Text>
+                            <Text
+                                style={{ fontSize: 14, color: '#5e5e5e' }}
+                            >{this.props.ship_data.packageno}</Text>
+    
+                        </View>
+    
+                        <View
+                            style={{ flexDirection: 'row', }}>
+    
+                            <Image
+                                source={HalfBottomIcon}
+                                style={styles.halfBottomIcon}
+    
+                            />
+                            <Text
+                                style={{ fontSize: 11, color: '#14136d', marginTop: 11, marginStart: 3, }}
+                            >WAREHOUSE : </Text>
+                            <Text
+                                numberOfLines={4}
+    
+                                style={{ fontSize: 11, color: '#53a602', marginTop: 11, paddingEnd: 10, flexWrap: 'wrap', flex: 1 }}
+                            >{this.props.ship_data.sender_address}</Text>
+    
+                        </View>
+
+                         <View
+                            style={{ flexDirection: 'row',marginTop:10 }}>
+                            <Text
+                                style={{ fontSize: 15, color: '#14136d' }}
+                            >RECIPIENT :  </Text>
+                            <Text
+                                style={{ fontSize: 14, color: '#5e5e5e' }}
+                            >{this.props.ship_data.recipient_name}</Text>
+    
+                        </View>
+
+                         <View
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                                style={{ fontSize: 15, color: '#14136d' }}
+                            >ADDRESS   :  </Text>
+                            <Text
+                                style={{ fontSize: 14, color: '#5e5e5e' }}
+                            >{this.props.ship_data.recipient_address.street}</Text>
+    
+                        </View>
+                        </View>
+
+                        <TouchableHighlight
+                        style = {{position:"absolute",right:0,top:0}}
+                            onPress={() => {
+                                this.setModalVisible(!this.state.modalVisible);
+                            }}>
+                           <Image
+                        style={{ width:30, height:30 }}
+                        source={Cross
+                        }>
+
+                    </Image>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
+
             <MapView style={{ width: "100%", height: "100%", marginBottom: this.state.marginBottom, marginTop: 0 }}
                 showsUserLocation={true}
                 region={this.state.initialPositon}>
@@ -250,20 +366,21 @@ class GeoLocationExampleScreen extends Component {
             </MapView>
 
             <View
-                style={{ flex: 1,
-                         flexDirection: 'row',
-                          alignItems: 'center', 
-                          justifyContent: 'center' ,
-                          height:100, 
-                          position:'absolute',
-                          bottom:0,
-                          left:10,
-                          right:10,
-                          backgroundColor:'rgba(255,255,255,0.75)',
-                          
-                          }}>
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 100,
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 10,
+                    right: 10,
+                    backgroundColor: 'rgba(255,255,255,0.95)',
+
+                }}>
                 <TouchableOpacity
-                    // onPress={() => this.onStartNavigationPress()}
+                    onPress={() => this.onPressShipmentDetails()}
                     style={styles.buttonStyle}>
                     <Text style={styles.textStyle}>
                         SHIPMENT DETAILS
@@ -271,19 +388,20 @@ class GeoLocationExampleScreen extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => this.onStartNavigationPress()}
-                    style={{flexDirection:'column',alignItems: 'center', marginStart: 50}}
+                    style={{ flexDirection: 'column', alignItems: 'center', marginStart: 50 }}
                 >
                     <Image
-                        style={{ width: 70, height: 70 }}
+                        style={{ width: 60, height: 60 }}
                         source={NavIcon
                         }>
-                   
+
                     </Image>
                     <Text
-                     style={{fontSize: 16,
+                        style={{
+                            fontSize: 16,
                             fontWeight: 'bold',
                             color: '#14136d',
-                            }}
+                        }}
                     >START</Text>
 
                 </TouchableOpacity>
@@ -305,10 +423,24 @@ const styles = StyleSheet.create({
     },
     textStyle: {
 
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '600',
         marginTop: 6,
         color: '#fff'
+
+    },
+    informationContainer: {
+       padding:10,  
+        flex: 1,
+        flexDirection: "column",
+        marginStart:10
+        
+
+    },
+    halfBottomIcon: {
+        width: 12,
+        height: 25,
+
 
     },
     buttonStyle: {
