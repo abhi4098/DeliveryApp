@@ -98,8 +98,8 @@ const RouterComponent = () => {
 	     <Scene
 	                key="GeoLocationExampleScreen"      
 	                component={GeoLocationExampleScreen}  
-					title = "Navigation"
-					titleStyle={{textAlign: 'center' ,marginLeft:65, fontSize: 20}}
+					title = "Delivery Route"
+					titleStyle={{textAlign: 'center' ,marginLeft:55, fontSize: 20}}
 				  
 					
 					

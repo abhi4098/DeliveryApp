@@ -37,6 +37,7 @@ import DashPersonIcon from "../../assets/dashmanIcon.png";
 import DashTruckIcon from "../../assets/dashTruckIcon.png";
 import DashRoundIcon from "../../assets/dashroundIcon.png";
 var userType = '';
+var count =0;
 
 
 
@@ -68,12 +69,29 @@ class Dashboard extends Component {
 
 
 
+componentDidUpdate(){
+	console.log("count..............................",count)
+	if(count == 0)
+	{
+		console.log("componentDidUpdate    dashboard////////////////////////////////////////////////////////")
+		this.componentWillMount();
+	//count = 1;
+	}
+
+}
+componentDidCatch(){
+	console.log("componentDidCatch////////////////////////////////////////////////////////")	
+
+}
+
+
 	componentWillMount() {
 		console.log("componentWillMount////////////////////////////////////////////////////////")
 
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
 		}
+		count = 1;
 		this.getProfileData();
 
 
@@ -100,11 +118,12 @@ class Dashboard extends Component {
 
 
 	componentDidMount() {
+		console.log("componentDidMount////////////////////////////////////////////////////////")
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 	}
 
 	componentWillUnmount() {
-
+		console.log("componentWillUnmount////////////////////////////////////////////////////////")
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -148,7 +167,7 @@ class Dashboard extends Component {
 
 
 	componentWillReceiveProps(nextProps) {
-
+		console.log("componentWillReceiveProps  dashboard///////////////////////////////////////////////////////")
 		if (nextProps.dashboardCountResponse != undefined && nextProps.dashboardCountResponse != '') {
 
 
@@ -378,6 +397,10 @@ class Dashboard extends Component {
 		this.requestMakeCallPermission(item.sender_phone);
 
 	}
+	onPressOpenJobs(){
+		count = 0;
+		Actions.OpenJobsScreen();
+	}
 
 
 	renderFlipFlopToggleButton() {
@@ -448,8 +471,10 @@ class Dashboard extends Component {
 			</View>;
 		}
 		else {
-
-			console.log("values........................................",this.state.data);
+			if(this.state.data !=null)
+			{
+			
+		
 
 			return <View style={styles.container}>
 				<View style={styles.content}>
@@ -458,7 +483,7 @@ class Dashboard extends Component {
 						<View style={styles.rowContent}>
 						<TouchableOpacity
 						style={{ backgroundColor: '#e8e8e8', height: "45%", justifyContent: 'center', alignItems: 'center' }}
-								onPress={() =>Actions.OpenJobsScreen()}
+								onPress={() =>this.onPressOpenJobs()}
 							>
 							
 								<Image
@@ -477,7 +502,7 @@ class Dashboard extends Component {
                                     source={DashRoundIcon
 									}>
 									<Text
-									style={{fontSize:24,color:'#14136d',fontWeight:"bold"}}>20</Text>
+									style={{fontSize:24,color:'#14136d',fontWeight:"bold"}}>{this.state.data[0].openJobs}</Text>
 									</ImageBackground>
 							
 							</TouchableOpacity>
@@ -505,7 +530,7 @@ class Dashboard extends Component {
                                     source={DashRoundIcon
 									}>
 									<Text
-									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>10</Text>
+									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>{this.state.data[0].assignedJobs}</Text>
 									</ImageBackground>
 							</TouchableOpacity>
 
@@ -530,13 +555,13 @@ class Dashboard extends Component {
                                     source={DashRoundIcon
 									}>
 									<Text
-									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>10</Text>
+									style={{fontSize:25,color:'#14136d',fontWeight:"bold"}}>{this.state.data[0].completedJobs}</Text>
 									</ImageBackground>
 					</TouchableOpacity>
 				</View>
 			</View>;
 		}
-
+	}
 
 	}
 
@@ -636,7 +661,7 @@ class Dashboard extends Component {
 
 
 	render() {
-
+console.log("render.................................................");
 
 		const menu = <Menu
 			onItemSelected={this.onMenuItemSelected}

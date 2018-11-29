@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { Dimensions, StyleSheet,Image, View,TouchableOpacity, StatusBar,Alert ,Text} from "react-native";
+import {
+    Dimensions,
+    StyleSheet,
+    Image,
+    View,
+    TouchableOpacity,
+    StatusBar,
+    Alert,
+    Text,
+    BackHandler,
+ ImageBackground
+} from "react-native";
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import TestImage from "../../assets/marker_icon1.png";
 import Polyline from '@mapbox/polyline';
@@ -13,8 +24,9 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 const GOOGLE_MAPS_APIKEY = 'AIzaSyA9kTgADps5-FpFzq56Dbn9-tCU-kUUFMw';
 import getDirections from 'react-native-google-maps-directions';
 import { Button } from "react-native-elements";
- var concatLot = '';
- var destLoc = '';
+var concatLot = '';
+var destLoc = '';
+import NavIcon from "../../assets/navIcon.png";
 class GeoLocationExampleScreen extends Component {
     constructor(props) {
         super(props)
@@ -30,8 +42,8 @@ class GeoLocationExampleScreen extends Component {
                 latitude: 0,
                 longitude: 0
             }),
-            cordLatitude: 30.7333,
-            cordLongitude: 76.7794,
+            cordLatitude: 0,
+            cordLongitude: 0,
             error: null,
             concat: null,
             coords: [],
@@ -40,7 +52,10 @@ class GeoLocationExampleScreen extends Component {
         this.mergeLot = this.mergeLot.bind(this);
 
     }
-
+    componentDidMount() {
+        console.log("componentDidMount  geolocation////////////////////////////////////////////////////////")
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    }
 
     componentWillReceiveProps(nextProps) {
         const duration = 500
@@ -72,13 +87,13 @@ class GeoLocationExampleScreen extends Component {
             var initialRegion = {
                 latitude: lat,
                 longitude: long,
-                latitudeDelta: 0.3,
-                longitudeDelta: 0.3
+                latitudeDelta: 0.5,
+                longitudeDelta: 0.5
             }
 
             this.setState({ initialPositon: initialRegion })
             this.setState({ markerPosition: initialRegion })
-            console.log("initial regions................................" ,initialRegion);
+            console.log("initial regions................................", initialRegion);
             this.mergeLot();
 
         },
@@ -92,8 +107,8 @@ class GeoLocationExampleScreen extends Component {
             var lastRegion = {
                 latitude: lat,
                 longitude: long,
-                latitudeDelta: 0.3,
-                longitudeDelta: 0.3
+                latitudeDelta: 0.5,
+                longitudeDelta: 0.5
             }
 
             this.setState({ initialPositon: lastRegion })
@@ -105,91 +120,108 @@ class GeoLocationExampleScreen extends Component {
 
     }
 
+    onBackPress() {
+        console.log("Actions state index....................", Actions.state.index);
+        if (Actions.state.index === 1) {
+
+            BackHandler.exitApp();
+            return false;
+        }
+
+        Actions.pop();
+        return true;
+
+    }
+
     async getDirections(startLoc, destinationLoc) {
 
         try {
             let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${GOOGLE_MAPS_APIKEY}`)
-            
-           // let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood&key=${GOOGLE_MAPS_APIKEY}`)
 
-            console.log("resp..............................................",resp);
+            // let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+Hollywood&key=${GOOGLE_MAPS_APIKEY}`)
+
+            console.log("resp..............................................", resp);
             let respJson = await resp.json();
-            console.log("respJson................................................",respJson);
+            console.log("respJson................................................", respJson);
             let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
-            console.log("points................................................",points);
+            console.log("points................................................", points);
             let coords = points.map((point, index) => {
                 return {
                     latitude: point[0],
                     longitude: point[1]
                 }
             })
-            console.log("coords................................................",coords);
+            console.log("coords................................................", coords);
             this.setState({ coords: coords })
             this.setState({ x: "true" })
             return coords
         } catch (error) {
-            console.log('error get direction.........................................',error)
-            Alert.alert("Message","Not able to fetch location path  Network Error !!")
+            console.log('error get direction.........................................', error)
+            Alert.alert("Message", "Not able to fetch location path  Network Error !!")
             this.setState({ x: "error" })
             return error
         }
     }
 
     mergeLot() {
-              destLoc = this.props.destination.lat + "," + this.props.destination.lng;
-       
+        destLoc = this.props.destination.lat + "," + this.props.destination.lng;
+        var clat = parseFloat(this.props.destination.lat)
+        var clong = parseFloat(this.props.destination.lng)
+        this.setState({ cordLatitude: clat });
+        this.setState({ cordLongitude: clong });
+
         if (this.state.initialPositon.latitude != null && this.state.initialPositon.longitude != null) {
-             concatLot = this.state.initialPositon.latitude + "," + this.state.initialPositon.longitude
-            console.log("concatLot................................" ,concatLot);
+            concatLot = this.state.initialPositon.latitude + "," + this.state.initialPositon.longitude
+            console.log("concatLot................................", concatLot);
             this.setState({
                 concat: concatLot
             }, () => {
                 this.getDirections(concatLot, destLoc);
-                console.log("getDirections................................" ,this.props.destination.lat );
+                console.log("getDirections................................", this.props.destination.lat);
             });
         }
 
     }
 
-    onStartNavigationPress()
-    {
+    onStartNavigationPress() {
 
         var destLat = parseFloat(this.props.destination.lat);
         var destlong = parseFloat(this.props.destination.lng)
         const data = {
             source: {
-             latitude: this.state.initialPositon.latitude,
-             longitude: this.state.initialPositon.longitude
-           },
-           destination: {
-             latitude: destLat,
-             longitude: destlong
-           },
-           params: [
-             {
-               key: "travelmode",
-               value: "driving"        // may be "walking", "bicycling" or "transit" as well
-             },
-             {
-               key: "dir_action",
-               value: "navigate"       // this instantly initializes navigation using the given travel mode 
-             }
-           ]
+                latitude: this.state.initialPositon.latitude,
+                longitude: this.state.initialPositon.longitude
+            },
+            destination: {
+                latitude: destLat,
+                longitude: destlong
+            },
+            params: [
+                {
+                    key: "travelmode",
+                    value: "driving"        // may be "walking", "bicycling" or "transit" as well
+                },
+                {
+                    key: "dir_action",
+                    value: "navigate"       // this instantly initializes navigation using the given travel mode 
+                }
+            ]
 
+        }
+        console.log("data...................................................", data)
+        getDirections(data);
     }
-    console.log("data...................................................",data)
-    getDirections(data);
-}
 
     componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
         navigator.geolocation.clearWatch(this.watchID)
     }
     render() {
-        return (   <View
+        return (<View
             style={styles.controlsContainer}>
-            <MapView style={{ width: "100%", height: 400, marginBottom: this.state.marginBottom, marginTop: 0 }}
-            showsUserLocation = {true} 
-            region={this.state.initialPositon}>
+            <MapView style={{ width: "100%", height: "100%", marginBottom: this.state.marginBottom, marginTop: 0 }}
+                showsUserLocation={true}
+                region={this.state.initialPositon}>
 
                 {!!this.state.initialPositon.latitude && !!this.state.initialPositon.longitude && <MapView.Marker
                     coordinate={{ "latitude": this.state.initialPositon.latitude, "longitude": this.state.initialPositon.longitude }}
@@ -217,20 +249,58 @@ class GeoLocationExampleScreen extends Component {
                 }
             </MapView>
 
-             <TouchableOpacity onPress={() => this.onStartNavigationPress()} style={styles.buttonStyle}>
-                        <Text style={styles.textStyle}>
-                            Start Navigation
+            <View
+                style={{ flex: 1,
+                         flexDirection: 'row',
+                          alignItems: 'center', 
+                          justifyContent: 'center' ,
+                          height:100, 
+                          position:'absolute',
+                          bottom:0,
+                          left:10,
+                          right:10,
+                          backgroundColor:'rgba(255,255,255,0.75)',
+                          
+                          }}>
+                <TouchableOpacity
+                    // onPress={() => this.onStartNavigationPress()}
+                    style={styles.buttonStyle}>
+                    <Text style={styles.textStyle}>
+                        SHIPMENT DETAILS
 			</Text>
-                    </TouchableOpacity>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => this.onStartNavigationPress()}
+                    style={{flexDirection:'column',alignItems: 'center', marginStart: 50}}
+                >
+                    <Image
+                        style={{ width: 70, height: 70 }}
+                        source={NavIcon
+                        }>
+                   
+                    </Image>
+                    <Text
+                     style={{fontSize: 16,
+                            fontWeight: 'bold',
+                            color: '#14136d',
+                            }}
+                    >START</Text>
+
+                </TouchableOpacity>
+
+
+
+
             </View>
+        </View>
         );
     }
 }
 const styles = StyleSheet.create({
     controlsContainer: {
         flex: 1,
-     //   justifyContent: 'center',
-        alignItems: 'center',
+        //   justifyContent: 'center',
+
         backgroundColor: '#f1f1fd'
     },
     textStyle: {
@@ -250,7 +320,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3,
         shadowColor: '#000',
-        shadowOffset:{width: 0,height:5},
+        shadowOffset: { width: 0, height: 5 },
         elevation: 3
 
     }

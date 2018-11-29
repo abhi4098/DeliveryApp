@@ -106,7 +106,31 @@ class AcceptedDeliveryRequestScreen extends Component {
 
 		}).done();
 
-	}
+    }
+    
+
+
+    async requestMakeCallPermission(number) {
+		try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.CALL_PHONE, {
+					title: 'Make Call',
+					message: 'need access to call from phone'
+				}
+			)
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+				RNImmediatePhoneCall.immediatePhoneCall(number);
+			} else {
+
+			}
+		} catch (err) {
+
+		}
+
+    }
+    
+    
 	componentWillReceiveProps(nextProps) {
 
 
@@ -154,12 +178,39 @@ class AcceptedDeliveryRequestScreen extends Component {
             return true;
         }
 
+
+        _onPress(item) {
+            // your code on item press
+            AsyncStorage.getItem("userData").then((value) => {
+    
+                if (value) {
+    
+                    if (JSON.parse(value).type == 'driver') {
+                        console.log("recipient_address add...................................", item.recipient_address);
+                        Actions.GeoLocationExampleScreen({ destination: item.recipient_address });
+                    }
+                    else if (JSON.parse(value).type == 'customer') {
+    
+                        //Actions.MapScreen({ shipmentId: item._id, from: 'Dashboard' });
+                    }
+    
+    
+    
+                }
+    
+            }).done();
+    
+    
+    
+        };
+    
+
     	_renderItem({ item,index }) {
             Moment.locale('en');
             var dt = item.receiveddate;
             var orderStatus = item.shipment_status;
             return	<TouchableOpacity
-            //onPress={() =>this._onPress(item)}
+            onPress={() =>this._onPress(item)}
             >
             <Card
                 containerStyle={{ padding: 0, marginTop: 15, marginEnd: 6, marginStart: 6 }}
