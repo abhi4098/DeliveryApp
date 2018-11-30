@@ -72,6 +72,7 @@ class Dashboard extends Component {
 
 componentDidUpdate(){
 	console.log("count..............................",count)
+	BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 	if(count == 0)
 	{
 		console.log("componentDidUpdate    dashboard////////////////////////////////////////////////////////")
@@ -88,7 +89,7 @@ componentDidCatch(){
 
 	componentWillMount() {
 		console.log("componentWillMount////////////////////////////////////////////////////////")
-
+		
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
 		}

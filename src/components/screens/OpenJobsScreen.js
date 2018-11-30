@@ -70,6 +70,8 @@ class OpenJobsScreen extends Component {
     componentWillUnmount() {
 
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+        this.props.clearAcceptJobData();
+        this.props.clearOpenJobsData();
         
     }
     _onPhoneIconPress(item) {
@@ -191,8 +193,8 @@ class OpenJobsScreen extends Component {
             BackHandler.exitApp();
             return false;
         }
-        this.props.clearAcceptJobData();
-        this.props.clearOpenJobsData();
+        console.log("backpresss.......................................");
+        
         Actions.pop();
         
         return true;

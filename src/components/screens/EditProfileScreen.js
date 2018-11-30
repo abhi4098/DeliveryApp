@@ -62,6 +62,12 @@ class EditProfileScreen extends Component {
         this.getProfileData();
     }
 
+    componentWillUnmount()
+    {
+        Actions.pop();
+        Actions.Dashboard({ refresh: Math.random()});
+    }
+
     selectPhotoTapped(){
 
 
@@ -176,8 +182,9 @@ class EditProfileScreen extends Component {
             this.props.showUpdateProfileLoading(false);
 
             if (nextProps.updateProfileResponseData.status == 200) {
+                AsyncStorage.setItem("userData", JSON.stringify(nextProps.updateProfileResponseData.data));
                 alert("Profile Updated");
-                //  Actions.pop();
+                
             }
 
             else {

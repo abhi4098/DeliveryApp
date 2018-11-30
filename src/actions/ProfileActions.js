@@ -115,7 +115,7 @@ export const userProfile = ({userId}) => {
         return response.json();
       })
       .then( (responseJSON) => {
-        
+        console.log("response profile........................",responseJSON)
   
         dispatch({
           type:UPDATE_PROFILE,

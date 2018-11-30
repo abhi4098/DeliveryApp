@@ -69,6 +69,7 @@ class DriverProfileScreen extends Component {
 
                 // Clear any previous data if exist.
                 if (nextProps.profileResponseData.message == "success") {
+                    console.log("my profile data...................................",nextProps.profileResponseData.data)
                     AsyncStorage.setItem("userData", JSON.stringify(nextProps.profileResponseData.data));
                 }
                 this.setState({ username: nextProps.profileResponseData.data.firstname + " " + nextProps.profileResponseData.data.lastname })
@@ -308,16 +309,16 @@ const styles = StyleSheet.create({
 
     },
     avatarContainer: {
-        borderColor: '#9B9B9B',
-        borderWidth: 1 / PixelRatio.get(),
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      avatar: {
-        borderRadius: 75,
-        width: 120,
-        height: 120,
-      },
+    borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar: {
+    borderRadius: 75,
+    width: 120,
+    height: 120,
+  },
 
 
 });
