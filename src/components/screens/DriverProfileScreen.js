@@ -9,7 +9,8 @@ import {
     BackHandler,
     Keyboard,
     Alert,
-    AsyncStorage
+    AsyncStorage,
+    PixelRatio
 } from "react-native";
 
 import {
@@ -33,7 +34,8 @@ class DriverProfileScreen extends Component {
             profileResponseData: '',
             username: '',
             email: '',
-            phone: ''
+            phone: '',
+            avatarSource: null,
 
         }
     }
@@ -72,6 +74,9 @@ class DriverProfileScreen extends Component {
                 this.setState({ username: nextProps.profileResponseData.data.firstname + " " + nextProps.profileResponseData.data.lastname })
                 this.setState({ email: nextProps.profileResponseData.data.email });
                 this.setState({ phone: nextProps.profileResponseData.data.phone });
+                var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + nextProps.profileResponseData.data.profilepic;
+                var source = { uri: imageUrl }
+                this.setState({ avatarSource: source});
             }
 
             else {
@@ -88,7 +93,7 @@ class DriverProfileScreen extends Component {
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
                 userId = JSON.parse(value)._id;
-                
+              
 
 
                 var profile = {
@@ -119,11 +124,19 @@ class DriverProfileScreen extends Component {
                 <View
                     style={styles.imageContainer}>
 
-                    <Image
-                        // style={{ width: 200, height: 50 }}
-                        source={AppLogo
-                        }></Image>
-
+                   <View
+            style={[
+              styles.avatar,
+              styles.avatarContainer,
+              
+            ]}
+          >
+            {this.state.avatarSource === null ? (
+              <Text>Select a Photo</Text>
+            ) : (
+              <Image style={styles.avatar} source={this.state.avatarSource} />
+            )}
+          </View>
 
 
 
@@ -293,7 +306,18 @@ const styles = StyleSheet.create({
         shadowOffset:{width: 0,height:5},
         elevation: 3
 
-    }
+    },
+    avatarContainer: {
+        borderColor: '#9B9B9B',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      avatar: {
+        borderRadius: 75,
+        width: 120,
+        height: 120,
+      },
 
 
 });

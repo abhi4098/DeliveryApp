@@ -90,11 +90,11 @@ export const userProfile = ({userId}) => {
   };
 
 
-  export const userProfileUpdate = ({name,email,phone,userId,type,mode}) => {
+  export const userProfileUpdate = ({name,email,phone,userId,type,mode,avatar,profilepic}) => {
 
     
     
-    
+    console.log("response edit profile.............................",{name,email,phone,userId,type,mode,avatar,profilepic});
    
   
     return (dispatch) => {
@@ -108,7 +108,7 @@ export const userProfile = ({userId}) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({name,email,phone,userId,type,mode})
+        body: JSON.stringify({name,email,phone,userId,type,mode,avatar,profilepic})
       })
       .then( (response) => {
         

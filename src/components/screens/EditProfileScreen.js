@@ -9,7 +9,8 @@ import {
     BackHandler,
     Keyboard,
     Alert,
-    AsyncStorage
+    AsyncStorage,
+    PixelRatio,
 } from "react-native";
 
 import {
@@ -24,6 +25,11 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions";
 import Button from '../common/Button';
+import ImagePicker from 'react-native-image-picker';
+var imageName = '';
+var imageValue= '';
+var imageType = '';
+var postData = '';
 class EditProfileScreen extends Component {
 
     constructor(props) {
@@ -37,8 +43,10 @@ class EditProfileScreen extends Component {
             email: '',
             phone: '',
             pressStatus: false,
-            selectedButton: null
+            selectedButton: null,
+            avatarSource: null,
         };
+        this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
     }
 
 
@@ -54,15 +62,66 @@ class EditProfileScreen extends Component {
         this.getProfileData();
     }
 
+    selectPhotoTapped(){
+
+
+  
+        const options = {
+            title: 'Select Image',
+            quality: 0.5,
+            maxWidth: 600,
+            maxHeight: 600,
+            storageOptions: {
+              skipBackup: true,
+              path: 'images'
+            }
+        };
+  
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+          
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+            const source = { uri: response.uri };
+              //let source = response.uri;
+              console.log("Source :..................................................... "+response.uri);
+              var randomNumber = Math.floor((Math.random() * 100) + 1);
+               imageName = 'image'+randomNumber+'.png';
+               imageType = 'image/png';
+               imageValue= response.data;
+               postData = {
+                filename:imageName,
+                filetype:imageType,
+                value:imageValue
+               }
+              // You can also display the image using data:
+              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+          
+              this.setState({
+                avatarSource: source,
+              });
+            }
+          });
+      }
+
 
     getProfileData() {
 
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
                 userId = JSON.parse(value)._id;
+                var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
+                source = { uri: imageUrl }
+                console.log("imageurl...........................................",imageUrl)
                 this.setState({ name: JSON.parse(value).firstname + " " + JSON.parse(value).lastname })
                 this.setState({ email: JSON.parse(value).email });
                 this.setState({ phone: JSON.parse(value).phone });
+                this.setState({avatarSource:source});
 
 
             }
@@ -94,7 +153,10 @@ class EditProfileScreen extends Component {
                     phone: this.state.phone,
                     userId: userId,
                     type: userType,
-                    mode: 'mobile'
+                    mode: 'mobile',
+                    avatar:postData,
+                    profilepic :'test'
+
 
                 }
 
@@ -137,10 +199,21 @@ class EditProfileScreen extends Component {
                 <View
                     style={styles.imageContainer}>
 
-                    <Image
-                        // style={{ width: 200, height: 50 }}
-                        source={AppLogo
-                        }></Image>
+                 <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+          <View
+            style={[
+              styles.avatar,
+              styles.avatarContainer,
+              
+            ]}
+          >
+            {this.state.avatarSource === null ? (
+              <Text>Select a Photo</Text>
+            ) : (
+              <Image style={styles.avatar} source={this.state.avatarSource} />
+            )}
+          </View>
+        </TouchableOpacity>
 
 
 
@@ -261,8 +334,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 60,
-        paddingBottom: 40,
+        paddingTop: 30,
+        paddingBottom: 20,
         backgroundColor: '#f1f1fd',
     },
 
@@ -378,7 +451,18 @@ const styles = StyleSheet.create({
         elevation: 3
 
     }
-
+,
+avatarContainer: {
+    borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar: {
+    borderRadius: 75,
+    width: 120,
+    height: 120,
+  },
 
 
 });

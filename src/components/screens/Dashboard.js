@@ -63,7 +63,8 @@ class Dashboard extends Component {
 			dashboardCounts:'',
 			pressStatus: false,
 			isActive: true,
-			userType: ''
+			userType: '',
+			isOpen: false,
 		}
 	}
 
@@ -282,7 +283,7 @@ componentDidCatch(){
 	}
 
 	updateMenuState(isOpen) {
-		this.setState({ isOpen, });
+		this.setState({ isOpen });
 	}
 
 

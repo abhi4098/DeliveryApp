@@ -9,6 +9,7 @@ import {
   Text,
   AsyncStorage,
   TouchableHighlight,
+  PixelRatio
 } from 'react-native';
 
 
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
 
   welcomeText: {
     color: '#014292',
-    marginTop: 30,
+    marginTop: 15,
     fontSize: 18,
     color: 'white',
     alignItems: 'center'
@@ -145,6 +146,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingLeft: 10
   },
+  avatarContainer: {
+    borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+    
+  },
+  avatar: {
+    borderRadius: 45,
+    width: 85,
+    height: 85,
+  },
+
 
 });
 
@@ -174,6 +186,9 @@ export default class Menu extends Component {
         userEmail = JSON.parse(value).email;
         userPhone = JSON.parse(value).phone;
         userType = JSON.parse(value).type;
+        var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
+        var source = { uri: imageUrl }
+        this.setState({avatarSource:source});
 
 
       }
@@ -247,11 +262,19 @@ export default class Menu extends Component {
       <View style={styles.container}>
 
         <View style={styles.userInfoContainer}>
-          <Image
-            source={AppLogo}
-            style={styles.inputIcon}
-            resizeMode="contain"
-          />
+        <View
+            style={[
+              styles.avatar,
+              styles.avatarContainer,
+              
+            ]}
+          >
+            {this.state.avatarSource === null ? (
+              <Text>Select a Photo</Text>
+            ) : (
+              <Image style={styles.avatar} source={this.state.avatarSource} />
+            )}
+          </View>
           <Text style={styles.welcomeText}>{userName}</Text>
           <Text style={{ fontSize: 13, color: 'white', alignItems: 'center', marginTop: 5 }}>{userEmail}</Text>
           <Text style={{ fontSize: 13, color: 'white', alignItems: 'center', marginTop: 5 }}>{userPhone}</Text>
