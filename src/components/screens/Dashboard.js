@@ -82,13 +82,13 @@ componentDidUpdate(){
 
 }
 componentDidCatch(){
-	console.log("componentDidCatch////////////////////////////////////////////////////////")	
+	console.log("componentDidCatch  dashboard////////////////////////////////////////////////////////")	
 
 }
 
 
 	componentWillMount() {
-		console.log("componentWillMount////////////////////////////////////////////////////////")
+		console.log("componentWillMount  dashboard////////////////////////////////////////////////////////")
 		
 		if (this.props.driverStatusResData != undefined && this.props.driverStatusResData != '') {
 			this.props.clearDriverStatusResponseRecord();
@@ -120,12 +120,12 @@ componentDidCatch(){
 
 
 	componentDidMount() {
-		console.log("componentDidMount////////////////////////////////////////////////////////")
+		console.log("componentDidMount  dashboard////////////////////////////////////////////////////////")
 		BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
 	}
 
 	componentWillUnmount() {
-		console.log("componentWillUnmount////////////////////////////////////////////////////////")
+		console.log("componentWillUnmount  dashboard////////////////////////////////////////////////////////")
 		BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
 
 	}
@@ -302,6 +302,7 @@ componentDidCatch(){
 		}
 
 		if (item == 'DriverProfileScreen') {
+			count = 0;
 			Actions.DriverProfileScreen();
 		}
 

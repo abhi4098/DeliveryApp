@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
   },
   avatar: {
     borderRadius: 45,
-    width: 85,
-    height: 85,
+    width: 90,
+    height: 90,
   },
 
 

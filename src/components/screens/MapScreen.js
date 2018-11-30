@@ -275,8 +275,10 @@ class MapScreen extends Component {
                 console.log("this.props.from........................",this.props.from);
                 if(this.props.from != "SlidingMenu")
                 {
-                Actions.pop();
-                Actions.ConfirmOrderScreen();
+                    Actions.pop();
+                    Actions.Dashboard();
+                    Alert.alert("Message","Shipment Ordered Successfully");
+                //Actions.ConfirmOrderScreen();
                 //this.setState({ data: nextProps.saveAddResponse.data })
                 }
                 else{
