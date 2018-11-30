@@ -173,7 +173,7 @@ export default class Menu extends Component {
     };
   }
 
-  componentWillUpdate() {
+  componentWillMount() {
     this.updateUserProfile();
   }
 
@@ -188,6 +188,7 @@ export default class Menu extends Component {
         userType = JSON.parse(value).type;
         var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
         var source = { uri: imageUrl }
+        console.log("imageurl.................................................",imageUrl);
         this.setState({avatarSource:source});
 
 
