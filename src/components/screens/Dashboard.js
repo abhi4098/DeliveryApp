@@ -38,6 +38,7 @@ import DashTruckIcon from "../../assets/dashTruckIcon.png";
 import DashRoundIcon from "../../assets/dashroundIcon.png";
 var userType = '';
 var count =0;
+var isListEmpty = "";
 
 
 
@@ -65,6 +66,7 @@ class Dashboard extends Component {
 			isActive: true,
 			userType: '',
 			isOpen: false,
+			isListEmpty:false
 		}
 	}
 
@@ -117,7 +119,19 @@ componentDidCatch(){
 		}
 
 	}
+	backgroundImage()
+    {
 
+        console.log("data....................................................",this.state.isListEmpty);
+        if (!this.state.isListEmpty) {
+          return<ImageBackground
+          //resizeMode={'stretch'} // or cover
+          style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+          source={require('../../assets/noShipmentFound.png/')}
+        >
+         </ImageBackground>;
+        }
+    }
 
 	componentDidMount() {
 		console.log("componentDidMount  dashboard////////////////////////////////////////////////////////")
@@ -200,6 +214,11 @@ componentDidCatch(){
 				this.props.showDashBoardLoading(false);
 
 				this.setState({ data: nextProps.dasboardResponseData.data })
+				if(nextProps.dasboardResponseData.data.length == 0)
+                {
+                    
+                this.setState({ isListEmpty: false })
+                }
 
 			}
 
@@ -278,6 +297,7 @@ componentDidCatch(){
 	}
 
 	toggle() {
+		console.log("hamburger..............................................")
 		this.setState({
 			isOpen: !this.state.isOpen,
 		});
@@ -464,7 +484,7 @@ componentDidCatch(){
 				style={{
 					flex: 1
 				}}>
-
+				{this.backgroundImage()} 
 				<FlatList
 					data={this.state.data}
 					renderItem={this._renderItem.bind(this)}
@@ -569,6 +589,7 @@ componentDidCatch(){
 	}
 
 	_renderItem({ item, index }) {
+		this.setState({ isListEmpty: true });
 		Moment.locale('en');
 		var dt = item.receiveddate;
 		var orderStatus = item.shipment_status;

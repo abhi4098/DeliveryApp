@@ -10,7 +10,8 @@ import { View,
 	Alert,
 	AsyncStorage,
 	FlatList,
-    TouchableOpacity } from "react-native";
+    TouchableOpacity,
+    ImageBackground } from "react-native";
 
 
     import { Actions, Stack } from 'react-native-router-flux';
@@ -26,7 +27,7 @@ import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
-
+var isListEmpty = "";
 
 
 import {
@@ -46,11 +47,24 @@ class AcceptedDeliveryRequestScreen extends Component {
 			orderAcceptedDeliveredData: '',
 			pressStatus: false,
 			usertype: '',
-			isActive: true,
+            isActive: true,
+            isListEmpty:false
 
 		}
     }
-    
+    backgroundImage()
+    {
+
+        console.log("data....................................................",this.state.isListEmpty);
+        if (!this.state.isListEmpty) {
+          return<ImageBackground
+          //resizeMode={'stretch'} // or cover
+          style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+          source={require('../../assets/noShipmentFound.png/')}
+        >
+         </ImageBackground>;
+        }
+    }
     componentWillMount() {
 		
 	
@@ -143,7 +157,12 @@ class AcceptedDeliveryRequestScreen extends Component {
 			if (nextProps.acceptedDeliveryResponse.status == 200) {
 				this.props.showAcceptedDeliveryLoading(false);
                 console.log("response................",nextProps.acceptedDeliveryResponse.data )
-				this.setState({ data: nextProps.acceptedDeliveryResponse.data })
+                this.setState({ data: nextProps.acceptedDeliveryResponse.data });
+                if(nextProps.acceptedDeliveryResponse.data.length == 0)
+                {
+                    
+                this.setState({ isListEmpty: false })
+                }
 
 			}
 
@@ -206,6 +225,7 @@ class AcceptedDeliveryRequestScreen extends Component {
     
 
     	_renderItem({ item,index }) {
+            this.setState({ isListEmpty: true });
             Moment.locale('en');
             var dt = item.receiveddate;
             var orderStatus = item.shipment_status;
@@ -311,7 +331,7 @@ class AcceptedDeliveryRequestScreen extends Component {
     
     
                         <View style={styles.mainContainer}>
-                            
+                        {this.backgroundImage()} 
                             <FlatList
                                 data={this.state.data}
                                 renderItem={this._renderItem.bind(this)}
