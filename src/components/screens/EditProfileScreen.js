@@ -21,13 +21,15 @@ import {
 } from "../../actions/ProfileActions";
 import Loader from '../common/Loader';
 import AppLogo from "../../assets/app_logo.png";
+import Camera from "../../assets/camera.png";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions";
 import Button from '../common/Button';
+
 import ImagePicker from 'react-native-image-picker';
 var imageName = '';
-var imageValue= '';
+var imageValue = '';
 var imageType = '';
 var postData = '';
 class EditProfileScreen extends Component {
@@ -44,7 +46,7 @@ class EditProfileScreen extends Component {
             phone: '',
             pressStatus: false,
             selectedButton: null,
-            avatarSource: null,
+            avatarSource: "https://nboxitdb.azurewebsites.net/images/profiles/test",
         };
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
     }
@@ -62,72 +64,81 @@ class EditProfileScreen extends Component {
         this.getProfileData();
     }
 
-    componentWillUnmount()
-    {
+    componentWillUnmount() {
         Actions.pop();
-        Actions.Dashboard({ refresh: Math.random()});
+        Actions.Dashboard({ refresh: Math.random() });
     }
 
-    selectPhotoTapped(){
+    selectPhotoTapped() {
 
 
-  
+
         const options = {
             title: 'Select Image',
             quality: 0.5,
             maxWidth: 600,
             maxHeight: 600,
             storageOptions: {
-              skipBackup: true,
-              path: 'images'
+                skipBackup: true,
+                path: 'images'
             }
         };
-  
+
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
-          
+
             if (response.didCancel) {
-              console.log('User cancelled image picker');
+                console.log('User cancelled image picker');
             } else if (response.error) {
-              console.log('ImagePicker Error: ', response.error);
+                console.log('ImagePicker Error: ', response.error);
             } else if (response.customButton) {
-              console.log('User tapped custom button: ', response.customButton);
+                console.log('User tapped custom button: ', response.customButton);
             } else {
-            const source = { uri: response.uri };
-              //let source = response.uri;
-              console.log("Source :..................................................... "+response.uri);
-              var randomNumber = Math.floor((Math.random() * 100) + 1);
-               imageName = 'image'+randomNumber+'.png';
-               imageType = 'image/png';
-               imageValue= response.data;
-               postData = {
-                filename:imageName,
-                filetype:imageType,
-                value:imageValue
-               }
-              // You can also display the image using data:
-              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-          
-              this.setState({
-                avatarSource: source,
-              });
+                const source = { uri: response.uri };
+                //let source = response.uri;
+                console.log("Source :..................................................... " + response.uri);
+                var randomNumber = Math.floor((Math.random() * 100) + 1);
+                imageName = 'image' + randomNumber + '.png';
+                imageType = 'image/png';
+                imageValue = response.data;
+                postData = {
+                    filename: imageName,
+                    filetype: imageType,
+                    value: imageValue
+                }
+                AsyncStorage.setItem("postImageData", JSON.stringify(postData));
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                console.log("postImageData.............................................", JSON.stringify(postData))
+                this.setState({
+                    avatarSource: source,
+                });
             }
-          });
-      }
+        });
+    }
 
 
     getProfileData() {
 
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
+
+
                 userId = JSON.parse(value)._id;
+                if(JSON.parse(value).profilepic != null)
+                {
                 var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
+                console.log("source if not null...........................................", imageUrl)
+                }
+                else{
+                    var imageUrl = "https://nboxit.azurewebsites.net/assets/admin/dist/img/user-image.png";
+                }
                 source = { uri: imageUrl }
-                console.log("imageurl...........................................",imageUrl)
+                
                 this.setState({ name: JSON.parse(value).firstname + " " + JSON.parse(value).lastname })
                 this.setState({ email: JSON.parse(value).email });
                 this.setState({ phone: JSON.parse(value).phone });
-                this.setState({avatarSource:source});
+                this.setState({ avatarSource: source });
 
 
             }
@@ -137,9 +148,9 @@ class EditProfileScreen extends Component {
     }
     onChangePasswordButtonPress() {
         this.setState({ selectedButton: "changePassword" });
-        Actions.pop();
+        //Actions.pop();
         Actions.UpdatePasswordScreen();
-        
+
     }
 
     onUpdateButtonPress() {
@@ -149,25 +160,36 @@ class EditProfileScreen extends Component {
             if (value) {
                 userId = JSON.parse(value)._id;
                 userType = JSON.parse(value).type;
-                
+
+                AsyncStorage.getItem("postImageData").then((postImageValue) => {
+                    if (postImageValue) {
+
+                        postData = JSON.parse(postImageValue);
+                        imgName = JSON.parse(postImageValue).filename;
+                        console.log("post data and image name................................", postData, imgName)
+
+
+                        var updateProfile = {
+                            name: this.state.name,
+                            email: this.state.email,
+                            phone: this.state.phone,
+                            userId: userId,
+                            type: userType,
+                            mode: 'mobile',
+                            avatar: postData,
+                            profilepic: imgName
+
+
+                        }
+
+                        this.props.userProfileUpdate(updateProfile);
+                    }
+
+                }).done();
 
 
 
-                var updateProfile = {
-                    name: this.state.name,
-                    email: this.state.email,
-                    phone: this.state.phone,
-                    userId: userId,
-                    type: userType,
-                    mode: 'mobile',
-                    avatar:postData,
-                    profilepic :'test'
 
-
-                }
-
-                this.props.userProfileUpdate(updateProfile);
-                
 
             }
 
@@ -182,9 +204,9 @@ class EditProfileScreen extends Component {
             this.props.showUpdateProfileLoading(false);
 
             if (nextProps.updateProfileResponseData.status == 200) {
-               // AsyncStorage.setItem("userData", JSON.stringify(nextProps.updateProfileResponseData.data));
+                // AsyncStorage.setItem("userData", JSON.stringify(nextProps.updateProfileResponseData.data));
                 alert("Profile Updated");
-                
+
             }
 
             else {
@@ -197,6 +219,7 @@ class EditProfileScreen extends Component {
 
 
     render() {
+        console.log("avatar source.....................................", this.state.avatarSource)
         return (
 
             <View
@@ -206,21 +229,34 @@ class EditProfileScreen extends Component {
                 <View
                     style={styles.imageContainer}>
 
-                 <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-          <View
-            style={[
-              styles.avatar,
-              styles.avatarContainer,
-              
-            ]}
-          >
-            {this.state.avatarSource === null ? (
-              <Text>Select a Photo</Text>
-            ) : (
-              <Image style={styles.avatar} source={this.state.avatarSource} />
-            )}
-          </View>
-        </TouchableOpacity>
+                    <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                        <View
+                            style={[
+                                // styles.avatar,
+                                styles.avatarContainer,
+
+                            ]}
+                        >
+                            {this.state.avatarSource.uri === null ? (
+                                <Text>Select a Photo</Text>
+                            ) : (
+                                    <Image style={styles.avatar} source={this.state.avatarSource} />
+                                )}
+
+                            <Image
+                                source={Camera}
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    position: 'absolute',
+                                    bottom: 15,
+                                    right: 0
+                                }}
+                            >
+                            </Image>
+                            
+                        </View>
+                    </TouchableOpacity>
 
 
 
@@ -438,7 +474,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3,
         shadowColor: '#000',
-        shadowOffset:{width: 0,height:5},
+        shadowOffset: { width: 0, height: 5 },
         elevation: 3,
         marginEnd: 10
 
@@ -446,7 +482,7 @@ const styles = StyleSheet.create({
     buttonStyle1: {
         width: 170,
         marginStart: 10,
-        marginEnd:20,
+        marginEnd: 20,
         alignItems: 'center',
         borderRadius: 3,
         backgroundColor: '#14136d',
@@ -454,22 +490,24 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3,
         shadowColor: '#000',
-        shadowOffset:{width: 0,height:5},
+        shadowOffset: { width: 0, height: 5 },
         elevation: 3
 
     }
-,
-avatarContainer: {
-    borderColor: '#9B9B9B',
-    borderWidth: 1 / PixelRatio.get(),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatar: {
-    borderRadius: 75,
-    width: 120,
-    height: 120,
-  },
+    ,
+    avatarContainer: {
+        borderColor: '#f1f1fd',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: "relative"
+    },
+    avatar: {
+        borderColor: '#9B9B9B',
+        borderRadius: 75,
+        width: 120,
+        height: 120,
+    },
 
 
 });

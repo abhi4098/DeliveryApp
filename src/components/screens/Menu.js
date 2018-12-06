@@ -186,7 +186,14 @@ export default class Menu extends Component {
         userEmail = JSON.parse(value).email;
         userPhone = JSON.parse(value).phone;
         userType = JSON.parse(value).type;
-        var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
+        if(JSON.parse(value).profilepic != null)
+                {
+                var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + JSON.parse(value).profilepic;
+                console.log("source if not null...........................................", imageUrl)
+                }
+                else{
+                    var imageUrl = "https://nboxit.azurewebsites.net/assets/admin/dist/img/user-image.png";
+                }
         var source = { uri: imageUrl }
         console.log("imageurl.................................................",imageUrl);
         this.setState({avatarSource:source});
