@@ -67,7 +67,7 @@ class AcceptedDeliveryRequestScreen extends Component {
     }
     componentWillMount() {
 		
-	
+       
 		this.getProfileData();
 
 
@@ -96,6 +96,7 @@ class AcceptedDeliveryRequestScreen extends Component {
                  
 				this.props.showAcceptedDeliveryLoading(true);
 				if (JSON.parse(value).type == 'customer') {
+                    Actions.refresh({title: 'Packages In Progress'})
 					var acceptedDelivery = {
 						shipment_status: "Driver Assigned",
 						userid: phoneNumber,
@@ -105,6 +106,7 @@ class AcceptedDeliveryRequestScreen extends Component {
 					};
 				}
 				else {
+                    Actions.refresh({title: 'Assigned Shipments'})
 					var acceptedDelivery = {
 						shipment_status: "Driver Assigned",
 						userid: userId,

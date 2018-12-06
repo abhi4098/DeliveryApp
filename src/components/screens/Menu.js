@@ -233,6 +233,47 @@ export default class Menu extends Component {
 
   }
 
+  renderaccepteReqName()
+  {
+    if (userType == 'customer') {
+      return <Text
+      style={styles.item}>
+     Packages In Progress
+  
+    </Text>;
+
+    }
+    else{
+      return <Text
+      style={styles.item}>
+     Assigned Shipments
+  
+    </Text>;
+
+    }
+  }
+
+  renderDeliveredeReqName()
+  {
+    if (userType == 'customer') {
+      return <Text
+      style={styles.item}>
+     Packages Delivered
+  
+    </Text>;
+    }
+    else{
+      return <Text
+      style={styles.item}>
+     Shipments Delivered
+  
+    </Text>;
+
+    }
+  }
+
+  
+
   renderMyAddress() {
 
     if (userType == 'customer') {
@@ -343,10 +384,9 @@ export default class Menu extends Component {
               <Image style={styles.itemImage} source={AcceptedReq}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('AcceptedDeliveryRequestScreen')}>
-                <Text
-                  style={styles.item}>
-                  Assigned Shipments
-                </Text>
+              {this.renderaccepteReqName()}
+                
+                
               </TouchableHighlight>
             </View>
 
@@ -361,10 +401,9 @@ export default class Menu extends Component {
               <Image style={styles.itemImage} source={OrderDelivered}>
               </Image>
               <TouchableHighlight underlayColor="transparent" style={{ width: "90%", height: 40, justifyContent: 'center' }} onPress={() => this.props.onItemSelected('OrderDeliveredScreen')}>
-                <Text
-                  style={styles.item}>
-                  Shipment Delivered
-                </Text>
+                
+                    {this.renderDeliveredeReqName()}
+                
               </TouchableHighlight>
             </View>
 

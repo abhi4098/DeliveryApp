@@ -122,7 +122,8 @@ const RouterComponent = () => {
 					 <Scene
 	                key="AcceptedDeliveryRequestScreen"      
 	                component={AcceptedDeliveryRequestScreen}  
-					title = "Assigned Shipments"
+					//title = "Assigned Shipments"
+					//title = {this.state.title}
 					titleStyle={{textAlign: 'center' ,marginLeft:40, fontSize: 20}}
 					
 					
@@ -131,7 +132,7 @@ const RouterComponent = () => {
 					 <Scene
 	                key="OrderDeliveredScreen"      
 	                component={OrderDeliveredScreen}  
-					title = "Shipment Delivered"
+					//title = "Shipment Delivered"
 					titleStyle={{textAlign: 'center' ,marginLeft:40, fontSize: 20}}
 					
 					

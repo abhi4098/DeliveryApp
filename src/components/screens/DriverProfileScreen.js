@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 60,
-        paddingBottom: 40,
+        paddingTop: 30,
+        paddingBottom: 20,
         backgroundColor: '#f1f1fd',
     },
 

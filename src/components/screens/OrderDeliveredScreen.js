@@ -84,6 +84,7 @@ class OrderDeliveredScreen extends Component {
 
 				this.props.showOrderDeliveredLoading(true);
 				if (JSON.parse(value).type == 'customer') {
+                    Actions.refresh({title: 'Packages Delivered'})
 					var dashboard = {
 						shipment_status: "Delivered",
 						userid: phoneNumber,
@@ -92,6 +93,7 @@ class OrderDeliveredScreen extends Component {
 					};
 				}
 				else {
+                    Actions.refresh({title: 'Shipments Delivered'})
 					var dashboard = {
 						shipment_status: "Delivered",
 						userid: userId,
