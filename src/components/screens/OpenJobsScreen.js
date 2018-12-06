@@ -29,6 +29,7 @@ import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
+import Loader from '../common/Loader';
 var isListEmpty = "";
 
 import {
@@ -85,7 +86,7 @@ class OpenJobsScreen extends Component {
           return<ImageBackground
           //resizeMode={'stretch'} // or cover
           style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
-          source={require('../../assets/noShipmentFound.png/')}
+          source={require('../../assets/noOpenJobFound.png/')}
         >
          </ImageBackground>;
         }
@@ -316,7 +317,8 @@ class OpenJobsScreen extends Component {
 
             <View style={styles.parentContainer}>
 
-
+<Loader
+                    loading={this.props.isLoading} />
 
 
                 <View style={styles.mainContainer}>

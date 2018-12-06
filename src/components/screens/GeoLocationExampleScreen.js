@@ -109,7 +109,7 @@ class GeoLocationExampleScreen extends Component {
             this.mergeLot();
 
         },
-            (error) => alert(JSON.stringify(error)),
+        (error) =>  console.log("Location not fetched, please select manually!!"),
             { enableHighAccuracy: true, timeout: 20000 })
 
         // this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -250,7 +250,7 @@ class GeoLocationExampleScreen extends Component {
                 
                 visible={this.state.modalVisible}
                 onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                   
                 }}>
                 <View style={{
                     position:'absolute',

@@ -27,6 +27,7 @@ import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
+import Loader from '../common/Loader';
 var isListEmpty = "";
 
 
@@ -117,13 +118,21 @@ class OrderDeliveredScreen extends Component {
     {
 
         console.log("data....................................................",this.state.isListEmpty);
-        if (!this.state.isListEmpty) {
+        if (!this.state.isListEmpty && usertype != 'customer') {
           return<ImageBackground
           //resizeMode={'stretch'} // or cover
           style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
           source={require('../../assets/noShipmentFound.png/')}
         >
          </ImageBackground>;
+        }
+        if(!this.state.isListEmpty && usertype == 'customer'){
+            return<ImageBackground
+            //resizeMode={'stretch'} // or cover
+            style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+            source={require('../../assets/noPackageFound.png/')}
+          >
+           </ImageBackground>;
         }
     }
 	componentWillReceiveProps(nextProps) {
@@ -274,7 +283,8 @@ class OrderDeliveredScreen extends Component {
                
                     <View style={styles.parentContainer}>
                     
-    
+                    <Loader
+                    loading={this.props.isLoading} />
     
     
                         <View style={styles.mainContainer}>

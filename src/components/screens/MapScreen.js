@@ -282,7 +282,7 @@ class MapScreen extends Component {
                 //this.setState({ data: nextProps.saveAddResponse.data })
                 }
                 else{
-                   Alert.alert("Message","Address saved Successfully");
+                  
                     Actions.pop();
                     Actions.Dashboard();
                     Alert.alert("Message","Address saved Successfully");

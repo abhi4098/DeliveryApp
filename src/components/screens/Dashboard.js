@@ -36,6 +36,7 @@ import DashListIcon from "../../assets/dashboardlistIcon.png";
 import DashPersonIcon from "../../assets/dashmanIcon.png";
 import DashTruckIcon from "../../assets/dashTruckIcon.png";
 import DashRoundIcon from "../../assets/dashroundIcon.png";
+import Loader from '../common/Loader';
 var userType = '';
 var count =0;
 var isListEmpty = "";
@@ -123,14 +124,22 @@ componentDidCatch(){
     {
 
         console.log("data....................................................",this.state.isListEmpty);
-        if (!this.state.isListEmpty) {
+        if (!this.state.isListEmpty && usertype != 'customer') {
           return<ImageBackground
           //resizeMode={'stretch'} // or cover
           style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
           source={require('../../assets/noShipmentFound.png/')}
         >
          </ImageBackground>;
-        }
+		}
+		if(!this.state.isListEmpty && usertype == 'customer'){
+			return<ImageBackground
+            //resizeMode={'stretch'} // or cover
+            style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+            source={require('../../assets/noPackageFound.png/')}
+          >
+           </ImageBackground>;
+		}
     }
 
 	componentDidMount() {
@@ -699,6 +708,8 @@ console.log("render.................................................");
 
 
 				<View style={styles.parentContainer}>
+				<Loader
+                    loading={this.props.isLoading} />
 					<View style={styles.logoContainer}>
 
 						<TouchableHighlight underlayColor="transparent" style={styles.hamBurgerContainer} onPress={() => this.toggle()}>
