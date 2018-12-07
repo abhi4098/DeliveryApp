@@ -278,6 +278,7 @@ componentDidCatch(){
 	}
 
 	toggle() {
+		console.log("hamburger..............................................")
 		this.setState({
 			isOpen: !this.state.isOpen,
 		});

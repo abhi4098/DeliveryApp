@@ -38,10 +38,10 @@ class GeoLocationExampleScreen extends Component {
         this.state = {
             modalVisible: false,
             initialPositon: {
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0,
-                longitudeDelta: 0
+                latitude: 25.0582,
+                longitude: -77.3431,
+                latitudeDelta:.05,
+                longitudeDelta: .05
             },
             markerPosition: new AnimatedRegion({
                 latitude: 0,
@@ -63,7 +63,8 @@ class GeoLocationExampleScreen extends Component {
     }
 
     componentDidMount() {
-        console.log("componentDidMount  geolocation////////////////////////////////////////////////////////")
+        this.componentWillMount();
+        
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
 
@@ -87,10 +88,10 @@ class GeoLocationExampleScreen extends Component {
         }
     }
 
-    watchID: ?number = null
+    //watchID: ?number = null
 
     componentWillMount() {
-        
+        console.log("componentWillMount  geolocation////////////////////////////////////////////////////////")
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
             var long = parseFloat(position.coords.longitude)
@@ -111,20 +112,20 @@ class GeoLocationExampleScreen extends Component {
             (error) => alert(JSON.stringify(error)),
             { enableHighAccuracy: true, timeout: 20000 })
 
-        this.watchID = navigator.geolocation.watchPosition((position) => {
-            var lat = parseFloat(position.coords.latitude)
-            var long = parseFloat(position.coords.longitude)
+        // this.watchID = navigator.geolocation.watchPosition((position) => {
+        //     var lat = parseFloat(position.coords.latitude)
+        //     var long = parseFloat(position.coords.longitude)
 
-            var lastRegion = {
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: 0.5,
-                longitudeDelta: 0.5
-            }
+        //     var lastRegion = {
+        //         latitude: lat,
+        //         longitude: long,
+        //         latitudeDelta: 0.5,
+        //         longitudeDelta: 0.5
+        //     }
 
-            this.setState({ initialPositon: lastRegion })
-            this.setState({ markerPosition: lastRegion })
-        })
+        //     this.setState({ initialPositon: lastRegion })
+        //     this.setState({ markerPosition: lastRegion })
+        // })
 
 
 
@@ -235,7 +236,7 @@ class GeoLocationExampleScreen extends Component {
 
     
    
-
+    _onMapReady = () => this.setState({ marginBottom: 0 })
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
         navigator.geolocation.clearWatch(this.watchID)
@@ -339,7 +340,12 @@ class GeoLocationExampleScreen extends Component {
 
             <MapView style={{ width: "100%", height: "100%", marginBottom: this.state.marginBottom, marginTop: 0 }}
                 showsUserLocation={true}
-                region={this.state.initialPositon}>
+                region={this.state.initialPositon}
+                onMapReady={this._onMapReady}
+                showsUserLocation={true}
+                showsMyLocationButton={false}
+                ref={ref => this.map = ref}
+                >
 
                 {!!this.state.initialPositon.latitude && !!this.state.initialPositon.longitude && <MapView.Marker
                     coordinate={{ "latitude": this.state.initialPositon.latitude, "longitude": this.state.initialPositon.longitude }}
