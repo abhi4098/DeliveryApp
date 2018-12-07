@@ -11,7 +11,8 @@ import {
     Alert,
     AsyncStorage,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ImageBackground
 } from "react-native";
 
 
@@ -28,7 +29,8 @@ import HalfBottomIcon from "../../assets/halfBottom.png";
 import Moment from 'moment';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
-
+import Loader from '../common/Loader';
+var isListEmpty = "";
 
 import {
     openJobData,
@@ -50,6 +52,7 @@ class OpenJobsScreen extends Component {
             pressStatus: false,
             usertype: '',
             isActive: true,
+            isListEmpty:false
 
         }
     }
@@ -73,6 +76,20 @@ class OpenJobsScreen extends Component {
         this.props.clearAcceptJobData();
         this.props.clearOpenJobsData();
         
+    }
+
+    backgroundImage()
+    {
+
+        console.log("data....................................................",this.state.isListEmpty);
+        if (!this.state.isListEmpty) {
+          return<ImageBackground
+          //resizeMode={'stretch'} // or cover
+          style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
+          source={require('../../assets/noOpenJobFound.png/')}
+        >
+         </ImageBackground>;
+        }
     }
     _onPhoneIconPress(item) {
 
@@ -158,7 +175,12 @@ class OpenJobsScreen extends Component {
             if (nextProps.openJobsResponseData.status == 200) {
                 this.props.showOpenJobsLoading(false);
                 console.log("response openjobs................", nextProps.openJobsResponseData.data)
-                this.setState({ data: nextProps.openJobsResponseData.data })
+                this.setState({ data: nextProps.openJobsResponseData.data });
+                if(nextProps.openJobsResponseData.data.length == 0)
+                {
+                    
+                this.setState({ isListEmpty: false })
+                }
 
             }
 
@@ -201,6 +223,7 @@ class OpenJobsScreen extends Component {
     }
 
     _renderItem({ item, index }) {
+        this.setState({ isListEmpty: true });
         Moment.locale('en');
         var dt = item.receiveddate;
         var orderStatus = item.shipment_status;
@@ -294,11 +317,12 @@ class OpenJobsScreen extends Component {
 
             <View style={styles.parentContainer}>
 
-
+<Loader
+                    loading={this.props.isLoading} />
 
 
                 <View style={styles.mainContainer}>
-
+                   {this.backgroundImage()} 
                     <FlatList
                         data={this.state.data}
                         renderItem={this._renderItem.bind(this)}

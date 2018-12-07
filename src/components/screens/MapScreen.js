@@ -133,7 +133,7 @@ class MapScreen extends Component {
                 userId = JSON.parse(value)._id;
                 
                 this.props.showSaveAddLoading(true);
-                console.log('this.state.checked...............................', this.state.checked);
+                //console.log('this.state.checked...............................', this.state.checked);
                 if(this.state.checked ==true || this.props.from == "SlidingMenu")
                 {
                     isAddressSaved = 1
@@ -282,10 +282,10 @@ class MapScreen extends Component {
                 //this.setState({ data: nextProps.saveAddResponse.data })
                 }
                 else{
-                   Alert.alert("Message","Address saved Successfully");
+                  
                     Actions.pop();
                     Actions.Dashboard();
-                   
+                    Alert.alert("Message","Address saved Successfully");
                 }
 
             }

@@ -46,16 +46,16 @@ class DriverProfileScreen extends Component {
         this.setState({ pressStatus: true });
     }
     componentWillMount() {
-        
+
     }
     componentDidMount() {
-        
+
 
         this.getProfileData();
     }
 
     componentWillUpdate() {
-        
+
 
     }
 
@@ -69,15 +69,20 @@ class DriverProfileScreen extends Component {
 
                 // Clear any previous data if exist.
                 if (nextProps.profileResponseData.message == "success") {
-                    console.log("my profile data...................................",nextProps.profileResponseData.data)
+                    console.log("my profile data...................................", nextProps.profileResponseData.data)
                     AsyncStorage.setItem("userData", JSON.stringify(nextProps.profileResponseData.data));
                 }
                 this.setState({ username: nextProps.profileResponseData.data.firstname + " " + nextProps.profileResponseData.data.lastname })
                 this.setState({ email: nextProps.profileResponseData.data.email });
                 this.setState({ phone: nextProps.profileResponseData.data.phone });
-                var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + nextProps.profileResponseData.data.profilepic;
+                if (nextProps.profileResponseData.data.profilepic != null) {
+                    var imageUrl = "https://nboxitdb.azurewebsites.net/images/profiles/" + nextProps.profileResponseData.data.profilepic;
+                }
+                else {
+                    var imageUrl = "https://nboxit.azurewebsites.net/assets/admin/dist/img/user-image.png";
+                }
                 var source = { uri: imageUrl }
-                this.setState({ avatarSource: source});
+                this.setState({ avatarSource: source });
             }
 
             else {
@@ -90,11 +95,11 @@ class DriverProfileScreen extends Component {
 
     getProfileData() {
         this.props.showProfileLoading(true);
-        
+
         AsyncStorage.getItem("userData").then((value) => {
             if (value) {
                 userId = JSON.parse(value)._id;
-              
+
 
 
                 var profile = {
@@ -125,19 +130,19 @@ class DriverProfileScreen extends Component {
                 <View
                     style={styles.imageContainer}>
 
-                   <View
-            style={[
-              styles.avatar,
-              styles.avatarContainer,
-              
-            ]}
-          >
-            {this.state.avatarSource === null ? (
-              <Text>Select a Photo</Text>
-            ) : (
-              <Image style={styles.avatar} source={this.state.avatarSource} />
-            )}
-          </View>
+                    <View
+                        style={[
+                            styles.avatar,
+                            styles.avatarContainer,
+
+                        ]}
+                    >
+                        {this.state.avatarSource === null ? (
+                            <Text>Select a Photo</Text>
+                        ) : (
+                                <Image style={styles.avatar} source={this.state.avatarSource} />
+                            )}
+                    </View>
 
 
 
@@ -232,8 +237,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 60,
-        paddingBottom: 40,
+        paddingTop: 30,
+        paddingBottom: 20,
         backgroundColor: '#f1f1fd',
     },
 
@@ -304,21 +309,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3,
         shadowColor: '#000',
-        shadowOffset:{width: 0,height:5},
+        shadowOffset: { width: 0, height: 5 },
         elevation: 3
 
     },
     avatarContainer: {
-    borderColor: '#9B9B9B',
-    borderWidth: 1 / PixelRatio.get(),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatar: {
-    borderRadius: 75,
-    width: 120,
-    height: 120,
-  },
+        borderColor: '#9B9B9B',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatar: {
+        borderRadius: 75,
+        width: 120,
+        height: 120,
+    },
 
 
 });
