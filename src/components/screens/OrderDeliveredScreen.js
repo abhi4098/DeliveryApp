@@ -29,6 +29,7 @@ import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import { PermissionsAndroid } from 'react-native';
 import Loader from '../common/Loader';
 var isListEmpty = "";
+var usertype = ''
 
 
 import {

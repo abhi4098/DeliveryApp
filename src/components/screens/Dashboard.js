@@ -124,7 +124,7 @@ componentDidCatch(){
     {
 
         console.log("data....................................................",this.state.isListEmpty);
-        if (!this.state.isListEmpty && usertype != 'customer') {
+        if (!this.state.isListEmpty && userType != 'customer') {
           return<ImageBackground
           //resizeMode={'stretch'} // or cover
           style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
@@ -132,7 +132,7 @@ componentDidCatch(){
         >
          </ImageBackground>;
 		}
-		if(!this.state.isListEmpty && usertype == 'customer'){
+		if(!this.state.isListEmpty && userType == 'customer'){
 			return<ImageBackground
             //resizeMode={'stretch'} // or cover
             style={{flex: 0, width: null, height: '100%', justifyContent: 'center', alignItems: 'center'}} // must be passed from the parent, the number may vary depending upon your screen size
@@ -487,7 +487,7 @@ componentDidCatch(){
 
 
 	renderFlatList() {
-		console.log("usertype..........................................", userType);
+		console.log("userType..........................................", userType);
 		if (userType == 'customer') {
 			return <View
 				style={{

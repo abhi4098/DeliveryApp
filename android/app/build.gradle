@@ -141,24 +141,15 @@ android {
 dependencies {
     api project(':react-native-image-picker')
     api project(':react-native-maps')
-    api project(':react-native-image-picker')
-    api project(':react-native-image-picker')
     api project(':react-native-vector-icons')
-    api project(':react-native-maps')
     api project(':react-native-linear-gradient')
     api project(':react-native-immediate-phone-call')
     api project(':react-native-android-sms-listener')
-    api project(':react-native-immediate-phone-call')
-    api project(':react-native-vector-icons')
-    api project(':react-native-android-sms-listener')
-    api project(':react-native-linear-gradient')
     api fileTree(include: ['*.jar'], dir: 'lcom.android.toolsibs')
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     api 'com.facebook.react:react-native:+'
     // From node_modules
-    api project(':react-native-maps')
-    api project(':react-native-image-picker')
     //api project(':react-native-geolocation-service')
 
    
